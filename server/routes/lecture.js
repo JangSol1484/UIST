@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const movies = require('../movies.json');
 const db = require('../db')
 
 const router = express.Router();
@@ -21,6 +20,7 @@ router.get('/:id', function (req, res, next) {
 });
 
 router.get('/:id/:no', async (req, res, next) => {
+  await db.increaseView(req.params.id, req.params.no);
   let [lecture] = await db.findLecture(req.params.id, req.params.no);
   res.json(lecture);
 });

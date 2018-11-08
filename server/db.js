@@ -49,6 +49,12 @@ const db = {
       console.log(e);
       return false;
     }
+
+  },
+  async increaseView(uid, lno){
+
+    const connection = await pool.getConnection(async conn => conn);
+    await connection.query('update lecture set l_view = l_view + 1 where l_wr = ? and l_no = ?', [uid, lno]);
   }
   /*,
   findAccessLog ({userId}) {
