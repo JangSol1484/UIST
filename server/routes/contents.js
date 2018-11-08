@@ -9,7 +9,6 @@ const db = require('../db')
 
 const router = express.Router();
 
-//multer file upload 파일 분리하여 export할 것
 //router.use('/uploadfile', express.static('../contents'));
 
 const storage = multer.diskStorage({
