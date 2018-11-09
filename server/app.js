@@ -1,21 +1,15 @@
-const express = require('express');
-const path = require('path');
+const express = require('express');//서버 라우팅 관리
+const path = require('path');//url path join
 //var favicon = require('serve-favicon');
 const logger = require('morgan');
-const cors = require('cors');
-const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
-
-const index = require('./routes/index');
-const user = require('./routes/user');
-const lecture = require('./routes/lecture');
-const contents = require('./routes/contents');
+const cors = require('cors');//spa에서 다중 요청 처리 가능하게 함
+const cookieParser = require('cookie-parser');//쿠키 파싱
+const bodyParser = require('body-parser');//바디 파싱 -> post 요청 처리 가능하게 함
 
 let app = express();
 
-// uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(cors());//spa에서 다중 요청 처리 가능하게 함
+app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -23,11 +17,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'contents')));
 
-app.use('/', index);
-app.use('/api/user', user);
-app.use('/api/lecture', lecture);
-app.use('/api/contents', contents);
-app.use(require('connect-history-api-fallback')())
+//express 라우트 세팅
+const index = require('./routes/index');
+const user = require('./routes/user');
+const lecture = require('./routes/lecture');
+const note = require('./routes/note');
+const contents = require('./routes/contents');
+app.use('/', index); //SPA 전달
+app.use('/api/user', user); //user 정보를 처리하는 api
+app.use('/api/lecture', lecture); //강의 정보를 처리하는 api
+app.use('/api/note', note); //필기 정보를 처리하는 api
+app.use('/api/contents', contents); //멀티미디어 컨텐츠와 api
+app.use(require('connect-history-api-fallback')());
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

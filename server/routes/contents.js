@@ -62,7 +62,6 @@ router.get('/video', function(req, res, next) {
       //console.log(err);
       res.end('500 Internal Server' + err);
     })
-//      res.sendFile(path.join(__dirname, '../contents/video', play));
   }
   else {
     res.send('<script>alert("잘못된 접근입니다.");history.back();</script>');
