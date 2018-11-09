@@ -8,21 +8,22 @@ const bodyParser = require('body-parser');//바디 파싱 -> post 요청 처리 
 
 let app = express();
 
+const index = require('./routes/index');
+const user = require('./routes/user');
+const lecture = require('./routes/lecture');
+const note = require('./routes/note');
+const contents = require('./routes/contents');
+
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'contents')));
+app.use(express.static(path.join(__dirname, 'public')));//vue spa 전달
+app.use(express.static(path.join(__dirname, 'contents')));//업로드 경로
 
 //express 라우트 세팅
-const index = require('./routes/index');
-const user = require('./routes/user');
-const lecture = require('./routes/lecture');
-const note = require('./routes/note');
-const contents = require('./routes/contents');
 app.use('/', index); //SPA 전달
 app.use('/api/user', user); //user 정보를 처리하는 api
 app.use('/api/lecture', lecture); //강의 정보를 처리하는 api

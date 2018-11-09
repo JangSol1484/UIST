@@ -21,6 +21,8 @@ var main = new Vue({
 
 var header = new Vue({
   el: '#header',
+  router,
   template: '<Header/>',
   components: { Header }
 })
+

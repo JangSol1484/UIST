@@ -6,7 +6,7 @@
     <br>
     <div class = "dropbox">
       <input class = "input-file" type = "file" name = "userfile" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)">
-      <h2>드래그앤드롭</h2>
+      <h2 v-text="msg"></h2>
     </div>
     <input type = "button" @click="upload" value = "업로드">
   </div>
@@ -21,19 +21,39 @@ export default {
   },
   methods: {
     loadfile (name, files) {
-      this.formData.append(name, files[0], files[0].name)
+      // this.formData.append(name, files[0], files[0].name)
+      this.targetName = name
+      this.targetFile = files[0]
+      let type = files[0].type.split('/')
+      this.msg = type[1] + files[0].name
+      if (type[1] === 'mp4' || type[1] === 'avi' || type[1] === 'mkv') {
+        this.isVideo = true
+      }
     },
     upload () {
-      this.formData.append('title', this.l_title)
-      this.formData.append('text', this.l_text)
-      this.$http.post('/api/contents/upload', this.formData).then((res) => {
-        this.$router.push({name: 'myclass'})
-      })
+      if (this.isVideo) {
+        if (!this.isFormExist) {
+          this.formData.append('title', this.l_title)
+          this.formData.append('text', this.l_text)
+          this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
+          this.isFormExist = true
+        }
+        this.$http.post('/api/contents/upload', this.formData).then((res) => {
+          this.$router.push({name: 'myclass'})
+        })
+      } else {
+        alert('동영상만 올려라')
+      }
     }
   },
   data () {
     return {
-      formData: ''
+      msg: 'drag and drop',
+      isVideo: false,
+      isFormExist: false,
+      formData: null,
+      targetName: null,
+      targetFile: null
     }
   }
 }
