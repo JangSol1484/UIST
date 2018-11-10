@@ -22,7 +22,7 @@ var main = new Vue({
 var header = new Vue({
   el: '#header',
   router,
+  store,
   template: '<Header/>',
   components: { Header }
 })
-

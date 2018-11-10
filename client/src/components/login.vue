@@ -1,13 +1,12 @@
 <template>
     <div>
-      <form id = "loginform" @submit.prevent = "onSubmit(email, password)">
-        id:<input type = "text" v-model = "email">
+      <form id = "loginform" @submit.prevent = "onSubmit(uid, upw)">
+        id:<input type = "text" v-model = "uid">
         <br>
-        pw:<input type = "password" v-model = "password">
+        pw:<input type = "password" v-model = "upw">
         <br>
         <button>send</button>
       </form>
-      {{msg}}
       <br>
       <router-link :to="{name: 'home'}">뒤로가기</router-link>
     </div>
@@ -20,20 +19,21 @@ export default {
   name: 'login',
   data: function () {
     return {
-      email: '',
-      password: '',
+      uid: 'test',
+      upw: '1111',
       mag: ''
     }
   },
   methods: {
-    onSubmit (email, password) {
-      this.$store.dispatch('LOGIN', {email, password})
+    onSubmit (uid, upw) {
+      this.$store.dispatch('LOGIN', {uid, upw})
       .then(() => this.redirect())
       .catch(message => { this.msg = message })
     },
     redirect () {
       this.$router.push({name: 'home'})
-    },
+    }
+    /*
     sendPost: function () {
       this.$http.post('/api/user/login', {
         userid: this.userid,
@@ -45,6 +45,7 @@ export default {
         console.log('failed')
       })
     }
+    */
   }
 }
 </script>

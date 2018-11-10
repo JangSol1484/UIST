@@ -1,14 +1,14 @@
 <template>
   <div id="header">
-    반갑습니다! <span v-text="login"></span>
 
-    <span v-if="!isAuthenticated || !login">
+    <span v-if="!isAuthenticated">
       <router-link :to="{name: 'login'}">로그인</router-link>
       <router-link :to="{name: 'signin'}">회원가입</router-link>
       id : test, pw : 1111
     </span>
 
-    <span v-else-if="isAuthenticated && login">
+    <span v-else-if="isAuthenticated">
+      반갑습니다! <span v-text="login"></span>
       <router-link :to="{name: 'my'}">마이페이지</router-link>
       <a href="" @click.prevent="onClickLogout">로그아웃</a>
     </span>
@@ -16,29 +16,30 @@
 </template>
 
 <script>
-import store from './store'
-
 export default {
   created () {
+    this.login = this.$store.getters.getLogin
+    /*
     this.$http.get('/api/user')
     .then((res) => {
-      this.login = res.data.login
+      this.$store.commit('setlogin', res.data.login)
+      this.login = this.$store.commit('getlogin')
     })
+    */
   },
   computed: {
     isAuthenticated () {
-      return store.getters.isAuthenticated
+      return this.$store.getters.isAuthenticated
     }
   },
   methods: {
     onClickLogout () {
-      store.dispatch('LOGOUT').then(() => this.$router.push('/'))
-      this.login = ''
+      this.$store.dispatch('LOGOUT').then(() => this.$router.push('/'))
     }
   },
   data () {
     return {
-      login: []
+      login: this.$store.getters.getLogin
     }
   }
 }

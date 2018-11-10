@@ -30,14 +30,16 @@ router.post('/signin', async(req, res, next) => {
 })
 
 router.post('/login', async (req, res) => {
-  let uid = req.body.email;
-  let upw = req.body.password;
+  let uid = req.body.uid;
+  let upw = req.body.upw;
 
   let [user] = await db.findUser(uid, upw);
   //console.log(user);
 
-  if(!user || !user.u_no) return res.status(401).json({error: 'login failure'});
-
+  if(!user || !user.u_no){
+    //console.log(uid, upw, user);
+    return res.status(401).json({error: 'login failure'});
+  } 
 //  db.createAccessLog({userId: user.no});//await
   let accessToken = auth.signToken(user.u_no);
 
