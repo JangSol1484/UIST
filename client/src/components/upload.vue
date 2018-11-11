@@ -8,6 +8,8 @@
       <input class = "input-file" type = "file" name = "userfile" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)">
       <h2 v-text="msg"></h2>
     </div>
+    <progress max="100" :value.prop="uploadPercentage"></progress>
+    <br>
     <input type = "button" @click="upload" value = "업로드">
   </div>
 </template>
@@ -21,7 +23,6 @@ export default {
   },
   methods: {
     loadfile (name, files) {
-      // this.formData.append(name, files[0], files[0].name)
       this.targetName = name
       this.targetFile = files[0]
       let type = files[0].type.split('/')
@@ -38,7 +39,15 @@ export default {
           this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
           this.isFormExist = true
         }
-        this.$http.post('/api/contents/upload', this.formData).then((res) => {
+        this.$http.post('/api/contents/upload', this.formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          },
+          onUploadProgress: function (progressEvent) {
+            this.uploadPercentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
+          }.bind(this)
+        })
+        .then((res) => {
           this.$router.push({name: 'myclass'})
         })
       } else {
@@ -53,7 +62,8 @@ export default {
       isFormExist: false,
       formData: null,
       targetName: null,
-      targetFile: null
+      targetFile: null,
+      uploadPercentage: 0
     }
   }
 }

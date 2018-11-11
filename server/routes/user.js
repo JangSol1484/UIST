@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
   }
   
   user = user ? await db.findUserByNo(user.id) : '';
-  res.json({login: `${user}`});
+  res.json({username: `${user}`});
 });
 
 router.post('/signin', async(req, res, next) => {
@@ -40,19 +40,15 @@ router.post('/login', async (req, res) => {
     //console.log(uid, upw, user);
     return res.status(401).json({error: 'login failure'});
   } 
-//  db.createAccessLog({userId: user.no});//await
   let accessToken = auth.signToken(user.u_no);
 
   //console.log(accessToken);
-
   res.json({accessToken});
 });
 
 router.get('/my', auth.ensureAuth(), async (req, res) => {
   let user = await db.findUserByNo(req.user.id);
-  //let accessLog = await db.findAccessLog({userId: user.id});
 
-  //console.log({user, accessLog});
   res.json({user});
 });
 
@@ -61,7 +57,6 @@ router.get('/my/class', auth.ensureAuth(), async (req, res) => {
 })
 
 router.use((err, req, res, next) => {
-  //console.log(err);
   res.json({error: err.message});
 });
 

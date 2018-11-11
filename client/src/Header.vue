@@ -8,7 +8,7 @@
     </span>
 
     <span v-else-if="isAuthenticated">
-      반갑습니다! <span v-text="login"></span>
+      반갑습니다! <!--<span v-text="username"></span>--><span v-text="login"></span>
       <router-link :to="{name: 'my'}">마이페이지</router-link>
       <a href="" @click.prevent="onClickLogout">로그아웃</a>
     </span>
@@ -21,11 +21,10 @@ export default {
     this.login = this.$store.getters.getLogin
     /*
     this.$http.get('/api/user')
-    .then((res) => {
-      this.$store.commit('setlogin', res.data.login)
-      this.login = this.$store.commit('getlogin')
-    })
-    */
+      .then((res) => {
+        this.username = res.data.username
+      })
+      */
   },
   computed: {
     isAuthenticated () {
@@ -40,6 +39,7 @@ export default {
   data () {
     return {
       login: this.$store.getters.getLogin
+      // username: null
     }
   }
 }
