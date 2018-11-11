@@ -1,4 +1,5 @@
 <template>
+<!--서버에 로그인 요청을 보내고 인증정보를  vuex 로컬에 저장-->
     <div>
       <form id = "loginform" @submit.prevent = "onSubmit(uid, upw)">
         id:<input type = "text" v-model = "uid">
@@ -33,19 +34,6 @@ export default {
     redirect () {
       this.$router.push({name: 'home'})
     }
-    /*
-    sendPost: function () {
-      this.$http.post('/api/user/login', {
-        userid: this.userid,
-        userpw: this.userpw
-      }).then((res) => {
-        this.data = res.data
-        this.$router.push({name: 'home'})
-      }, function () {
-        console.log('failed')
-      })
-    }
-    */
   }
 }
 </script>

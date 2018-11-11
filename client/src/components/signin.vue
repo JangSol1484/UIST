@@ -1,4 +1,5 @@
 <template>
+<!--회원가입-->
   <div>
     <form id = "signinform" @submit.prevent = "sendPost">
       id:<input type = "text" name = "u_id" v-model = "u_id">

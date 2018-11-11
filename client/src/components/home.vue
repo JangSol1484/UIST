@@ -1,13 +1,15 @@
 <template>
-  <div class="lecture">
+<!--메인화면 홈페이지 /api/lecture에서 받은 정보를 화면에 렌더-->
+<!--썸네일은 별도로 /api/contents/thumbnail에서 요청함-->
+  <div class="index">
     <h1>강의 목록</h1>
-    <div v-for="lecture in lectures" v-bind:key="lecture.l_no" class="movie">
+    <span v-for="lecture in lectures" v-bind:key="lecture.l_no" class="lecture">
       <img v-bind:src="`/api/contents/thumbnail/${lecture.l_thum}`" class="thumbnail">
       <div>
         <strong>{{lecture.l_no}}</strong> {{lecture.l_title}} [{{lecture.l_view}}]
         <router-link :to="{ name: 'lecture', params: { id: lecture.l_wr, no: lecture.l_no }}">더보기</router-link>
       </div>
-    </div>
+    </span>
   </div>
 </template>
 
@@ -37,7 +39,7 @@ export default {
 <style scoped>
 div.index {
   position: relative;
-  left: 20%;
+/*  left: 20%;*/
 }
 .thumbnail {
   width: 185px;

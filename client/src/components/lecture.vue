@@ -1,4 +1,6 @@
 <template>
+<!--강의 영상과 강의 정보를 렌더-->
+<!--우측 note는 지속적으로 ajax로 서버와 통신하며 값을 DB에 갱신, 미구현-->
   <div>
     <div class="video">
       <video v-bind:src = "path" controls></video>
@@ -47,7 +49,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 div.video {
   position: absolute;
   left: 0%;

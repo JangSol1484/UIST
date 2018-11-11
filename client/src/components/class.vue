@@ -1,4 +1,7 @@
 <template>
+<!--내 강의실-->
+<!--내가 올린 모든 동영상에 관한 정보 혹은 요약된 정보를 렌더-->
+<!--아직 미구현-->
   <div>
     {{msg}}
     <router-link :to="{name: 'upload'}">업로드</router-link>

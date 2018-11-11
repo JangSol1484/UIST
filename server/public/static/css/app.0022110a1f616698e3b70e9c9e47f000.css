@@ -5,7 +5,7 @@
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
   position: absolute;
-  top: 10%;
+  top: 9%;
 }
 * {
   box-sizing: border-box;
@@ -14,34 +14,38 @@
 #header {
   background-color: aquamarine;
   position: fixed;
+  margin: 0;
   top: 0%;
+  left: 0%;
+  height: 8%;
+  width: 100%;
 }
 
 div.index[data-v-03e74d57] {
   position: relative;
-  left: 20%;
+/*  left: 20%;*/
 }
-.poster[data-v-03e74d57] {
+.thumbnail[data-v-03e74d57] {
   width: 185px;
   vertical-align: middle;
 }
-.movie[data-v-03e74d57] {
+.lecture[data-v-03e74d57] {
   display: inline-block;
   padding: 10px;
   text-align: center;
 }
 
-div.video {
+div.video[data-v-0badb094] {
   position: absolute;
   left: 0%;
   width: 960px;
   height: 540px;
 }
-div.video > video {
+div.video > video[data-v-0badb094] {
   width: 100%;
   height: 100%;
 }
-div.note {
+div.note[data-v-0badb094] {
   position: absolute;
   padding: 5px;
   left: 970px;
@@ -50,13 +54,13 @@ div.note {
   overflow: auto;
   background-color: aliceblue;
 }
-div.contents {
+div.contents[data-v-0badb094] {
   position: absolute;
   top: 550px;
   width: 960px;
 }
 
-.dropbox {
+.dropbox[data-v-bb61a50e] {
   outline: 2px dashed #aaa;
   background: #7fb4dd;
   width: 300px;
@@ -65,13 +69,13 @@ div.contents {
   margin: 0 auto;
   text-align: center;
 }
-.dropbox > h2{
+.dropbox > h2[data-v-bb61a50e]{
   position: absolute;
   top: 50px;
   left: 0;
   z-index: 2;
 }
-.input-file{
+.input-file[data-v-bb61a50e]{
   position: absolute;
   opacity: 0;
   width:100%;
@@ -81,4 +85,4 @@ div.contents {
   z-index: 3;
 }
 
-/*# sourceMappingURL=app.c3518d9dfdbccc815b27cfa3f0b6dc6e.css.map*/
+/*# sourceMappingURL=app.0022110a1f616698e3b70e9c9e47f000.css.map*/

@@ -1,4 +1,6 @@
 <template>
+<!--강의 영상 업로드-->
+<!--script는 건드리지 말 것-->
   <div>
     title:<input type = "text" name = "l_title" v-model = "l_title">
     <br>
@@ -69,7 +71,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .dropbox {
   outline: 2px dashed #aaa;
   background: #7fb4dd;

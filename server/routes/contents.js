@@ -3,7 +3,6 @@ const multiparty = require('multiparty');
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-const ffmpeg = require('ffmpeg');
 const ThumbnailGenerator = require('video-thumbnail-generator').default;
 
 const auth = require('../auth');
