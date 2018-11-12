@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const ThumbnailGenerator = require('video-thumbnail-generator').default;
 
 const auth = require('../auth');
-const db = require('../db')
+const db = require('../db');
 
 const router = express.Router();
 

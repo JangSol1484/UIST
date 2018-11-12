@@ -14,20 +14,26 @@ const db = {
       return false;
     }
   },
-  async findUser (uid, upw) {
+  async findUser (uid, upw) {//로그인 시
     const connection = await pool.getConnection(async conn => conn);
-    const [rows] = await connection.query('select * from user where u_id = ? and u_pw = ?;',  [uid, upw]);
+    const [rows] = await connection.query('select u_no from user where u_id = ? and u_pw = ?;',  [uid, upw]);
     return rows;
   },
-  async findUserByNo(u_no) {
+  async findUserByNo(u_no) {//요청 시 토큰의 id값으로 유저 인증
     const connection = await pool.getConnection(async conn => conn);
     u_no = u_no * 1;
     const [rows] = await connection.query('select u_name from user where u_no = ?', u_no);
     return rows[0].u_name;
   },
-  async findLectureAll() {
+  async getLectureWithNewest() {
     const connection = await pool.getConnection(async conn => conn);
-    const [lecture] = await connection.query('select l_no, l_wr, l_title, l_thum, l_view from lecture');
+    const [lecture] = await connection.query('select l_no, l_wr, l_title, l_thum, l_view from lecture order by l_date desc limit 0, 5');
+
+    return lecture;
+  },
+  async getLectureWithPopularity() {
+    const connection = await pool.getConnection(async conn => conn);
+    const [lecture] = await connection.query('select l_no, l_wr, l_title, l_thum, l_view from lecture order by l_view desc limit 0, 5');
 
     return lecture;
   },

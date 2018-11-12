@@ -2,29 +2,74 @@
 <!--메인화면 홈페이지 /api/lecture에서 받은 정보를 화면에 렌더-->
 <!--썸네일은 별도로 /api/contents/thumbnail에서 요청함-->
   <div class="index">
-    <h1>강의 목록</h1>
-    <span v-for="lecture in lectures" v-bind:key="lecture.l_no" class="lecture">
-      <img v-bind:src="`/api/contents/thumbnail/${lecture.l_thum}`" class="thumbnail">
-      <div>
-        <strong>{{lecture.l_no}}</strong> {{lecture.l_title}} [{{lecture.l_view}}]
-        <router-link :to="{ name: 'lecture', params: { id: lecture.l_wr, no: lecture.l_no }}">더보기</router-link>
-      </div>
-    </span>
+    <div>
+      <h1>최신 영상</h1>
+      <span v-for="newest in newests" v-bind:key="newest.l_no" class="lecture">
+        <router-link :to="{ name: 'lecture', params: { id: newest.l_wr, no: newest.l_no }}">
+          <img v-bind:src="`/api/contents/thumbnail/${newest.l_thum}`" class="thumbnail">
+        </router-link>
+        <div>
+          <strong>{{newest.l_title}}</strong> [{{newest.l_view}}]
+        </div>
+      </span>
+    </div>
+    
+    <div>
+      <h1>인기 영상</h1>
+      <span v-for="popular in populars" v-bind:key="popular.l_no" class="lecture">
+        <router-link :to="{ name: 'lecture', params: { id: popular.l_wr, no: popular.l_no }}">
+          <img v-bind:src="`/api/contents/thumbnail/${popular.l_thum}`" class="thumbnail">
+        </router-link>
+        <div>
+          <strong>{{popular.l_title}}</strong> [{{popular.l_view}}]
+        </div>
+      </span>
+    </div>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
+    스크롤바 나와라<br>
   </div>
 </template>
 
 <script>
 export default {
-
   created () {
     this.$http.get('/api/lecture')
     .then((res) => {
-      this.lectures = res.data.lecture
+      this.newests = res.data.newest
+      this.populars = res.data.popular
     })
   },
   data () {
     return {
-      lectures: [],
+      newests: [],
+      populars: [],
       login: []
     }
   },
@@ -39,7 +84,6 @@ export default {
 <style scoped>
 div.index {
   position: relative;
-/*  left: 20%;*/
 }
 .thumbnail {
   width: 185px;

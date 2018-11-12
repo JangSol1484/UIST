@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 
   let user;
   try {
-    user = auth.verify(req.headers.authorization);
+    user = auth.verify(req.headers.authorization);//토큰의 인증정보 검증
   }
   catch (e) {
 
@@ -20,7 +20,7 @@ router.get('/', async (req, res) => {
   res.json({username: `${user}`});
 });
 
-router.post('/signin', async(req, res, next) => {
+router.post('/signin', async(req, res, next) => {//회원가입
   let result = await db.registerUser(req.body);
   if (result) {
     res.send(true);

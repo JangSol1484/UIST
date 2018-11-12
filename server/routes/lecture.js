@@ -6,9 +6,10 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
 
-  let lecture = await db.findLectureAll();
-  //console.log(lecture);
-  res.json({lecture});
+  let newest = await db.getLectureWithNewest();
+  let popular = await db.getLectureWithPopularity();
+  //console.log(newest, popular);
+  res.json({newest, popular});
 });
 
 router.get('/:id', function (req, res, next) {

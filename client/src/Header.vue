@@ -1,14 +1,17 @@
 <template>
   <div id="header">
+    <router-link :to="{name: 'home'}">
+      <span class='title'>UIST</span>
+    </router-link>
 
-    <span v-if="!isAuthenticated">
+    <span class='user' v-if="!isAuthenticated">
       <router-link :to="{name: 'login'}">로그인</router-link>
       <router-link :to="{name: 'signin'}">회원가입</router-link>
       id : test, pw : 1111
     </span>
 
-    <span v-else-if="isAuthenticated">
-      반갑습니다! <!--<span v-text="username"></span>--><span v-text="login"></span>
+    <span class='user' v-else-if="isAuthenticated">
+      반갑습니다! <span v-text="username"></span>[<span v-text="login"></span>]
       <router-link :to="{name: 'my'}">마이페이지</router-link>
       <a href="" @click.prevent="onClickLogout">로그아웃</a>
     </span>
@@ -18,13 +21,11 @@
 <script>
 export default {
   created () {
-    this.login = this.$store.getters.getLogin
-    /*
+    // this.login = this.$store.getters.getLogin
     this.$http.get('/api/user')
-      .then((res) => {
-        this.username = res.data.username
-      })
-      */
+    .then((res) => {
+      this.username = res.data.username
+    })
   },
   computed: {
     isAuthenticated () {
@@ -38,14 +39,14 @@ export default {
   },
   data () {
     return {
-      login: this.$store.getters.getLogin
-      // username: null
+      login: this.$store.getters.getLogin,
+      username: null
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
 #header {
   background-color: aquamarine;
   position: fixed;
@@ -54,5 +55,13 @@ export default {
   left: 0%;
   height: 8%;
   width: 100%;
+}
+
+.title {
+  font-size: 40px;
+}
+
+.user {
+  text-align: right;
 }
 </style>
