@@ -6,7 +6,7 @@ const conn = mysql.createConnection(dbconfig);
 conn.connect();
 
 const db = {
-  registerUser (userInfo) {
+  registerUser (userInfo, cb) {
     conn.query('alter table user auto_increment=1;', () => {
       with(userInfo){
         conn.query('insert into user value (null, ?, ?, ?, ?, ?);',  [u_id,u_pw,u_name,u_email,u_intro]);

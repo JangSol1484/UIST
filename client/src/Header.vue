@@ -20,11 +20,7 @@
 <script>
 export default {
   created () {
-    /*
     this.$http.get('/api/user')
-    .then((res) => {
-      this.username = res.data.username
-    }) */
   },
   computed: {
     isAuthenticated () {

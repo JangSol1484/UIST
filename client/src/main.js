@@ -4,7 +4,6 @@ import Vue from 'vue'
 import axios from 'axios'
 import App from './App'
 import Header from './Header'
-import Aside from './Aside'
 import router from './router'
 import store from './store'
 
@@ -28,10 +27,3 @@ var header = new Vue({
   components: { Header }
 })
 
-var aside = new Vue({
-  el: '#aside',
-  router,
-  store,
-  template: '<Aside/>',
-  components: { Aside }
-})

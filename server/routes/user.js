@@ -17,13 +17,10 @@ router.get('/', (req, res) => {
   })
 });
 
-router.post('/signin', async(req, res, next) => {//회원가입
-  let result = await db.registerUser(req.body);
-  if (result) {
-    res.send(true);
-  } else {
-    res.send(false);
-  }
+router.post('/signin', (req, res, next) => {//회원가입
+  db.registerUser(req.body, () => {
+    res.status(200);
+  });
 })
 
 router.post('/login', (req, res) => {
