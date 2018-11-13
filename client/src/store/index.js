@@ -15,38 +15,44 @@ enhanceAccessToeken()
 
 export default new Vuex.Store({
   state: {
-    name: null,
-    accessToken: null
+    accessToken: null,
+    login: null
   },
   getters: {
     isAuthenticated (state) {
       state.accessToken = state.accessToken || localStorage.accessToken
       return state.accessToken
     },
-    getName (state) {
-      state.name = state.name || localStorage.name
-      return state.name
+    getLogin (state) {
+      state.login = state.login || localStorage.login
+      return state.login
     }
   },
   mutations: {
+    getlogin (state) {
+      return state.login
+    },
+    setlogin (state, payload) {
+      state.login = payload
+    },
     LOGIN (state, payload) {
-      state.name = payload.name
+      state.login = payload.login
       state.accessToken = payload.accessToken
-      localStorage.name = payload.name
+      localStorage.login = payload.login
       localStorage.accessToken = payload.accessToken
     },
     LOGOUT (state) {
       state.accessToken = null
-      state.name = null
+      state.login = null
       delete localStorage.accessToken
-      delete localStorage.name
+      delete localStorage.login
     }
   },
   actions: {
     LOGIN ({commit}, {uid, upw}) {
       return axios.post(`${resourceHost}/login`, {uid, upw})
         .then(({data}) => {
-          let payload = {name: data.name, accessToken: data.accessToken}
+          let payload = {login: uid, accessToken: data.accessToken}
           commit('LOGIN', payload)
           axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`
         })

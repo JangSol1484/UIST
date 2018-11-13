@@ -34,7 +34,7 @@ router.post('/upload', async (req, res, next) => {
     filetype = tmp[1];
     
     if (part.filename) {
-      fileName = crypto.createHash('sha256').update(writer+part.filename).digest('base64').replace('+','').replace('/','');
+      fileName = crypto.createHash('sha256').update(writer+part.filename).digest('base64').replace('+','');
       size = part.byteCount;
     } else {
       part.resume();
@@ -61,19 +61,10 @@ router.post('/upload', async (req, res, next) => {
       thumbnailPath: path.join(__dirname, '..', 'contents', 'img', 'thumbnail')
     });
   
-    tg.generateOneByPercent(10).then( async (thumb) => {
-      l_info = {
-        title: title,
-        text: text,
-        writer: writer,
-        fileName: fileName,
-        filetype: filetype,
-        thumb: thumb
-      }
-      db.registerLecture(l_info, () => {
-        res.status(200).send('Upload Complete');
-      });
+    tg.generateOneByPercent(10).then( async (thum) => {
+      await db.registerLecture(title, text, writer, fileName, filetype, thum);
     });;
+    res.status(200).send('Upload Complete');
   });
 
   form.on('progress', (byteRead, byteExpected) => {

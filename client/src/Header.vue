@@ -3,14 +3,15 @@
     <router-link :to="{name: 'home'}">
       <span class='title'>UIST</span>
     </router-link>
-    <span class='user' v-if="!this.$store.getters.getName">
+
+    <span class='user' v-if="!isAuthenticated">
       <router-link :to="{name: 'login'}">로그인</router-link>
       <router-link :to="{name: 'signin'}">회원가입</router-link>
       id : test, pw : 1111
     </span>
-    
-    <span class='user' v-else-if="this.$store.getters.getName">
-      반갑습니다 <span v-text="this.$store.getters.getName"></span> 님!
+
+    <span class='user' v-else-if="isAuthenticated">
+      반갑습니다! <span v-text="username"></span>[<span v-text="login"></span>]
       <router-link :to="{name: 'my'}">마이페이지</router-link>
       <a href="" @click.prevent="onClickLogout">로그아웃</a>
     </span>
@@ -20,7 +21,15 @@
 <script>
 export default {
   created () {
+<<<<<<< HEAD
     this.$http.get('/api/user')
+=======
+    // this.login = this.$store.getters.getLogin
+    this.$http.get('/api/user')
+    .then((res) => {
+      this.username = res.data.username
+    })
+>>>>>>> parent of dc9f030... 서버안정화 로그인 개선
   },
   computed: {
     isAuthenticated () {
@@ -30,11 +39,12 @@ export default {
   methods: {
     onClickLogout () {
       this.$store.dispatch('LOGOUT').then(() => this.$router.push('/'))
-      this.username = null
     }
   },
   data () {
     return {
+      login: this.$store.getters.getLogin,
+      username: null
     }
   }
 }

@@ -6,15 +6,18 @@ const db = require('../db');
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
 
   let user;
-  try { user = auth.verify(req.headers.authorization); } catch (e) {}
+  try {
+    user = auth.verify(req.headers.authorization);//토큰의 인증정보 검증
+  }
+  catch (e) {
 
-  db.findUserByNo(user.id, (err, [rows]) => {
-    user = user ? rows.u_name : '';
-    res.json({username: `${user}`});
-  })
+  }
+  
+  user = user ? await db.findUserByNo(user.id) : '';
+  res.json({username: `${user}`});
 });
 
 router.post('/signin', (req, res, next) => {//회원가입
@@ -23,18 +26,21 @@ router.post('/signin', (req, res, next) => {//회원가입
   });
 })
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
+  let uid = req.body.uid;
+  let upw = req.body.upw;
 
-  let userInfo = {uid: req.body.uid, upw: req.body.upw}
-  
-  db.findUser(userInfo, (err, [user]) => {
-    if(!user || !user.u_no){
-      return res.status(401).json({error: 'login failure'});
-    }
-    let name = user.u_name;
-    let accessToken = auth.signToken(user.u_no);
-    res.json({name, accessToken});
-  });
+  let [user] = await db.findUser(uid, upw);
+  //console.log(user);
+
+  if(!user || !user.u_no){
+    //console.log(uid, upw, user);
+    return res.status(401).json({error: 'login failure'});
+  } 
+  let accessToken = auth.signToken(user.u_no);
+
+  //console.log(accessToken);
+  res.json({accessToken});
 });
 
 router.get('/my', auth.ensureAuth(), async (req, res) => {

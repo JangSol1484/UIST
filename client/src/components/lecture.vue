@@ -26,7 +26,7 @@ export default {
     let no = this.$route.params.no
     this.$http.get(`/api/lecture/${id}/${no}`)
     .then((res) => {
-      this.lecture = res.data
+      this.lecture = res.data[0]
       this.play = this.lecture.l_v_name + '.' + this.lecture.l_v_type
       this.path = `/api/contents/video?play=${this.play}`
     })
