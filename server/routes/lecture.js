@@ -4,12 +4,13 @@ const db = require('../db')
 
 const router = express.Router();
 
-router.get('/', async (req, res) => {
-
-  let newest = await db.getLectureWithNewest();
-  let popular = await db.getLectureWithPopularity();
-  //console.log(newest, popular);
-  res.json({newest, popular});
+router.get('/', (req, res, next) => {
+  db.getLectureWithNewest((err, newest) => {
+    db.getLectureWithPopularity((err, popular) => {
+      res.json({newest, popular});
+    })
+  });
+  
 });
 
 router.get('/:id', function (req, res, next) {
@@ -20,10 +21,12 @@ router.get('/:id', function (req, res, next) {
   res.send(movie)
 });
 
-router.get('/:id/:no', async (req, res, next) => {
-  await db.increaseView(req.params.id, req.params.no);
-  let [lecture] = await db.findLecture(req.params.id, req.params.no);
-  res.json(lecture);
+router.get('/:id/:no', (req, res, next) => {
+  db.findLecture(req.params.id, req.params.no, (err, [lecture]) => {
+    db.increaseView(req.params.id, req.params.no);
+    console.log(lecture.l_no);
+    res.json(lecture);
+  });
 });
 
 module.exports = router;
