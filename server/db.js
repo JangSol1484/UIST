@@ -1,28 +1,17 @@
-const mysql2 = require('mysql2/promise');
 const mysql = require('mysql');
 const dbconfig = require('./dbconfig.json');
 
-const pool = mysql2.createPool(dbconfig);
-const conn = mysql.createConnection({
-  hostname: "localhost:3306",
-  user: 'root',
-  password: '1111',
-  database: 'uist',
-  charset: 'utf8'
-})
+const conn = mysql.createConnection(dbconfig);
 
 conn.connect();
 
 const db = {
-  async registerUser (userInfo) {
-    const connection = await pool.getConnection(async conn => conn);
-    try{
-      await connection.query('alter table user auto_increment=1;');
-      await connection.query('insert into user value (null, ?, ?, ?, ?, ?);',  [userInfo.u_id,userInfo.u_pw,userInfo.u_name,userInfo.u_email,userInfo.u_intro]);
-      return true;
-    } catch (e) {
-      return false;
-    }
+  registerUser (userInfo) {
+    conn.query('alter table user auto_increment=1;', () => {
+      with(userInfo){
+        conn.query('insert into user value (null, ?, ?, ?, ?, ?);',  [u_id,u_pw,u_name,u_email,u_intro]);
+      }
+    });
   },
   findUser (userInfo, cb) {//로그인 시
     conn.query('select u_no, u_name from user where u_id = ? and u_pw = ?;',  [userInfo.uid, userInfo.upw], cb);
