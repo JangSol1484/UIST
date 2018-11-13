@@ -1,72 +1,51 @@
-<<<<<<< HEAD
 const mysql = require('mysql');
 const dbconfig = require('./dbconfig.json');
 
 const conn = mysql.createConnection(dbconfig);
 
 conn.connect();
-=======
-const mysql = require('mysql2/promise');
-const dbconfig = require('./dbconfig.json');
-
-const pool = mysql.createPool(dbconfig);
->>>>>>> parent of dc9f030... 서버안정화 로그인 개선
 
 const db = {
-  registerUser (userInfo) {
+  registerUser (userInfo, cb) {
     conn.query('alter table user auto_increment=1;', () => {
       with(userInfo){
-        conn.query('insert into user value (null, ?, ?, ?, ?, ?);',  [u_id,u_pw,u_name,u_email,u_intro]);
+        conn.query('insert into user value (null, ?, ?, ?, ?, ?);',  [u_id,u_pw,u_name,u_email,u_intro], cb);
       }
     });
   },
-  async findUser (uid, upw) {//로그인 시
-    const connection = await pool.getConnection(async conn => conn);
-    const [rows] = await connection.query('select u_no from user where u_id = ? and u_pw = ?;',  [uid, upw]);
-    return rows;
+  findUser (userInfo, cb) {//로그인 시
+    conn.query('select u_no, u_name from user where u_id = ? and u_pw = ?;',  [userInfo.uid, userInfo.upw], cb);
   },
-  async findUserByNo(u_no) {//요청 시 토큰의 id값으로 유저 인증
-    const connection = await pool.getConnection(async conn => conn);
+  findUserByNo(u_no, cb) {//요청 시 토큰의 id값으로 유저 인증
     u_no = u_no * 1;
-    const [rows] = await connection.query('select u_name from user where u_no = ?', u_no);
-    return rows[0].u_name;
+    conn.query('select u_name from user where u_no = ?', u_no, cb);
   },
-  async getLectureWithNewest() {
-    const connection = await pool.getConnection(async conn => conn);
-    const [lecture] = await connection.query('select l_no, l_wr, l_title, l_thum, l_view from lecture order by l_date desc limit 0, 5');
-
-    return lecture;
+  getLectureWithNewest(cb) {
+    conn.query('select l_no, l_wr, l_title, l_thum, l_view from lecture order by l_date desc limit 0, 5', cb);
   },
-  async getLectureWithPopularity() {
-    const connection = await pool.getConnection(async conn => conn);
-    const [lecture] = await connection.query('select l_no, l_wr, l_title, l_thum, l_view from lecture order by l_view desc limit 0, 5');
-
-    return lecture;
+  getLectureWithPopularity(cb) {
+    conn.query('select l_no, l_wr, l_title, l_thum, l_view from lecture order by l_view desc limit 0, 5', cb);
   },
-  async findLecture(uid, lno) {
+  findLecture(uid, lno, cb) {
     lno = lno * 1;
-    const connection = await pool.getConnection(async conn => conn);
-    const lecture = connection.query('select * from lecture where l_wr = ? and l_no = ?', [uid, lno]);
-
-    return await lecture;
+    conn.query('select * from lecture where l_wr = ? and l_no = ?', [uid, lno], cb);
   },
-  async registerLecture(title, text, writer, fileName, filetype, thum) {
-    
-    const connection = await pool.getConnection(async conn => conn);
-    try{
-      await connection.query('alter table lecture auto_increment=1;');
-      await connection.query('insert into lecture(l_title, l_text, l_wr, l_v_name, l_v_type, l_thum) value(?, ?, ?, ?, ? ,?);',[title, text, writer, fileName, filetype, thum]);
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-
+  registerLecture(l_info, cb) {
+    conn.query('alter table lecture auto_increment=1;', () => {
+      with(l_info){
+        conn.query('insert into lecture(l_title, l_text, l_wr, l_v_name, l_v_type, l_thum) value(?, ?, ?, ?, ? ,?);',[title, text, writer, fileName, filetype, thumb], cb);
+      }
+    })
   },
-  async increaseView(uid, lno){
+  increaseView(uid, lno){
+    conn.query('update lecture set l_view = l_view + 1 where l_wr = ? and l_no = ?', [uid, lno]);
+  },
 
-    const connection = await pool.getConnection(async conn => conn);
-    await connection.query('update lecture set l_view = l_view + 1 where l_wr = ? and l_no = ?', [uid, lno]);
+  getNote() {
+    conn.query('select * from note;');
+  },
+  insertNote(notestr,timest) {
+    conn.query('insert into note(n_ts,n_string) value(?,?)',[timest,notestr]);
   }
   /*,
   findAccessLog ({userId}) {

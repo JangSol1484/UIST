@@ -35,12 +35,8 @@ export default {
         u_name: this.u_name,
         u_email: this.u_email,
         u_intro: this.u_intro
-      }).then((res) => {
-        if (res.data === true) {
-          this.$router.push({name: 'home'})
-        } else {
-          this.data = 'fail'
-        }
+      }).then(() => {
+        this.$router.push('/')
       })
     }
   }

@@ -6,50 +6,46 @@ const db = require('../db');
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/', async (req, res) => {
+router.get('/', (req, res) => {
 
   let user;
-  try {
-    user = auth.verify(req.headers.authorization);//토큰의 인증정보 검증
-  }
-  catch (e) {
+  try { user = auth.verify(req.headers.authorization); } catch (e) {}
 
-  }
-  
-  user = user ? await db.findUserByNo(user.id) : '';
-  res.json({username: `${user}`});
+  db.findUserByNo(user.id, (err, [rows]) => {
+    user = user ? rows.u_name : '';
+    res.json({username: `${user}`});
+  })
 });
 
-router.post('/signin', async(req, res, next) => {//회원가입
-  let result = await db.registerUser(req.body);
-  if (result) {
-    res.send(true);
-  } else {
-    res.send(false);
-  }
+router.post('/signin', (req, res, next) => {//회원가입
+  db.registerUser(req.body, () => {
+      res.status(200).send('success');
+  });
 })
 
-router.post('/login', async (req, res) => {
-  let uid = req.body.uid;
-  let upw = req.body.upw;
+router.post('/login', (req, res) => {
 
-  let [user] = await db.findUser(uid, upw);
-  //console.log(user);
-
-  if(!user || !user.u_no){
-    //console.log(uid, upw, user);
-    return res.status(401).json({error: 'login failure'});
-  } 
-  let accessToken = auth.signToken(user.u_no);
-
-  //console.log(accessToken);
-  res.json({accessToken});
+  let userInfo = {uid: req.body.uid, upw: req.body.upw}
+  
+  db.findUser(userInfo, (err, [user]) => {
+    if(!user || !user.u_no){
+      return res.status(401).json({error: 'login failure'});
+    }
+    let name = user.u_name;
+    let accessToken = auth.signToken(user.u_no);
+    res.json({name, accessToken});
+  });
 });
 
-router.get('/my', auth.ensureAuth(), async (req, res) => {
-  let user = await db.findUserByNo(req.user.id);
-
-  res.json({user});
+router.get('/my', auth.ensureAuth(), (req, res) => {
+  db.findUserByNo(req.user.id, (err, [user]) => {
+    if(err){
+      res.status(401);
+    }
+    else{
+      res.json({user});
+    }
+  });
 });
 
 router.get('/my/class', auth.ensureAuth(), async (req, res) => {

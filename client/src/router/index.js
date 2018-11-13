@@ -10,12 +10,14 @@ import Lecture from 'components/lecture'
 import Login from 'components/login'
 import Signin from 'components/Signin'
 import Upload from 'components/upload'
-import store from '../store'
+// import store from '../store'
 
+/*
 const requireAuth = () => (from, to, next) => {
   if (store.getters.isAuthenticated) return next()
   next('/login?returnPath=my')
 }
+*/
 
 export default new Router({
   mode: 'history',
@@ -43,20 +45,20 @@ export default new Router({
     {
       path: '/my',
       name: 'my',
-      component: MyPage,
-      beforeEnter: requireAuth()
+      component: MyPage
+    //  beforeEnter: requireAuth()
     },
     {
       path: '/my/class',
       name: 'myclass',
-      component: MyClass,
-      beforeEnter: requireAuth()
+      component: MyClass
+     // beforeEnter: requireAuth()
     },
     {
       path: '/upload',
       name: 'upload',
-      component: Upload,
-      beforeEnter: requireAuth()
+      component: Upload
+    //  beforeEnter: requireAuth()
     }
   ]
 })

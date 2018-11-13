@@ -20,16 +20,15 @@
   export default {
     data () {
       return {
-        user: null,
-        accessLog: []
+        user: null
       }
     },
     created () {
       this.$http.get('api/user/my')
         .then((res) => {
           this.user = res.data.user
-          this.accessLog = res.data.accessLog
         })
+        .catch(() => { this.$store.dispatch('LOGOUT').then(() => this.$router.push('/login')) })
     }
   }
 </script>

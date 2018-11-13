@@ -5,6 +5,7 @@ const logger = require('morgan');
 const cors = require('cors');//spa에서 다중 요청 처리 가능하게 함
 const cookieParser = require('cookie-parser');//쿠키 파싱
 const bodyParser = require('body-parser');//바디 파싱 -> post 요청 처리 가능하게 함
+const compression = require('compression');
 
 let app = express();
 
@@ -16,6 +17,7 @@ const contents = require('./routes/contents');
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(cors());
+app.use(compression());//gzip 압축
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

@@ -69,8 +69,7 @@ export default {
   data () {
     return {
       newests: [],
-      populars: [],
-      login: []
+      populars: []
     }
   },
   name: 'home',
