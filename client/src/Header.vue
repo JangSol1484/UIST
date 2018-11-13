@@ -1,20 +1,42 @@
 <template>
-  <div id="header">
-    <router-link :to="{name: 'home'}">
-      <span class='title'>UIST</span>
-    </router-link>
-    <span class='user' v-if="!this.$store.getters.getName">
-      <router-link :to="{name: 'login'}">로그인</router-link>
-      <router-link :to="{name: 'signin'}">회원가입</router-link>
-      id : test, pw : 1111
-    </span>
-    
-    <span class='user' v-else-if="this.$store.getters.getName">
-      반갑습니다 <span v-text="this.$store.getters.getName"></span> 님!
-      <router-link :to="{name: 'my'}">마이페이지</router-link>
-      <a href="" @click.prevent="onClickLogout">로그아웃</a>
-    </span>
-  </div>
+  <b-navbar toggleable="md" type="dark" variant="info">
+
+    <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+    <b-navbar-brand href="/">UNIT</b-navbar-brand>
+
+    <b-collapse is-nav id="nav_collapse">
+
+      <b-navbar-nav>
+        <b-nav-item href="#">탐색</b-nav-item>
+      </b-navbar-nav>
+
+      <!-- Right aligned nav items -->
+      <b-navbar-nav class="ml-auto">
+        <b-nav-form>
+          <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
+          <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+        </b-nav-form>
+        <span class='user' v-if="!this.$store.getters.getName">
+              <router-link :to="{name: 'login'}">로그인</router-link>
+              <router-link :to="{name: 'signin'}">회원가입</router-link>
+            </span>
+        <b-nav-item-dropdown right v-if="this.$store.getters.getName">
+          <template slot="button-content" >
+            <span class='user' v-if="this.$store.getters.getName">
+              반갑습니다 <span v-text="this.$store.getters.getName"></span> 님!
+            </span>
+          </template>
+          <b-dropdown-item href="#">
+            <router-link :to="{name: 'my'}">마이페이지</router-link>
+          </b-dropdown-item>
+          <b-dropdown-item href="#">
+            <a href="" @click.prevent="onClickLogout">로그아웃</a>
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+    </b-collapse>
+  </b-navbar>
 </template>
 
 <script>
