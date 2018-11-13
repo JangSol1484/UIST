@@ -18,7 +18,7 @@ export default {
   color: #2c3e50;
   position: absolute;
   top: 9%;
-  left: 3%;
+  left: 15%;
 }
 
 * {

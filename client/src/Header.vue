@@ -21,15 +21,22 @@
 <script>
 export default {
   created () {
-<<<<<<< HEAD
+    /*
     this.$http.get('/api/user')
-=======
+<<<<<<< HEAD
     // this.login = this.$store.getters.getLogin
     this.$http.get('/api/user')
     .then((res) => {
       this.username = res.data.username
     })
->>>>>>> parent of dc9f030... 서버안정화 로그인 개선
+
+    /*
+    this.$http.get('/api/user')
+=======
+>>>>>>> parent of 53a0c6c... 뷰 및 api 수정
+    .then((res) => {
+      this.username = res.data.username
+    }) */
   },
   computed: {
     isAuthenticated () {

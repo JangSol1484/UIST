@@ -15,9 +15,6 @@ export default {
     .then((res) => {
       this.msg = res.data.msg
     })
-    .catch(() => {
-      this.$store.dispatch('LOGOUT').then(() => this.$router.push('/login'))
-    })
   },
   data () {
     return {

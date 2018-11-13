@@ -13,7 +13,7 @@ const pool = mysql.createPool(dbconfig);
 >>>>>>> parent of dc9f030... 서버안정화 로그인 개선
 
 const db = {
-  registerUser (userInfo, cb) {
+  registerUser (userInfo) {
     conn.query('alter table user auto_increment=1;', () => {
       with(userInfo){
         conn.query('insert into user value (null, ?, ?, ?, ?, ?);',  [u_id,u_pw,u_name,u_email,u_intro]);

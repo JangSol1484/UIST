@@ -20,10 +20,13 @@ router.get('/', async (req, res) => {
   res.json({username: `${user}`});
 });
 
-router.post('/signin', (req, res, next) => {//회원가입
-  db.registerUser(req.body, () => {
-    res.status(200);
-  });
+router.post('/signin', async(req, res, next) => {//회원가입
+  let result = await db.registerUser(req.body);
+  if (result) {
+    res.send(true);
+  } else {
+    res.send(false);
+  }
 })
 
 router.post('/login', async (req, res) => {
