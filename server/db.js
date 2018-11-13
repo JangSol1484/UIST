@@ -55,7 +55,18 @@ const db = {
 
     const connection = await pool.getConnection(async conn => conn);
     await connection.query('update lecture set l_view = l_view + 1 where l_wr = ? and l_no = ?', [uid, lno]);
+  },
+
+  async getnote(){
+    const conneciton = await pool.getConnection(async conn => conn);
+    await connection.query('select * from note;');
+  },
+  async insertnote(str,time_st){
+    const conneciton = await pool.getConnection(async conn => conn);
+    await connection.qurey('alter table note auto_increment=1;')
+    await connection.query('insert into note(n_string,n_ts) value(?,?)', [str,time_st]);
   }
+
   /*,
   findAccessLog ({userId}) {
     return Promise.resolve()
