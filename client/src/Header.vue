@@ -3,7 +3,7 @@
 
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-    <b-navbar-brand href="/">UNIT</b-navbar-brand>
+    <b-navbar-brand href="/">UIST</b-navbar-brand>
 
     <b-collapse is-nav id="nav_collapse">
 
