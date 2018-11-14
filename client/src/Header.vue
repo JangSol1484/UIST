@@ -13,15 +13,16 @@
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-        <b-nav-form>
-          <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search"/>
-          <b-button size="sm" class="my-2 my-sm-0" type="submit">Search</b-button>
+        <b-nav-form @submit="SearchQuery" @submit.prevent>
+          <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" name="query" v-model="query"/>
+          <b-button size="sm" class="my-2 my-sm-0" type="button" @click="SearchQuery">Search</b-button>
         </b-nav-form>
         <span class='user' v-if="!this.$store.getters.getName">
               <router-link :to="{name: 'login'}">로그인</router-link>
               <router-link :to="{name: 'signin'}">회원가입</router-link>
             </span>
         <b-nav-item-dropdown right v-if="this.$store.getters.getName">
+          
           <template slot="button-content" >
             <span class='user' v-if="this.$store.getters.getName">
               반갑습니다 <span v-text="this.$store.getters.getName"></span> 님!
@@ -42,11 +43,6 @@
 <script>
 export default {
   created () {
-    /*
-    this.$http.get('/api/user')
-    .then((res) => {
-      this.username = res.data.username
-    }) */
   },
   computed: {
     isAuthenticated () {
@@ -55,8 +51,12 @@ export default {
   },
   methods: {
     onClickLogout () {
-      this.$store.dispatch('LOGOUT').then(() => this.$router.push('/'))
+      this.$store.dispatch('LOGOUT')
       this.username = null
+    },
+    SearchQuery () {
+      let query = this.query
+      this.$router.push(`/search/${query}`)
     }
   },
   data () {

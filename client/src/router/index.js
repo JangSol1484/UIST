@@ -8,7 +8,8 @@ import MyPage from 'components/mypage'
 import MyClass from 'components/class'
 import Lecture from 'components/lecture'
 import Login from 'components/login'
-import Signin from 'components/Signin'
+import Signin from 'components/signin'
+import Search from 'components/search'
 import Upload from 'components/upload'
 import store from '../store'
 
@@ -39,6 +40,11 @@ export default new Router({
       path: '/lecture/:id/:no',
       name: 'lecture',
       component: Lecture
+    },
+    {
+      path: '/search/:query',
+      name: 'search',
+      component: Search
     },
     {
       path: '/my',

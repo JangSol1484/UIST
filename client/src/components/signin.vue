@@ -37,9 +37,9 @@ export default {
         u_intro: this.u_intro
       }).then((res) => {
         if (res.data === true) {
-          this.$router.push({name: 'home'})
+          this.$router.push('/')
         } else {
-          this.data = 'fail'
+          this.data = '회원가입 실패'
         }
       })
     }

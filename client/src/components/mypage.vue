@@ -28,8 +28,8 @@
       this.$http.get('api/user/my')
         .then((res) => {
           this.user = res.data.user
-          this.accessLog = res.data.accessLog
         })
+        .catch(() => { this.$router.push('/') })
     }
   }
 </script>

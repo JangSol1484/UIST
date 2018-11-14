@@ -32,7 +32,7 @@ export default {
       .catch(message => { this.msg = message })
     },
     redirect () {
-      this.$router.push({name: 'home'})
+      this.$router.push('/')
     }
   }
 }
