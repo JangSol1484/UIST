@@ -17,13 +17,14 @@ router.get('/', (req, res) => {
   })
 });
 
-router.post('/signin', async(req, res, next) => {//회원가입
-  let result = await db.registerUser(req.body);
-  if (result) {
-    res.send(true);
-  } else {
-    res.send(false);
-  }
+router.post('/signin', (req, res, next) => {//회원가입
+  db.registerUser(req.body, (err) => {
+    if(err){
+      res.send(false);
+    } else {
+      res.status(200).send(true);
+    }
+  })
 })
 
 router.post('/login', (req, res) => {
@@ -40,13 +41,18 @@ router.post('/login', (req, res) => {
   });
 });
 
-router.get('/my', auth.ensureAuth(), async (req, res) => {
-  let user = await db.findUserByNo(req.user.id);
-
-  res.json({user});
+router.get('/my', auth.ensureAuth(), (req, res) => {
+  db.findUserByNo(req.user.id, (err, [user]) => {
+    if(err){
+      res.status(401);
+    }
+    else{
+      res.json({user});
+    }
+  });
 });
 
-router.get('/my/class', auth.ensureAuth(), async (req, res) => {
+router.get('/my/class', auth.ensureAuth(), (req, res) => {
   res.json({"msg": "myclass"});
 })
 

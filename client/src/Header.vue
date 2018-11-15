@@ -13,7 +13,7 @@
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
-        <b-nav-form @submit="SearchQuery" @submit.prevent>
+        <b-nav-form @submit.prevent="SearchQuery">
           <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" name="query" v-model="query"/>
           <b-button size="sm" class="my-2 my-sm-0" type="button" @click="SearchQuery">Search</b-button>
         </b-nav-form>
@@ -21,10 +21,10 @@
               <router-link :to="{name: 'login'}">로그인</router-link>
               <router-link :to="{name: 'signin'}">회원가입</router-link>
             </span>
+
         <b-nav-item-dropdown right v-if="this.$store.getters.getName">
-          
           <template slot="button-content" >
-            <span class='user' v-if="this.$store.getters.getName">
+            <span class='user' v-if="this.$store.getters.getName" >
               반갑습니다 <span v-text="this.$store.getters.getName"></span> 님!
             </span>
           </template>
@@ -57,6 +57,9 @@ export default {
     SearchQuery () {
       let query = this.query
       this.$router.push(`/search/${query}`)
+    },
+    over () {
+      alert('aa')
     }
   },
   data () {
