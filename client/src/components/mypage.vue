@@ -27,7 +27,7 @@
     created () {
       this.$http.get('api/user/my')
         .then((res) => {
-          this.user = res.data.user
+          this.user = res.data.user// 로그아웃하기
         })
         .catch(() => { this.$router.push('/') })
     }
