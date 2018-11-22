@@ -35,8 +35,12 @@ export default {
         u_name: this.u_name,
         u_email: this.u_email,
         u_intro: this.u_intro
-      }).then(() => {
-        this.$router.push('/')
+      }).then((res) => {
+        if (res.data === true) {
+          this.$router.push('/')
+        } else {
+          this.data = '회원가입 실패'
+        }
       })
     }
   }

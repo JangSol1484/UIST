@@ -3,7 +3,8 @@
 <!--내가 올린 모든 동영상에 관한 정보 혹은 요약된 정보를 렌더-->
 <!--아직 미구현-->
   <div>
-    {{msg}}
+    {{myinfo}}<br>
+    {{mylecture}}<br>
     <router-link :to="{name: 'upload'}">업로드</router-link>
   </div>
 </template>
@@ -13,13 +14,18 @@ export default {
   created () {
     this.$http.get('/api/user/my/class')
     .then((res) => {
-      this.msg = res.data.msg
+      this.myinfo = res.data.msg
     })
-    .catch(() => { this.$store.dispatch('LOGOUT').then(() => this.$router.push('/login')) })
+    .catch(() => { this.$router.push('/') })
+    this.$http.get('/api/lecture/test')
+    .then((res) => {
+      this.mylecture = res.data
+    })
   },
   data () {
     return {
-      msg: ''
+      myinfo: '',
+      mylecture: []
     }
   }
 }

@@ -20,7 +20,8 @@
   export default {
     data () {
       return {
-        user: null
+        user: null,
+        accessLog: []
       }
     },
     created () {
@@ -28,7 +29,7 @@
         .then((res) => {
           this.user = res.data.user
         })
-        .catch(() => { this.$store.dispatch('LOGOUT').then(() => this.$router.push('/login')) })
+        .catch(() => { this.$router.push('/') })
     }
   }
 </script>

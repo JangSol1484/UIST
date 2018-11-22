@@ -6,54 +6,26 @@
       <h1>최신 영상</h1>
       <span v-for="newest in newests" v-bind:key="newest.l_no" class="lecture">
         <router-link :to="{ name: 'lecture', params: { id: newest.l_wr, no: newest.l_no }}">
-          <img v-bind:src="`/api/contents/thumbnail/${newest.l_thum}`" class="thumbnail">
+          <img v-bind:src="'data:image/jpeg;base64,'+newest.l_thum" class="thumbnail">
         </router-link>
         <div>
           <strong>{{newest.l_title}}</strong> [{{newest.l_view}}]
         </div>
       </span>
     </div>
-    
+    <!--<img v-bind:src="`/api/user/thumbnail/test`" class="thumbnail">-->
     <div>
       <h1>인기 영상</h1>
       <span v-for="popular in populars" v-bind:key="popular.l_no" class="lecture">
         <router-link :to="{ name: 'lecture', params: { id: popular.l_wr, no: popular.l_no }}">
-          <img v-bind:src="`/api/contents/thumbnail/${popular.l_thum}`" class="thumbnail">
+          <img v-bind:src="'data:image/jpeg;base64,'+popular.l_thum" class="thumbnail">
         </router-link>
         <div>
           <strong>{{popular.l_title}}</strong> [{{popular.l_view}}]
         </div>
       </span>
     </div>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
-    스크롤바 나와라<br>
+    <!--<img v-bind:src="'data:image/jpeg;base64,'+thumbnail" />-->
   </div>
 </template>
 
@@ -69,7 +41,9 @@ export default {
   data () {
     return {
       newests: [],
-      populars: []
+      populars: [],
+      login: [],
+      test: null
     }
   },
   name: 'home',

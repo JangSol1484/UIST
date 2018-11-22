@@ -1,4 +1,6 @@
 const express = require('express');
+const path = require('path');
+const fs = require('fs');
 
 const auth = require('../auth');
 const db = require('../db');
@@ -14,14 +16,18 @@ router.get('/', (req, res) => {
   db.findUserByNo(user.id, (err, [rows]) => {
     user = user ? rows.u_name : '';
     res.json({username: `${user}`});
-  })
+  });
 });
 
 router.post('/signin', (req, res, next) => {//회원가입
-  db.registerUser(req.body, () => {
-      res.status(200).send('success');
+  db.registerUser(req.body, (err) => {
+    if(err){
+      res.send(false);
+    } else {
+      res.status(200).send(true);
+    }
   });
-})
+});
 
 router.post('/login', (req, res) => {
 
@@ -48,12 +54,25 @@ router.get('/my', auth.ensureAuth(), (req, res) => {
   });
 });
 
-router.get('/my/class', auth.ensureAuth(), async (req, res) => {
+router.get('/my/class', auth.ensureAuth(), (req, res) => {
   res.json({"msg": "myclass"});
-})
+});
 
 router.use((err, req, res, next) => {
   res.json({error: err.message});
+});
+
+router.get('/thumbnail/:id', (req, res) => {
+  
+  let id = req.params.id;
+
+  if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + id + '.jpg'))){
+    let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + id + '.jpg'));
+    res.send(new Buffer(imagebytes).toString('base64'));
+  } else {
+    let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'default_user_thumbnail.jpg'));
+    res.send(new Buffer(imagebytes).toString('base64'));
+  }
 });
 
 module.exports = router;
