@@ -38,7 +38,7 @@ const db = {
   },
   registerLecture(l_info, cb) {
     conn.query('alter table lecture auto_increment=1;', () => {
-      conn.query('update user set u_lectures = u_lectures + 1', () => {
+      conn.query('update user set u_lectures = u_lectures + 1 where u_id = ?', [l_info.writer], () => {
         with(l_info){
           conn.query('insert into lecture(l_title, l_text, l_wr, l_v_name, l_v_type, l_thum) value(?, ?, ?, ?, ? ,?);',[title, text, writer, fileName, filetype, thumb], cb);
         }
