@@ -6,10 +6,7 @@
     <div>
       <label>User Info:</label>
       <pre>{{user}}</pre>
-    </div>
-    <div>
-      <label>Access Log:</label>
-      <div v-for="log in accessLog" v-bind:key="log.userId">{{log.userId}}, {{log.createdAt}}</div>
+      <img v-bind:src="'data:image/jpeg;base64,'+thumbnail" width = "180px" height="100px">
     </div>
     <router-link :to="{name: 'myclass'}">내강의실</router-link>
   </div>
@@ -21,15 +18,22 @@
     data () {
       return {
         user: null,
-        accessLog: []
+        thumbnail: null
       }
     },
     created () {
       this.$http.get('api/user/my')
         .then((res) => {
           this.user = res.data.user
+          this.$http.get(`api/user/thumbnail/${this.user.u_id}`)
+          .then((res) => {
+            this.thumbnail = res.data
+          })
         })
-        .catch(() => { this.$router.push('/') })
+        .catch(() => {
+          this.$router.push('/')
+          this.$store.dispatch('LOGOUT')
+        })
     }
   }
 </script>

@@ -16,7 +16,10 @@ export default {
     .then((res) => {
       this.myinfo = res.data.msg
     })
-    .catch(() => { this.$router.push('/') })
+    .catch(() => {
+      this.$router.push('/')
+      this.$store.dispatch('LOGOUT')
+    })
     this.$http.get('/api/lecture/test')
     .then((res) => {
       this.mylecture = res.data
