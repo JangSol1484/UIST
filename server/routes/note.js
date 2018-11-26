@@ -11,10 +11,6 @@ router.get('/video', function (req, res,next) {
     })
 });
 
-router.get('/test', (req,res) => {
-    res.sendFile(path.join(__dirname, '../public', 'video.html'))
-});
-
 router.post('/video', function(req,res) {
     let text = req.body.txt;
 
