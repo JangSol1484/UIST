@@ -1,6 +1,10 @@
 <template>
   <div>
-    {{data}}
+    강의 검색 :<br>
+    {{lecturelist}}<br>
+<br>
+    유저 검색 :<br>
+    {{userlist}}<br>
   </div>
 </template>
 
@@ -10,12 +14,17 @@ export default {
     let query = this.$route.params.query
     this.$http.get(`/api/search/lecture?query=${query}`)
     .then((res) => {
-      this.data = res.data
+      this.lecturelist = res.data
+    })
+    this.$http.get(`/api/search/user?query=${query}`)
+    .then((res) => {
+      this.userlist = res.data
     })
   },
   data () {
     return {
-      data: null
+      lecturelist: null,
+      userlist: null
     }
   }
 }
