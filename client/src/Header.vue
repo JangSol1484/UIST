@@ -17,21 +17,21 @@
             <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" name="query" v-model="query"/>
             <b-button size="sm" class="my-2 my-sm-0" type="button" @click="SearchQuery">Search</b-button>
           </b-nav-form>
-          <span class='user' v-if="!this.$store.getters.getName">
-                <router-link :to="{name: 'login'}">로그인</router-link>
-                <router-link :to="{name: 'signin'}">회원가입</router-link>
-              </span>
+          <span class='user' id = "loginbar" v-if="!this.$store.getters.getName" >
+            <router-link :to="{name: 'login'}" id="lglink">로그인</router-link>
+            <router-link :to="{name: 'signup'}" id="sglink">회원가입</router-link>
+          </span>
 
-          <b-nav-item-dropdown right v-if="this.$store.getters.getName">
+          <b-nav-item-dropdown right  id="drop" v-if="this.$store.getters.getName" v-b-popover.hover = "navDrop">
             <template slot="button-content" >
               <span class='user' v-if="this.$store.getters.getName" >
                 반갑습니다 <span v-text="this.$store.getters.getName"></span> 님!
               </span>
             </template>
-            <b-dropdown-item href="#">
+            <b-dropdown-item>
               <router-link :to="{name: 'my'}">마이페이지</router-link>
             </b-dropdown-item>
-            <b-dropdown-item href="#">
+            <b-dropdown-item>
               <a href="" @click.prevent="onClickLogout">로그아웃</a>
             </b-dropdown-item>
           </b-nav-item-dropdown>

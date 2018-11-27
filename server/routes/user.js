@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.post('/signin', (req, res, next) => {//회원가입
+router.post('/signup', (req, res, next) => {//회원가입
   db.registerUser(req.body, (err) => {
     if(err){
       res.send(false);
@@ -32,7 +32,6 @@ router.post('/signin', (req, res, next) => {//회원가입
 router.post('/login', (req, res) => {
 
   let userInfo = {uid: req.body.uid, upw: req.body.upw}
-  console.log(userInfo)
   
   db.findUser(userInfo, (err, [user]) => {
     if(!user || !user.u_no){

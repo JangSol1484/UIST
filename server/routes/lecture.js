@@ -8,13 +8,21 @@ const router = express.Router();
 router.get('/', (req, res, next) => {
   db.getLectureWithNewest((err, newest) => {
     for (let i = 0; i < newest.length; i++) {
-      let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', newest[i].l_thum));
-      newest[i].l_thum = new Buffer(thumbnail).toString('base64');
+      try {
+        let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', newest[i].l_thum));
+        newest[i].l_thum = new Buffer(thumbnail).toString('base64');    
+      } catch (e) {
+        newest[i].l_thum = null;
+      }
     }
     db.getLectureWithPopularity((err, popular) => {
       for (let i = 0; i < popular.length; i++) {
-        let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', popular[i].l_thum));
-        popular[i].l_thum = new Buffer(thumbnail).toString('base64');
+        try {
+          let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', popular[i].l_thum));
+          popular[i].l_thum = new Buffer(thumbnail).toString('base64');
+        } catch (e) {
+          popular[i].l_thum = null;
+        }
       }
       res.json({newest, popular});
     })
@@ -33,7 +41,5 @@ router.get('/:id/:no', (req, res, next) => {
     res.json(lecture);
   });
 });
-
-
 
 module.exports = router;

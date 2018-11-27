@@ -25,7 +25,6 @@
         </div>
       </span>
     </div>
-    <!--<img v-bind:src="'data:image/jpeg;base64,'+thumbnail" />-->
   </div>
 </template>
 

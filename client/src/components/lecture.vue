@@ -105,13 +105,28 @@ export default {
         // console.log('player current update state', playerCurrentState)
     },
       // player is ready
+    onPlayerCanplay () {
+
+    },
+    onPlayerTimeupdate () {
+
+    },
+    onPlayerLoadeddata () {
+
+    },
+    onPlayerPlaying () {
+
+    },
+    onPlayerCanplaythrough () {
+
+    },
     playerReadied (player) {
       console.log('the player is readied', player)
         // you can use it to do something...
         // player.[methods]
     },
     getCurrentTime (event) {
-      console.log(this.$refs.videoPlayer.video.currentTime())
+      console.log(this.$refs.videoPlayer.$el.childNodes[0].childNodes[0].currentTime)
     }
   }
 }
@@ -129,7 +144,7 @@ div.video > video {
   height: 540px;
 }
 textarea.note {
-  position: absolute;
+  position: relative;
   padding: 5px;
   left: 970px;
   width: 490px;
@@ -138,7 +153,7 @@ textarea.note {
   background-color: aliceblue;
 }
 div.contents {
-  position: absolute;
+  position: relative;
   top: 550px;
   width: 960px;
 }

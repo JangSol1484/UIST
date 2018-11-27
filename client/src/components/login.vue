@@ -1,9 +1,10 @@
 <template>
   <div id="login" align="center">
+    <br><br><br><br><br><br>
     <b-container>
       <b-row align-v="center" align-h="center">
         <b-col md="4">
-          <b-form id = "loginform" autocomplete = "off" @keydown.enter="onSubmit(uid, upw)">
+          <b-form id = "loginform" autocomplete = "off" @keydown.enter = "onSubmit(uid, upw)">
             <b-form-group label = "아이디" 
                         label-for = "ID">
               <b-form-input id = "ID" 
@@ -21,12 +22,11 @@
                           type = "password"
                           v-model = "upw"
                           required = "required" 
-                          placeholder="비밀번호를 입력해주세요"
-                          @keydown.enter="onSubmit(uid, upw)">
+                          placeholder="비밀번호를 입력해주세요">
               </b-form-input>
             </b-form-group>
-            <b-button class="w-75" size="lg" variant="secondary" @click = "onSubmit(uid, upw)">send</b-button> <br>
-            <b-button class="w-75" size="lg" variant="success"><router-link :to="{name: 'signin'}">회원가입</router-link></b-button> <br>
+            <b-button id = "loginb" class="w-75" size="lg" variant="secondary" @click = "onSubmit(uid, upw)">로그인</b-button> <br>
+            <b-button class="w-75" size="lg" variant="dark" router-link :to="{name: 'signin'}" >회원가입</b-button> <br>
             
             <router-link :to="{name: 'home'}">뒤로가기</router-link>
           </b-form>

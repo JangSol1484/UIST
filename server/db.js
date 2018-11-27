@@ -18,7 +18,7 @@ const db = {
   },
   findUserByNo(u_no, cb) {//요청 시 토큰의 id값으로 유저 인증
     u_no = u_no * 1;
-    conn.query('select u_id, u_name from user where u_no = ?', u_no, cb);
+    conn.query('select u_id, u_name, u_email, u_introduction from user where u_no = ?', u_no, cb);
   },
   getLectureWithNewest(cb) {
     conn.query('select l_no, l_wr, l_title, l_thum, l_view from lecture order by l_date desc limit 0, 5', cb);
