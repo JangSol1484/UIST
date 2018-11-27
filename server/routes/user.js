@@ -32,6 +32,7 @@ router.post('/signin', (req, res, next) => {//회원가입
 router.post('/login', (req, res) => {
 
   let userInfo = {uid: req.body.uid, upw: req.body.upw}
+  console.log(userInfo)
   
   db.findUser(userInfo, (err, [user]) => {
     if(!user || !user.u_no){
@@ -66,8 +67,8 @@ router.get('/thumbnail/:id', (req, res) => {
   
   let id = req.params.id;
 
-  if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + id + '.jpg'))){
-    let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + id + '.jpg'));
+  if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + id.toString() + '.jpg'))){
+    let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + id.toString() + '.jpg'));
     res.send(new Buffer(imagebytes).toString('base64'));
   } else {
     let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'default_user_thumbnail.jpg'));

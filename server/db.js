@@ -58,7 +58,7 @@ const db = {
     conn.query('select l_no, l_title, l_wr, l_thum, l_view from lecture WHERE l_title REGEXP ?', searchStr, cb);
   },
   searchUserByName(searchStr, cb) {
-
+    conn.query('select u_id, u_email, u_introduction, u_lectures from user WHERE u_id REGEXP ?' ,searchStr,cb);  
   }
 }
 

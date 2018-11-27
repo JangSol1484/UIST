@@ -12,7 +12,7 @@
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto">
+        <b-navbar-nav class="ml-auto" sticky = true>
           <b-nav-form @submit.prevent="SearchQuery">
             <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" name="query" v-model="query"/>
             <b-button size="sm" class="my-2 my-sm-0" type="button" @click="SearchQuery">Search</b-button>

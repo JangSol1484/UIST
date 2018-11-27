@@ -2,10 +2,6 @@
 <!--강의 영상 업로드-->
 <!--script는 건드리지 말 것-->
   <div>
-    title:<input type = "text" name = "l_title" v-model = "l_title">
-    <br>
-    text:<textarea name = "l_text" v-model = "l_text"></textarea>
-    <br>
     <div class = "dropbox">
       <input class = "input-file" type = "file" name = "userfile" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)">
       <h2 v-text="msg"></h2>
@@ -13,6 +9,31 @@
     <progress max="100" :value.prop="uploadPercentage"></progress>
     <br>
     <input type = "button" @click="upload" value = "업로드">
+    <b-container>
+        <b-row align-h="center" align-v="center">
+          <b-col md = "6">
+            <b-form-group horizontal
+                          label="타이틀 : "
+                          label-class="text-sm-right"
+                          label-for="up_title"
+                          >
+                <b-form-input id="up_title"></b-form-input>
+            </b-form-group>
+            <b-form-group horizontal
+                                label="소개 : "
+                                label-class="text-sm-right"
+                                label-for="up_text">
+                    <b-form-textarea id="up_text"
+                                :rows = "3"
+                                :max-rows = "6">
+                    </b-form-textarea>
+            </b-form-group>
+              <b-form-file v-model="file" :state="Boolean(file)" placeholder="Drag and drop" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
+              <b-progress class = "mt-2" :value.prop="uploadPercentage" max="100" show-progress animated></b-progress>
+              <b-button class = "mt-1" size="" variant="secondary" @click="upload" value = "업로드">업로드</b-button>
+          </b-col>
+        </b-row>
+    </b-container>
   </div>
 </template>
 

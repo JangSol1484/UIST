@@ -26,7 +26,7 @@
               </b-form-input>
             </b-form-group>
             <b-button id = "loginb" class="w-75" size="lg" variant="secondary" @click = "onSubmit(uid, upw)">로그인</b-button> <br>
-            <b-button class="w-75" size="lg" variant="dark" router-link :to="{name: 'signin'}" >회원가입</b-button> <br>
+            <b-button class="mt-1 w-75" size="lg" variant="dark" router-link :to="{name: 'signin'}" >회원가입</b-button> <br>
             
             <router-link :to="{name: 'home'}">뒤로가기</router-link>
           </b-form>

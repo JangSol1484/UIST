@@ -7,7 +7,7 @@
       <br><br>
       <div align-self="end">
         <b-button size="" variant="secondary" router-link :to="{name: 'myclass'}" >내강의실</b-button>
-        <b-button size="" variant="secondary" router-link :to="{name: 'modify'}" >프로필 수정</b-button>
+        <b-button size="" variant="secondary" @click="modifyB()" >{{profileB}}</b-button>
       </div>
       <br>
       <b-card bg-variant="light">
@@ -33,19 +33,19 @@
                         label-class="text-sm-right"
                         label-for="my_id"
                         >
-              <b-form-input id="my_id" disabled = "true"></b-form-input>
+              <b-form-input id="my_id" disabled = true :value="user.u_id"></b-form-input>
               </b-form-group>
               <b-form-group horizontal
                             label="이름:"
                             label-class="text-sm-right"
                             label-for="my_name">
-                <b-form-input id="my_name" disabled = "true"></b-form-input>
+                <b-form-input id="my_name" :disabled = modify></b-form-input>
               </b-form-group>
               <b-form-group horizontal
                             label="이메일:"
                             label-class="text-sm-right"
                             label-for="my_email">
-                <b-form-input id="my_email" disabled = "true"></b-form-input>
+                <b-form-input id="my_email" :disabled = modify></b-form-input>
               </b-form-group>
               <b-form-group horizontal
                             label="자기소개:"
@@ -54,7 +54,7 @@
                 <b-form-textarea id="my intro"
                             :rows = "3"
                             :max-rows = "6"
-                            disabled = "true">
+                            :disabled = modify >
                 </b-form-textarea>
               </b-form-group>
             </b-col>
@@ -82,8 +82,9 @@
       return {
         user: null,
         thumbnail: null,
-        email: null,
-        intro: null
+        modify: true,
+        modifyOn: '1',
+        profileB: '프로필 수정'
       }
     },
     created () {
@@ -99,6 +100,24 @@
           this.$router.push('/')
           this.$store.dispatch('LOGOUT')
         })
+    },
+    methods: {
+      modifyB () {
+        switch (this.modifyOn) {
+          case '1':
+            alert('프로필을 저장합니다.')
+            this.modify = true
+            this.profileB = '프로필 수정'
+            this.modifyOn = '2'
+            break
+          case '2':
+            alert('프로필을 수정합니다.')
+            this.modify = false
+            this.profileB = '프로필 저장'
+            this.modifyOn = '1'
+            break
+        }
+      }
     }
   }
 </script>
