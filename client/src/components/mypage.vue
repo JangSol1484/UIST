@@ -55,6 +55,7 @@
                             :rows = "3"
                             :max-rows = "6"
                             :disabled = modify
+                            style="resize: none;"
                             :value="user.u_introduction">
                 </b-form-textarea>
               </b-form-group>
