@@ -31,10 +31,10 @@ router.get('/user', (req, res, next) => {
     for(let i = 0; i < result.length; i++){
       if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id + '.jpg'))){
         let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id + '.jpg'));
-        result[i] = new Buffer(imagebytes).toString('base64');
+        result[i].u_thum = new Buffer(imagebytes).toString('base64');
       } else {
         let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'default_user_thumbnail.jpg'));
-        result[i] = new Buffer(imagebytes).toString('base64');
+        result[i].u_thum = new Buffer(imagebytes).toString('base64');
       }
     }
   }

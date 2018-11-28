@@ -16,13 +16,14 @@ const note = require('./routes/note');
 const contents = require('./routes/contents');
 const search = require('./routes/search');
 const discovery = require('./routes/discovery');
+const category = require('./routes/category');
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(cors());
 app.use(compression());//gzip 압축
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));//vue spa 전달
 app.use(express.static(path.join(__dirname, 'contents')));//업로드 경로
@@ -35,6 +36,7 @@ app.use('/api/note', note); //필기 정보를 처리하는 api
 app.use('/api/contents', contents); //멀티미디어 컨텐츠와 api
 app.use('/api/search', search); //디비정보 검색 결과를 출력하는 api
 app.use('/api/discovery', discovery);
+app.use('/api/category', category);
 app.use(require('connect-history-api-fallback')());
 
 // catch 404 and forward to error handler

@@ -36,7 +36,7 @@
           </b-col>
       </b-row>
       <b-row>
-        <b-col md="3">
+        <b-col md="5">
           <b-dropdown :text="selected_cate_lv0" >
             <b-dropdown-item v-for="category0 in category_level0" 
                             :key="category0"
@@ -60,7 +60,6 @@
         <b-col>
           <b-progress class = "mt-2" :value="uploadPercentage" max="100" show-progress animated></b-progress>
           <b-button class = "mt-1" size="" variant="secondary" @click="upload">업로드</b-button>
-          <button @click="test">test</button>
         </b-col>
       </b-row>
     </b-container>
@@ -71,8 +70,17 @@
 
 <script>
 export default {
-  created: function () {
+  created () {
     this.formData = new FormData()
+    this.$http.get('/api/category')
+    .then((res) => {
+      this.categories = res.data
+      for (let i = 0; i < this.categories.length; i++) {
+        if (this.categories[i].c_level1 === '00') {
+          this.category_level0.push(this.categories[i].c_name)
+        }
+      }
+    })
   },
   methods: {
     loadfile (name, files) {
@@ -107,6 +115,46 @@ export default {
         alert('동영상만 올려라')
       }
     },
+    cast_category0 (categoryName) {
+      for (let i = 0; i < this.categories.length; i++) {
+        if (categoryName === this.categories[i].c_name) {
+          return this.categories[i].c_level0
+        }
+      }
+    },
+    cast_category1 (categoryName) {
+      for (let i = 0; i < this.categories.length; i++) {
+        if (categoryName === this.categories[i].c_name) {
+          return this.categories[i].c_level1
+        }
+      }
+    },
+    selectLevel0 (categoryName0) {
+      this.selected_cate_lv0 = categoryName0
+      this.category_on_lv0 = true
+      this.category_on_lv1 = false
+      this.category_level1 = []
+      for (let i = 0; i < this.categories.length; i++) {
+        if (this.categories[i].c_level0 === this.cast_category0(categoryName0)) {
+          if (this.categories[i].c_level1 !== '00') {
+            this.category_level1.push(this.categories[i].c_name)
+          }
+        }
+      }
+    },
+    selectLevel1 (categoryName1) {
+      this.selected_cate_lv1 = categoryName1
+      this.category_on_lv1 = true
+      this.selected_lecture = []
+      let categoryNumber0
+      for (let i = 0; i < this.categories.length; i++) {
+        if (this.categories[i].c_name === categoryName1) {
+          categoryNumber0 = this.categories[i].c_level0
+        }
+      }
+      this.selected_category = categoryNumber0 + this.cast_category1(categoryName1)
+      alert(this.selected_category)
+    },
     test () {
       alert(this.l_title + this.l_text)
     }
@@ -123,7 +171,11 @@ export default {
       selected_cate_lv0: '카테고리 선택',
       selected_cate_lv1: '카테고리 선택',
       category_on_lv0: false,
-      category_on_lv1: false
+      category_on_lv1: false,
+      category_level0: [],
+      category_level1: [],
+      categories: '',
+      selected_category: ''
     }
   }
 }

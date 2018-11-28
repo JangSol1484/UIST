@@ -78,7 +78,7 @@ const db = {
     conn.query('select * from category where c_level1 = 00',cb);
   },
   getAllCategory(cb) {
-    conn.query('select * from category',cb)
+    conn.query('select * from category order by c_level0',cb)
   }
 }
 
