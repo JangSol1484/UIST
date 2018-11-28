@@ -101,8 +101,8 @@ export default {
         }
       }
     },
-    selectLevel0 (category_number) {
-      this.selected_cate_lv0 = category_number
+    selectLevel0 (categoryNumber) {
+      this.selected_cate_lv0 = categoryNumber
       this.category_on_lv0 = true
       for (let i = 0, write = true; i < this.categories.length; i++) {
         for (let j = 0; j < this.category_level1.length; j++) {
