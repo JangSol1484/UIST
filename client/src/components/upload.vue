@@ -3,7 +3,7 @@
 <!--script는 건드리지 말 것-->
   <div>
     <br>
-    <b-container>
+    <b-container class="w-50">
       <b-row>
         <b-col class="text-left">
           <b-form-group horizontal
