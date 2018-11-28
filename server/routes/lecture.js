@@ -46,7 +46,22 @@ router.get('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
   db.getLectureById(req.params.id, (err, lecture) => {
-    res.json(lecture);
+    let categoryInfo = new Array();
+    let Info = new Object();
+  
+      if(lecture)
+      {
+        for(let i=0; i<lecture.length; i++)
+        {
+          Info = new Object();
+          Info.c_level0 = lecture[i].l_category[0];
+          Info.c_level1 = lecture[i].l_category.slice(1,3);
+          Info.c_name = lecture[i].l_c_name;
+          categoryInfo.push(Info);
+        }
+      }
+      console.log(categoryInfo);
+      res.json({lecture,categoryInfo});
   });
 });
 
