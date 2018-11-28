@@ -8,7 +8,7 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="#">탐색</b-nav-item>
+          <b-nav-item href="/discovery">탐색</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
