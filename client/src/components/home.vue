@@ -5,7 +5,7 @@
     <div>
       <h1>최신 영상</h1>
       <span v-for="newest in newests" v-bind:key="newest.l_no" class="lecture">
-        <router-link :to="{ name: 'lecture', params: { id: newest.l_wr, no: newest.l_no }}">
+        <router-link :to="{ name: 'lecture', params: { id: newest.l_wr_id, no: newest.l_no }}">
           <img v-bind:src="'data:image/jpeg;base64,'+newest.l_thum" class="thumbnail">
         </router-link>
         <div>
@@ -17,7 +17,7 @@
     <div>
       <h1>인기 영상</h1>
       <span v-for="popular in populars" v-bind:key="popular.l_no" class="lecture">
-        <router-link :to="{ name: 'lecture', params: { id: popular.l_wr, no: popular.l_no }}">
+        <router-link :to="{ name: 'lecture', params: { id: popular.l_wr_id, no: popular.l_no }}">
           <img v-bind:src="'data:image/jpeg;base64,'+popular.l_thum" class="thumbnail">
         </router-link>
         <div>

@@ -29,13 +29,10 @@
     <div class="contents">
       제목 : {{lecture.l_title}}<br>
       본문 : {{lecture.l_text}}<br>
-      작성자 : {{lecture.l_wr}}<br>
+      작성자 : {{lecture.l_wr_name}}<br>
       작성일 : {{lecture.l_date}}<br>
       조회수 : {{lecture.l_view}}<br>
-      파일 : {{play}}<br>
 
-      <button v-on:click="getCurrentTime">dddddddddd</button>
-      
     <router-link :to="{name: 'home'}">뒤로가기</router-link>
     </div>
     <textarea class="note" @keydown.tab.prevent="tabed($event.target)" style="resize: none;"></textarea>
@@ -81,9 +78,6 @@ export default {
       playerOptions: null
     }
   },
-  mounted () {
-    // this.currentTime = this.$refs.myvideo.currentTime
-  },
   methods: {
     tabed (textareas) {
       let tab = '    '
@@ -125,7 +119,7 @@ export default {
         // you can use it to do something...
         // player.[methods]
     },
-    getCurrentTime (event) {
+    getCurrentTime () {
       console.log(this.$refs.videoPlayer.$el.childNodes[0].childNodes[0].currentTime)
     }
   }

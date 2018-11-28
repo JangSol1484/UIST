@@ -35,7 +35,7 @@
             <b-form-group horizontal
               :label-cols = "2"
               label-size = "lg"
-              label = "이름 :"
+              label = "닉네임 :"
               label-for = "s_name">
               <b-form-input id= "s_name"
                         size = "lg"
@@ -63,12 +63,14 @@
               label-size = "lg"
               label = "자기소개 :"
               label-for = "s_intro">
-              <b-form-textarea id = "s_intro"
+              <textarea class="form-control"
+                     id = "s_intro"
                     v-model = "u_intro"
                     placeholder = "자기소개를 입력해주세요"
                     :rows = "3"
-                    :max-rows = "6">
-              </b-form-textarea>
+                    :max-rows = "6"
+                    style="resize:none">
+              </textarea>
             </b-form-group>
             <b-button id = "loginb" class="w-100" size="lg" variant="secondary" @click = "sendPost">가입하기</b-button> <br><br>
             <router-link :to="{name: 'home'}">뒤로가기</router-link>

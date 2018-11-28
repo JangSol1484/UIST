@@ -9,10 +9,17 @@ const db = require('../db');
 
 const router = express.Router();
 
-router.post('/upload', (req, res, next) => {
+router.post('/upload/userthumbnail', (req, res, next) => {
+  let thumbnail = req.body.thumbnail;
+  console.log(thumbnail);
+  res.send('');
+});
+
+router.post('/upload/lecture', (req, res, next) => {
   const user = auth.verify(req.headers.authorization);
 
-  let writer;
+  let wr_id;
+  let wr_name;
   let cnt;
   let fileName;
   let filetype;
@@ -22,13 +29,13 @@ router.post('/upload', (req, res, next) => {
   let text;
 
   db.findUserByNo(user.id, (err, [rows]) => {
-    writer = rows.u_id;
+    wr_id = rows.u_id;
+    wr_name = rows.u_name;
 
-    db.getNumberofLectures(writer, (err, [rows]) => {
+    db.getNumberofLectures(wr_id, (err, [rows]) => {
       cnt = rows ? rows.u_lectures : 0;
       cnt++;
-      console.log(rows, cnt);
-      fileName = writer + '-' + cnt;
+      fileName = wr_id + '-' + cnt;
 
       let form = new multiparty.Form();
 
@@ -43,7 +50,7 @@ router.post('/upload', (req, res, next) => {
         const tmp = part.headers['content-type'].split('/');
         filetype = tmp[1];
 
-        console.log('Write Streaming file : ' + fileName + '.' + filetype);
+        // console.log('Write Streaming file : ' + fileName + '.' + filetype);
         let writeStream = fs.createWriteStream(path.join(__dirname, '..', 'contents', 'video', fileName + '.' + filetype));
         writeStream.filename = fileName + '.' + filetype;
         part.pipe(writeStream);
@@ -53,7 +60,7 @@ router.post('/upload', (req, res, next) => {
         });
     
         part.on('end', () => {
-          console.log(fileName + '.' + filetype + 'Part read complete');
+          //console.log(fileName + '.' + filetype + 'Part read complete');
           writeStream.end();
         });
       });
@@ -68,15 +75,21 @@ router.post('/upload', (req, res, next) => {
           filename: fileName + '.jpg'
         }).then( (thumb) => {
           l_info = {
+            no: cnt,
             title: title,
             text: text,
-            writer: writer,
+            wr_id: wr_id,
+            wr_name: wr_name,
             fileName: fileName,
             filetype: filetype,
             thumb: thumb
           }
-          db.registerLecture(l_info, () => {
-            res.status(200).send('Upload Complete');
+          db.registerLecture(l_info, (err) => {
+            if (err) {
+              console.log(err)
+            } else {
+              res.status(200).send('Upload Complete');
+            }
           });
         });;
       });
