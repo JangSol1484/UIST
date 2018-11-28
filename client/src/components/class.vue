@@ -6,6 +6,7 @@
     {{myinfo}}<br>
     {{mylecture}}<br>
     {{categories}}<br>
+    {{category_level0}}<br>
     {{category_level1}}<br>
     <router-link :to="{name: 'upload'}">업로드</router-link>
     <b-card bg-variant="light">
@@ -30,7 +31,7 @@
                         label-class="text-sm-right"
                         label-for="my_id"
                         >
-              <b-label>아이디</b-label>
+              <label>아이디</label>
               </b-form-group>
               <b-form-group horizontal
                         label="업로드한 동영상 수:"
@@ -45,10 +46,14 @@
       <br>
       <b-row>
         <b-col>
-          <b-dropdown id="set_category" text="카테고리 선택">
-            <b-drop-item :v-for="category in category_level1" :key="category" >{{category}}</b-drop-item>
+          <b-dropdown id="set_category" :text="selected_cate_lv0">
+            <b-dropdown-item v-for="category in category_level0" 
+                            :key="category"
+                            @click="selectLevel0(cast_category(category))">
+              {{category}}
+            </b-dropdown-item>
           </b-dropdown>
-          <b-dropdown v-if="category_one===true" id="set_sub_category" text="카테고리 선택">
+          <b-dropdown v-if="category_on_lv0===true" :text="selected_cate_lv1">
             
           </b-dropdown>
         </b-col>
@@ -79,16 +84,19 @@ export default {
     .then((res) => {
       this.categories = res.data
       for (let i = 0, write = true; i < this.categories.length; i++) {
-        for (let j = 0; j < this.category_level1.length; j++) {
-          if (this.category_level1[j] === this.categories[i].c_level0) {
+        for (let j = 0; j < this.category_level0_temp.length; j++) {
+          if (this.category_level0_temp[j] === this.categories[i].c_level0) {
             write = false
             break
           }
         }
         if (write) {
-          this.category_level1.push(this.categories[i].c_level0)
+          this.category_level0_temp.push(this.categories[i].c_level0)
         }
         write = true
+      }
+      for (let i in this.category_level0_temp) {
+        this.category_level0.push(this.category_name[this.category_level0_temp[i]])
       }
     })
   },
@@ -96,10 +104,40 @@ export default {
     return {
       myinfo: '',
       mylecture: '',
+      selected_cate_lv0: '카테고리 선택',
+      selected_cate_lv1: '카테고리 선택',
+      category_on_lv0: false,
+      category_on_lv1: false,
       category_name: ['수능', '공시', '어학', '사회', '투자', '생활', '예술', '기술', '게임', '기타'],
       categories: [],
-      category_level2: [],
+      category_level0_temp: [],
+      category_level0: [],
       category_level1: []
+    }
+  },
+  methods: {
+    cast_category (category) {
+      for (let i = 0; i < this.categories.length;) {
+        if (this.category_name === this.categories[i].c_name) {
+          return this.categories[i].c_level0
+        }
+      }
+    },
+    selectLevel0 (category_number) {
+      this.selected_cate_lv0 = category_number
+      this.category_on_lv0 = true
+      for (let i = 0, write = true; i < this.categories.length; i++) {
+        for (let j = 0; j < this.category_level1.length; j++) {
+          if (this.category_level1[j] === this.categories[i].c_name) {
+            write = false
+            break
+          }
+        }
+        if (write) {
+          this.category_level1.push(this.categories[i].c_name)
+        }
+        write = true
+      }
     }
   }
 }
