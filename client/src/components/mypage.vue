@@ -42,7 +42,7 @@
           <b-row class="mt-2">
             <b-col>
               <b-img thumbnail fluid v-bind:src="'data:image/jpeg;base64,'+thumbnail" width = "400px" height="400px"/>
-              <b-form-file v-if="modify===false"></b-form-file>
+              <b-form-file name = "thumbnail" v-if="modify===false" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
             </b-col>
             <b-col md="8">
               <b-form-group horizontal
@@ -69,6 +69,7 @@
                             label-class="text-sm-right"
                             label-for="my_intro">
                 <textarea class="form-control"
+                          v-model="v_intro"
                           ref="my_intro"
                           id="my_intro"
                           :rows="3"
@@ -108,23 +109,27 @@
         modifyOn: '2',
         profileB: '프로필 수정',
         showBtn: false,
-        b_color: 'secondary'
+        b_color: 'secondary',
+        isJpeg: null,
+        targetName: null,
+        targetFile: null
       }
     },
     created () {
-      this.formData = new FormData()
-      this.$http.get('api/user/my')
+      this.$http.get('/api/user/my')
         .then((res) => {
           this.user = res.data.user
           this.v_name = this.user.u_name
-          this.v_
-          this.$http.get(`api/user/thumbnail/${this.user.u_id}`)
+          this.v_email = this.user.u_email
+          this.v_intro = this.user.u_introduction
+          this.$http.get(`/api/user/thumbnail/${this.user.u_id}`)
           .then((res) => {
             this.thumbnail = res.data
           })
           this.v_name = this.user.u_name
         })
-        .catch(() => {
+        .catch((err) => {
+          alert(err)
           this.$router.push('/')
           this.$store.dispatch('LOGOUT')
         })
@@ -138,6 +143,7 @@
             this.profileB = '프로필 수정'
             this.modifyOn = '2'
             this.b_color = 'secondary'
+            this.sendProfileChange()
             break
           case '2':
             alert('프로필을 수정합니다.')
@@ -158,16 +164,30 @@
       },
       cancel () {
         this.modifyOn = '3'
-        alert(this.v_name + this.$refs.my_name.value)
         this.v_name = this.user.u_name + ' '
         this.modifyB()
       },
       sendProfileChange () {
+        this.formData = new FormData()
         this.formData.append('name', this.v_name)
         this.formData.append('email', this.v_email)
         this.formData.append('intro', this.v_intro)
-        alert(this.v_name + this.v_email + this.v_intro)
-        // this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
+        this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
+        // alert(this.v_name + this.v_email + this.v_intro + this.targetFile.name)
+
+        this.$http.post('/api/user/update', this.formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+      },
+      loadfile (name, files) {
+        this.targetName = name
+        this.targetFile = files[0]
+        let type = files[0].type.split('/')
+        if (type[1] === 'jpg') {
+          this.isJpeg = true
+        }
       }
     }
   }

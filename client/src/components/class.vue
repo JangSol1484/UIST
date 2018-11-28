@@ -66,15 +66,8 @@
 <script>
 export default {
   created () {
-    this.$http.get('/api/user/my/class')
-    .then((res) => {
-      this.myinfo = res.data.msg
-    })
-    .catch(() => {
-      this.$router.push('/')
-      this.$store.dispatch('LOGOUT')
-    })
-    this.$http.get('/api/lecture/test')
+    let id = this.$route.params.id
+    this.$http.get(`/api/lecture/${id}`)
     .then((res) => {
       this.mylecture = res.data.lecture
       this.categories = res.data.categoryInfo
@@ -93,6 +86,10 @@ export default {
       for (let i in this.category_level0_temp) {
         this.category_level0.push(this.category_name[this.category_level0_temp[i]])
       }
+    })
+    .catch(() => {
+      this.$router.push('/')
+      this.$store.dispatch('LOGOUT')
     })
   },
   data () {
