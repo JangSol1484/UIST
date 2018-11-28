@@ -5,6 +5,7 @@
   <div>
     {{myinfo}}<br>
     {{mylecture}}<br>
+    {{categories}}<br>
     {{category_level1}}<br>
     <router-link :to="{name: 'upload'}">업로드</router-link>
     <b-card bg-variant="light">
@@ -45,7 +46,7 @@
       <b-row>
         <b-col>
           <b-dropdown id="set_category" text="카테고리 선택">
-            <b-drop-item v-for="category in categories" :key="category">{{category}}</b-drop-item>
+            <b-drop-item :v-for="category in category_level1" :key="category" >{{category}}</b-drop-item>
           </b-dropdown>
           <b-dropdown v-if="category_one===true" id="set_sub_category" text="카테고리 선택">
             
@@ -76,15 +77,29 @@ export default {
     })
     this.$http.get('/api/lecture/testapi')
     .then((res) => {
-      this.category_level1 = res.data
+      this.categories = res.data
+      for (let i = 0, write = true; i < this.categories.length; i++) {
+        for (let j = 0; j < this.category_level1.length; j++) {
+          if (this.category_level1[j] === this.categories[i].c_level0) {
+            write = false
+            break
+          }
+        }
+        if (write) {
+          this.category_level1.push(this.categories[i].c_level0)
+        }
+        write = true
+      }
     })
   },
   data () {
     return {
       myinfo: '',
+      mylecture: '',
       category_name: ['수능', '공시', '어학', '사회', '투자', '생활', '예술', '기술', '게임', '기타'],
-      category_level1: [],
-      category_level2: []
+      categories: [],
+      category_level2: [],
+      category_level1: []
     }
   }
 }
