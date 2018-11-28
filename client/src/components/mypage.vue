@@ -109,11 +109,6 @@
         b_color: 'secondary'
       }
     },
-    computed: {
-      getMyname () {
-        return this.user.u_name
-      }
-    },
     created () {
       this.$http.get('api/user/my')
         .then((res) => {
@@ -123,6 +118,7 @@
           .then((res) => {
             this.thumbnail = res.data
           })
+          this.v_name = this.user.u_name
         })
         .catch(() => {
           this.$router.push('/')
@@ -148,6 +144,7 @@
             break
           case '3':
             alert('변경을 취소합니다.')
+            this.v_name = this.user.u_name
             this.modify = true
             this.profileB = '프로필 수정'
             this.modifyOn = '2'
