@@ -171,7 +171,7 @@
         this.formData.append('email', this.v_email)
         this.formData.append('intro', this.v_intro)
         this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
-        // alert(this.v_name + this.v_email + this.v_intro + this.targetFile.name)
+        alert(this.v_name + this.v_email + this.v_intro + this.targetFile.name)
         this.$http.post('/api/user/update', this.formData, {
           headers: {
             'Content-Type': 'multipart/form-data'

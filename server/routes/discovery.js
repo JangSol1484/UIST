@@ -8,7 +8,9 @@ const router = express.Router();
 
 router.get('/:category', (req, res) => {
   let category = req.params.category;
+  db.getLectureByCategory(category, (err, rows) => {
+    res.send(rows);
+  });
 });
-
 
 module.exports = router;
