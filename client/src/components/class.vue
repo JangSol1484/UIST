@@ -5,6 +5,7 @@
   <div>
     {{myinfo}}<br>
     {{mylecture}}<br>
+    {{category_level1}}<br>
     <router-link :to="{name: 'upload'}">업로드</router-link>
     <b-card bg-variant="light">
           <b-row>
@@ -19,20 +20,23 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col md="8">
+            <b-col>
+              <b-img thumbnail fluid v-bind:src="'data:image/jpeg;base64,'+thumbnail" width = "400px" height="400px"/>
+            </b-col>
+            <b-col md="8" class="text-left">
               <b-form-group horizontal
                         label="아이디:"
                         label-class="text-sm-right"
                         label-for="my_id"
                         >
-              <b-form-input id="my_id" disabled = true></b-form-input>
+              <b-label>아이디</b-label>
               </b-form-group>
               <b-form-group horizontal
                         label="업로드한 동영상 수:"
                         label-class="text-sm-right"
                         label-for="my_video"
                         >
-              <b-form-input id="my_video" disabled = true></b-form-input>
+              <label>동영상 수</label>
               </b-form-group>
             </b-col>
           </b-row>
@@ -41,6 +45,9 @@
       <b-row>
         <b-col>
           <b-dropdown id="set_category" text="카테고리 선택">
+            <b-drop-item v-for="category in categories" :key="category">{{category}}</b-drop-item>
+          </b-dropdown>
+          <b-dropdown v-if="category_one===true" id="set_sub_category" text="카테고리 선택">
             
           </b-dropdown>
         </b-col>
@@ -67,11 +74,17 @@ export default {
     .then((res) => {
       this.mylecture = res.data
     })
+    this.$http.get('/api/lecture/testapi')
+    .then((res) => {
+      this.category_level1 = res.data
+    })
   },
   data () {
     return {
       myinfo: '',
-      mylecture: []
+      category_name: ['수능', '공시', '어학', '사회', '투자', '생활', '예술', '기술', '게임', '기타'],
+      category_level1: [],
+      category_level2: []
     }
   }
 }

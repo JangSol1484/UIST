@@ -55,7 +55,7 @@
                             label="이름:"
                             label-class="text-sm-right"
                             label-for="my_name">
-                <b-form-input ref="my_name" id="my_name" :disabled = modify :value="getMyname"></b-form-input>
+                <b-form-input v-model = "v_name" ref="my_name" id="my_name" :disabled = modify :value="user.u_name"></b-form-input>
               </b-form-group>
               <b-form-group horizontal
                             label="이메일:"
@@ -109,11 +109,6 @@
         b_color: 'secondary'
       }
     },
-    computed: {
-      getMyname () {
-        return this.user.u_name
-      }
-    },
     created () {
       this.$http.get('api/user/my')
         .then((res) => {
@@ -122,6 +117,7 @@
           .then((res) => {
             this.thumbnail = res.data
           })
+          this.v_name = this.user.u_name
         })
         .catch(() => {
           this.$router.push('/')
@@ -147,6 +143,7 @@
             break
           case '3':
             alert('변경을 취소합니다.')
+            this.v_name = this.user.u_name
             this.modify = true
             this.profileB = '프로필 수정'
             this.modifyOn = '2'
@@ -156,7 +153,7 @@
       },
       cancel () {
         this.modifyOn = '3'
-        // this.$refs.my_name = this.getMyname()
+        alert(this.v_name + this.$refs.my_name.value)
         // this.my_name.value = this.user.u_name
         /* this.$refs.my_email.value = this.user.u_email
         this.$refs.my_intro.value = this.user.u_introduction */
