@@ -10,7 +10,8 @@
               :label-cols = "2"
               label-size = "lg"
               label = "아이디 :"
-              label-for = "s_id">
+              label-for = "s_id"
+              style="text-align:right">
               <b-form-input id= "s_id"
                         size = "lg"
                         type = "text" 
@@ -23,7 +24,8 @@
               :label-cols = "2"
               label-size = "lg"
               label = "비밀번호 :"
-              label-for = "s_pw">
+              label-for = "s_pw"
+              style="text-align:right">
               <b-form-input id= "s_pw"
                         size = "lg"
                         type = "password" 
@@ -36,7 +38,8 @@
               :label-cols = "2"
               label-size = "lg"
               label = "닉네임 :"
-              label-for = "s_name">
+              label-for = "s_name"
+              style="text-align:right">
               <b-form-input id= "s_name"
                         size = "lg"
                         type = "text" 
@@ -49,7 +52,8 @@
               :label-cols = "2"
               label-size = "lg"
               label = "이메일 :"
-              label-for = "s_email">
+              label-for = "s_email"
+              style="text-align:right">
               <b-form-input id= "s_email"
                         size = "lg"
                         type = "email" 
@@ -62,7 +66,8 @@
               :label-cols = "2"
               label-size = "lg"
               label = "자기소개 :"
-              label-for = "s_intro">
+              label-for = "s_intro"
+              style="text-align:right">
               <textarea class="form-control"
                      id = "s_intro"
                     v-model = "u_intro"

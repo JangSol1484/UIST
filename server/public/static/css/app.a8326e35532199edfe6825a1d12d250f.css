@@ -351,7 +351,7 @@ div.video > video[data-v-0badb094] {
   height: 540px;
 }
 textarea.note[data-v-0badb094] {
-  position: absolute;
+  position: relative;
   padding: 5px;
   left: 970px;
   width: 490px;
@@ -360,7 +360,7 @@ textarea.note[data-v-0badb094] {
   background-color: aliceblue;
 }
 div.contents[data-v-0badb094] {
-  position: absolute;
+  position: relative;
   top: 550px;
   width: 960px;
 }
@@ -11268,4 +11268,4 @@ table.b-table > tbody > tr.b-table-details > td {
     border-top: none;
 }
 
-/*# sourceMappingURL=app.8befe4c526047c10e76c76f40ae381ab.css.map*/
+/*# sourceMappingURL=app.a8326e35532199edfe6825a1d12d250f.css.map*/

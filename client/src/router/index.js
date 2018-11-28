@@ -47,13 +47,13 @@ export default new Router({
       component: Search
     },
     {
-      path: '/my',
+      path: '/my/:id',
       name: 'my',
       component: MyPage,
       beforeEnter: requireAuth()
     },
     {
-      path: '/my/class',
+      path: '/my/:id/class',
       name: 'myclass',
       component: MyClass,
       beforeEnter: requireAuth()

@@ -116,19 +116,20 @@
       }
     },
     created () {
-      this.$http.get('api/user/my')
+      this.$http.get('/api/user/my')
         .then((res) => {
           this.user = res.data.user
           this.v_name = this.user.u_name
           this.v_email = this.user.u_email
           this.v_intro = this.user.u_introduction
-          this.$http.get(`api/user/thumbnail/${this.user.u_id}`)
+          this.$http.get(`/api/user/thumbnail/${this.user.u_id}`)
           .then((res) => {
             this.thumbnail = res.data
           })
           this.v_name = this.user.u_name
         })
-        .catch(() => {
+        .catch((err) => {
+          alert(err)
           this.$router.push('/')
           this.$store.dispatch('LOGOUT')
         })

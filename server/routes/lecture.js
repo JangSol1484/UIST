@@ -5,12 +5,6 @@ const db = require('../db')
 
 const router = express.Router();
 
-router.get('/testapi', (req, res, next) => {
-  db.testapi((err, rows) => {
-    res.json(rows);
-  })
-})
-
 router.get('/', (req, res, next) => {
   db.getLectureWithNewest((err, newest) => {
     if (newest) {

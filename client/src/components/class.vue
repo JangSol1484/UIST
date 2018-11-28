@@ -62,21 +62,14 @@
 <script>
 export default {
   created () {
-    this.$http.get('/api/user/my/class')
+    let id = this.$route.params.id
+    this.$http.get(`/api/lecture/${id}`)
     .then((res) => {
-      this.myinfo = res.data.msg
+      this.mylecture = res.data
     })
     .catch(() => {
       this.$router.push('/')
       this.$store.dispatch('LOGOUT')
-    })
-    this.$http.get('/api/lecture/test')
-    .then((res) => {
-      this.mylecture = res.data
-    })
-    this.$http.get('/api/lecture/testapi')
-    .then((res) => {
-      this.category_level1 = res.data
     })
   },
   data () {
