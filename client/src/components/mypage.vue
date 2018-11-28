@@ -42,6 +42,7 @@
           <b-row class="mt-2">
             <b-col>
               <b-img thumbnail fluid v-bind:src="'data:image/jpeg;base64,'+thumbnail" width = "400px" height="400px"/>
+              <b-form-file v-if="modify===false"></b-form-file>
             </b-col>
             <b-col md="8">
               <b-form-group horizontal
@@ -61,7 +62,7 @@
                             label="이메일:"
                             label-class="text-sm-right"
                             label-for="my_email">
-                <b-form-input ref="my_email" id="my_email" :disabled = modify :value="user.u_email"></b-form-input>
+                <b-form-input v-model="v_email" ref="my_email" id="my_email" :disabled = modify :value="user.u_email"></b-form-input>
               </b-form-group>
               <b-form-group horizontal
                             label="자기소개:"
@@ -100,6 +101,7 @@
   export default {
     data () {
       return {
+        formData: null,
         user: null,
         thumbnail: null,
         modify: true,
@@ -110,10 +112,12 @@
       }
     },
     created () {
+      this.formData = new FormData()
       this.$http.get('api/user/my')
         .then((res) => {
           this.user = res.data.user
           this.v_name = this.user.u_name
+          this.v_
           this.$http.get(`api/user/thumbnail/${this.user.u_id}`)
           .then((res) => {
             this.thumbnail = res.data
@@ -157,6 +161,13 @@
         alert(this.v_name + this.$refs.my_name.value)
         this.v_name = this.user.u_name + ' '
         this.modifyB()
+      },
+      sendProfileChange () {
+        this.formData.append('name', this.v_name)
+        this.formData.append('email', this.v_email)
+        this.formData.append('intro', this.v_intro)
+        alert(this.v_name + this.v_email + this.v_intro)
+        // this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
       }
     }
   }

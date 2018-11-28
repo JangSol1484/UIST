@@ -6,6 +6,9 @@ const conn = mysql.createConnection(dbconfig);
 conn.connect();
 
 const db = {
+  testapi (cb) {
+    conn.query('select * from category where c_level1 != "00" order by c_level0', cb);
+  },
   registerUser (userInfo, cb) {
     conn.query('alter table user auto_increment=1;', () => {
       with(userInfo){

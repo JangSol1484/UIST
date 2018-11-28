@@ -6,19 +6,9 @@ const db = require('../db')
 const router = express.Router();
 
 router.get('/testapi', (req, res, next) => {
-  let category = {
-    000:{
-      001: "국어",
-		  002: "외국어",
-		  003: "제2외국어",
-		  005: "과학탐구"
-	  },
-	  200:{
-		  201: "한국어",
-      202: "영어"
-	  }
-  }
-  res.json(category);
+  db.testapi((err, rows) => {
+    res.json(rows);
+  })
 })
 
 router.get('/', (req, res, next) => {
