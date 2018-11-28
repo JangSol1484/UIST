@@ -22,13 +22,52 @@ router.get('/', (req, res) => {
 });
 
 router.get('/my', auth.ensureAuth(), (req, res) => {
-  console.log('api진입')
   db.findUserByNo(req.user.id, (err, [user]) => {
-    if(err){
-      res.status(401);
-    }
-    else{
-      res.json({user});
+    db.searchMySubscribe(req.user.id, (err, result) => {
+      if(err){
+        res.status(401);
+      }
+      else{
+        let sublist = new Array()
+        let people;
+
+        if(result)
+        for(let i=0; i<result.length; i++)
+        {
+          people = new Object();
+          people.bj = result[i].u_name;          
+
+          if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + people.bj.toString() + '.jpg'))){
+            let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + people.bj.toString() + '.jpg'));
+            people.bjThumbnail = new Buffer(imagebytes).toString('base64');
+            sublist.push(people);
+          } else {
+            let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'default_user_thumbnail.jpg'));
+            people.bjThumbnail = new Buffer(imagebytes).toString('base64');
+            sublist.push(people);
+          }          
+        }
+        console.log(sublist);
+        
+        res.json({user,sublist})
+      }
+    })
+  });
+});
+
+router.get('/my/class', auth.ensureAuth(), (req, res) => {
+  db.findUserByNo(req.user.id, (err,user) => {
+    if(err) {res.status(401);}
+    else {
+    let smallUserInfo = new Array();
+    let info = new Object();
+
+    info.follower = user[0].u_follower
+    info.lectures = user[0].u_lectures
+
+    smallUserInfo.push(info);
+    console.log(smallUserInfo);
+    res.json(smallUserInfo);
     }
   });
 });

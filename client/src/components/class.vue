@@ -3,13 +3,13 @@
 <!--내가 올린 모든 동영상에 관한 정보 혹은 요약된 정보를 렌더-->
 <!--아직 미구현-->
   <div>
-    {{mylecture}}<br>
+    {{mylecture}}
     {{categories}}<br>
     {{category_level0}}<br>
     {{category_level1}}<br>
     <b-container>
       <b-row>
-        <b-col><h2>{{this.$route.params.id}}님의 강의실</h2></b-col>
+        <b-col><h2>{{this.$store.getters.getName}}님의 강의실</h2></b-col>
         <b-col class="text-right">
           <b-button variant="dark" router-link :to="{name: 'upload'}" >업로드</b-button>
         </b-col>
@@ -22,8 +22,8 @@
                 <b-img thumbnail fluid v-bind:src="'data:image/jpeg;base64,'+thumbnail" width = "400px" height="400px"/>
               </b-col>
               <b-col md="8" class="text-center">
-                <p>구독자 : 명</p>
-                <p>동영상 : 개</p>
+                <p>구독자 : {{upinfo[0].follower}}명</p>
+                <p>동영상 : {{upinfo[0].lectures}}개</p>
               </b-col>
             </b-row>
           </b-card>
@@ -31,7 +31,7 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-dropdown id="set_category" :text="selected_cate_lv0" >
+          <b-dropdown :text="selected_cate_lv0" >
             <b-dropdown-item v-for="category0 in category_level0" 
                             :key="category0"
                             @click="selectLevel0(category0)">
@@ -51,9 +51,9 @@
         <b-card v-if = "this.category_on_lv1===true">
           <span v-for="video in selected_lecture" :key="video.l_no" class="lecture">
             <router-link :to="{ name: 'lecture', params: { id: video.l_wr_id, no: video.l_no }}">
-              <img v-bind:src="'data:image/jpeg;base64,'+video.l_thum" class="thumbnail">
+              <img v-bind:src="'data:image/jpeg;base64,'+video.l_thum" class="thumbnail" width="200px" height="100px">
             </router-link>
-            <div>
+            <div class="text-center">
               <strong>{{video.l_title}}</strong> [{{video.l_view}}]
             </div>
           </span>
@@ -64,6 +64,7 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
 export default {
   created () {
     let id = this.$route.params.id
@@ -71,6 +72,7 @@ export default {
     .then((res) => {
       this.mylecture = res.data.lecture
       this.categories = res.data.categoryInfo
+
       for (let i = 0, write = true; i < this.categories.length; i++) {
         for (let j = 0; j < this.category_level0_temp.length; j++) {
           if (this.category_level0_temp[j] === this.categories[i].c_level0) {
@@ -95,17 +97,22 @@ export default {
     .then((res) => {
       this.thumbnail = res.data
     })
+    this.$http.get(`/api/user/my/class`)
+    .then((res) => {
+      this.upinfo = res.data
+    })
   },
   data () {
     return {
+      upinfo: '',
       myinfo: '',
       mylecture: '',
       thumbnail: null,
       selected_cate_lv0: '카테고리 선택',
       selected_cate_lv1: '카테고리 선택',
+      category_name: ['수능', '공시', '어학', '사회', '투자', '생활', '예술', '기술', '게임', '기타'],
       category_on_lv0: false,
       category_on_lv1: false,
-      category_name: ['수능', '공시', '어학', '사회', '투자', '생활', '예술', '기술', '게임', '기타'],
       categories: [],
       category_level0_temp: [],
       category_level0: [],
