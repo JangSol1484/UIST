@@ -7,7 +7,17 @@
       <br><br>
       <div align-self="end">
         <b-button size="" variant="secondary" router-link :to="{name: 'myclass'}" >내강의실</b-button>
-        <b-button size="" variant="secondary" @click="modifyB()" >{{profileB}}</b-button>
+        <b-button size="" 
+                  v-b-toggle.collapse_btn 
+                  variant="secondary" 
+                  @click="modifyB()" 
+                  aria-controls="collapse_btn"
+                  :aria-expanded="showBtn ? 'true' : 'false'">
+          {{profileB}}
+        </b-button>
+        <b-collapse id="collapse_btn" class="mt-2" v-model = "showBtn">
+          <b-button>취소</b-button>
+        </b-collapse>
       </div>
       <br>
       <b-card bg-variant="light">
@@ -39,13 +49,13 @@
                             label="이름:"
                             label-class="text-sm-right"
                             label-for="my_name">
-                <b-form-input id="my_name" :disabled = modify></b-form-input>
+                <b-form-input id="my_name" :disabled = modify :value="user.u_name"></b-form-input>
               </b-form-group>
               <b-form-group horizontal
                             label="이메일:"
                             label-class="text-sm-right"
                             label-for="my_email">
-                <b-form-input id="my_email" :disabled = modify></b-form-input>
+                <b-form-input id="my_email" :disabled = modify :value="user.u_email"></b-form-input>
               </b-form-group>
               <b-form-group horizontal
                             label="자기소개:"
@@ -83,8 +93,9 @@
         user: null,
         thumbnail: null,
         modify: true,
-        modifyOn: '1',
-        profileB: '프로필 수정'
+        modifyOn: '2',
+        profileB: '프로필 수정',
+        showBtn: false
       }
     },
     created () {
