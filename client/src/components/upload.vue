@@ -2,33 +2,42 @@
 <!--강의 영상 업로드-->
 <!--script는 건드리지 말 것-->
   <div>
+    <br>
     <b-container>
-        <b-row align-h="center" align-v="center">
-          <b-col md = "6">
-            <b-form-group horizontal
-                          label="타이틀 : "
-                          label-class="text-sm-right"
-                          label-for="up_title"
-                          >
-                <b-form-input v-model="l_title"></b-form-input>
-            </b-form-group>
-            <b-form-group horizontal
-                                label="소개 : "
-                                label-class="text-sm-right"
-                                label-for="l_text">
-                    <textarea class="form-control"
-                              v-model="l_text"
-                              :rows = "3"
-                              :max-rows = "6"
-                              style="resize:none">
-                    </textarea>
-            </b-form-group>
-              <b-form-file name = "userfile" v-model="file" :state="Boolean(file)" placeholder="Drag and Drop" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
-              <b-progress class = "mt-2" :value="uploadPercentage" max="100" show-progress animated></b-progress>
-              <b-button class = "mt-1" size="" variant="secondary" @click="upload">업로드</b-button>
-              <button @click="test">test</button>
+      <b-row>
+        <b-col class="text-left">
+          <b-form-group horizontal
+                        label="타이틀 : "
+                        label-class="text-sm-left"
+                        label-for="up_title"
+                        >
+              <b-form-input v-model="l_title"></b-form-input>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group horizontal
+                              label="소개 : "
+                              label-class="text-sm-left"
+                              label-for="l_text">
+                  <textarea class="form-control"
+                            v-model="l_text"
+                            :rows = "3"
+                            :max-rows = "6"
+                            style="resize:none">
+                  </textarea>
+          </b-form-group>
           </b-col>
-        </b-row>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-file name = "userfile" v-model="file" :state="Boolean(file)" placeholder="Drag and Drop" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
+          <b-progress class = "mt-2" :value="uploadPercentage" max="100" show-progress animated></b-progress>
+          <b-button class = "mt-1" size="" variant="secondary" @click="upload">업로드</b-button>
+          <button @click="test">test</button>
+        </b-col>
+      </b-row>
     </b-container>
   </div>
 </template>

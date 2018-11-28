@@ -67,6 +67,12 @@ const db = {
   },
   searchUserByName(searchStr, cb) {
     conn.query('select u_id, u_email, u_introduction, u_lectures from user WHERE u_id REGEXP ?' ,searchStr,cb);
+  },
+  searchMySubscribe(cb) {
+    conn.query('select s_following_no from subscribe, user where u_no = s_follower_no',cb)
+  },
+  searchLecturePartitioning(cb) {
+    conn.query('select * from category where c_level1 = 00',cb);
   }
 }
 
