@@ -9,7 +9,7 @@
     {{category_level1}}<br>
     <b-container>
       <b-row>
-        <b-col><h2>님의 강의실</h2></b-col>
+        <b-col><h2>{{this.$route.params.id}}님의 강의실</h2></b-col>
         <b-col class="text-right">
           <b-button variant="dark" router-link :to="{name: 'upload'}" >업로드</b-button>
         </b-col>
@@ -90,6 +90,10 @@ export default {
     .catch(() => {
       this.$router.push('/')
       this.$store.dispatch('LOGOUT')
+    })
+    this.$http.get(`/api/user/thumbnail/${this.$route.params.id}`)
+    .then((res) => {
+      this.thumbnail = res.data
     })
   },
   data () {
