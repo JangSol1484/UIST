@@ -2,7 +2,6 @@
 <!--유저 정보에 관한 요약 정보 렌더-->
 <!--내가 시청한 강의와 내가 업로드한 강의-->
   <div>
-    <br><br><br>
     <b-container>
       <br><br>
       <div align-self="end">

@@ -39,23 +39,41 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-  db.getLectureById(req.params.id, (err, lecture) => {
-    let categoryInfo = new Array();
-    let Info = new Object();
-  
+
+  db.getLectureById(req.params.id, (err, lecture) => { //수정완료
+    db.searchLecturePartitioning((err,result) => {
+
+      let categoryInfo = new Array();
+      let Info
+      let Info_tmp
+      let flag = 'a'
+
       if(lecture)
       {
         for(let i=0; i<lecture.length; i++)
         {
           Info = new Object();
+              if(flag != lecture[i].l_category[0])
+              {
+                Info.c_level0 = lecture[i].l_category[0];
+                Info.c_level1 = '00';
+                for(let j=0; j<result.length; j++)
+                  if(result[j].c_level0 == Info.c_level0)
+                    Info.c_name = result[j].c_name;
+                categoryInfo.push(Info);
+              } //X00 DATA
+
+          Info = new Object();
           Info.c_level0 = lecture[i].l_category[0];
           Info.c_level1 = lecture[i].l_category.slice(1,3);
           Info.c_name = lecture[i].l_c_name;
-          categoryInfo.push(Info);
+          categoryInfo.push(Info)
         }
       }
-      console.log(categoryInfo);
+      console.log(categoryInfo)
+      
       res.json({lecture,categoryInfo});
+     });
   });
 });
 
