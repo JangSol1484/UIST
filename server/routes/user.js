@@ -96,7 +96,6 @@ router.post('/login', (req, res) => {
   });
 });
 
-
 router.post('/update', (req, res) => {
 
   const user = auth.verify(req.headers.authorization);

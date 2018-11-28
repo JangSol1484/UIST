@@ -15,6 +15,7 @@ const lecture = require('./routes/lecture');
 const note = require('./routes/note');
 const contents = require('./routes/contents');
 const search = require('./routes/search');
+const discovery = require('./routes/discovery');
 
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(cors());
@@ -33,6 +34,7 @@ app.use('/api/lecture', lecture); //강의 정보를 처리하는 api
 app.use('/api/note', note); //필기 정보를 처리하는 api
 app.use('/api/contents', contents); //멀티미디어 컨텐츠와 api
 app.use('/api/search', search); //디비정보 검색 결과를 출력하는 api
+app.use('/api/discovery', discovery);
 app.use(require('connect-history-api-fallback')());
 
 // catch 404 and forward to error handler

@@ -70,6 +70,15 @@ router.get('/:id', (req, res, next) => {
       }
       console.log(lecture)
       console.log(categoryInfo)
+
+      for (let i = 0; i < lecture.length; i++) {
+        try {
+          let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', lecture[i].l_thum));
+          lecture[i].l_thum = new Buffer(thumbnail).toString('base64');
+        } catch (e) {
+          lecture[i].l_thum = null;
+        }
+      }
       
       res.json({lecture,categoryInfo});
      });

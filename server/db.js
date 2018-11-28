@@ -44,6 +44,9 @@ const db = {
     lno = lno * 1;
     conn.query('select * from lecture where l_wr_id = ? and l_no = ?', [uid, lno], cb);
   },
+  getLectureByCategory(cat, cb) {
+    conn.query('select * from lecture where l_category = ?', cat, cb);
+  },
   registerLecture(l_info, cb) {
     conn.query('alter table lecture auto_increment=1;', () => {
       conn.query('update user set u_lectures = u_lectures + 1 where u_id = ?', [l_info.wr_id], () => {
@@ -66,7 +69,7 @@ const db = {
     conn.query('select l_no, l_title, l_wr_id, l_wr_name, l_thum, l_view from lecture WHERE l_title REGEXP ?', searchStr, cb);
   },
   searchUserByName(searchStr, cb) {
-    conn.query('select u_id, u_email, u_introduction, u_lectures from user WHERE u_id REGEXP ?' ,searchStr,cb);
+    conn.query('select u_id, u_email, u_introduction, u_lectures, u_follower from user WHERE u_id REGEXP ?' ,searchStr,cb);
   },
   searchMySubscribe(myid,cb) {
     conn.query('select u_name from user where u_no = (select s_following_no from subscribe where s_follower_no = ?)',myid, cb)
