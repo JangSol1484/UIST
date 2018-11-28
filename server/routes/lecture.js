@@ -5,13 +5,29 @@ const db = require('../db')
 
 const router = express.Router();
 
+router.get('/testapi', (req, res, next) => {
+  let category = {
+    000:{
+      001: "국어",
+		  002: "외국어",
+		  003: "제2외국어",
+		  005: "과학탐구"
+	  },
+	  200:{
+		  201: "한국어",
+      202: "영어"
+	  }
+  }
+  res.json(category);
+})
+
 router.get('/', (req, res, next) => {
   db.getLectureWithNewest((err, newest) => {
     if (newest) {
       for (let i = 0; i < newest.length; i++) {
         try {
           let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', newest[i].l_thum));
-          newest[i].l_thum = new Buffer(thumbnail).toString('base64');    
+          newest[i].l_thum = new Buffer(thumbnail).toString('base64');
         } catch (e) {
           newest[i].l_thum = null;
         }

@@ -55,7 +55,7 @@
                             label="이름:"
                             label-class="text-sm-right"
                             label-for="my_name">
-                <b-form-input ref="my_name" id="my_name" :disabled = modify :value="getMyname"></b-form-input>
+                <b-form-input v-model="v_name" ref="my_name" id="my_name" :disabled = modify :value="user.u_name"></b-form-input>
               </b-form-group>
               <b-form-group horizontal
                             label="이메일:"
@@ -118,6 +118,7 @@
       this.$http.get('api/user/my')
         .then((res) => {
           this.user = res.data.user
+          this.v_name = this.user.u_name
           this.$http.get(`api/user/thumbnail/${this.user.u_id}`)
           .then((res) => {
             this.thumbnail = res.data
@@ -156,10 +157,8 @@
       },
       cancel () {
         this.modifyOn = '3'
-        // this.$refs.my_name = this.getMyname()
-        // this.my_name.value = this.user.u_name
-        /* this.$refs.my_email.value = this.user.u_email
-        this.$refs.my_intro.value = this.user.u_introduction */
+        alert(this.v_name + this.$refs.my_name.value)
+        this.v_name = this.user.u_name + ' '
         this.modifyB()
       }
     }
