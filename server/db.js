@@ -23,6 +23,11 @@ const db = {
     u_no = u_no * 1;
     conn.query('select u_id, u_name, u_email, u_introduction from user where u_no = ?', u_no, cb);
   },
+  updateUserProfile(userInfo, cb) {
+    with(userInfo){
+      conn.query('update user set u_name = ?, u_email = ?, u_introduction = ? where u_no = ?', [u_name, u_email, u_intro, u_no], cb);
+    }
+  },
   getLectureWithNewest(cb) {
     conn.query('select l_no, l_wr_id, l_wr_name, l_title, l_thum, l_view from lecture order by l_date desc limit 0, 5', cb);
   },

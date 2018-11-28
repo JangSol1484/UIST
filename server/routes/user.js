@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const multiparty = require('multiparty');
 
 const auth = require('../auth');
 const db = require('../db');
@@ -40,6 +41,67 @@ router.post('/login', (req, res) => {
     let name = user.u_name;
     let accessToken = auth.signToken(user.u_no);
     res.json({name, accessToken});
+  });
+});
+
+router.post('/update', (req, res) => {
+
+  const user = auth.verify(req.headers.authorization);
+
+  db.findUserByNo(user.id, (err, [rows]) => {
+    let u_id = rows.u_id;
+
+    let form = new multiparty.Form();
+    let u_name;
+    let u_email;
+    let u_intro;
+
+    form.on('field', (name, value) => {
+      console.log('nomal field / name = ' + name + ' value = ' + value);
+      if (name === 'name') u_name = value;
+      else if (name === 'email') u_email = value;
+      else if (name === 'intro') u_intro = value;
+    });
+
+    form.on('part', (part) => {
+
+     let writeStream = fs.createWriteStream(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_test.jpg'));
+      writeStream.filename = 'thumbnail_test.jpg';
+      part.pipe(writeStream);
+
+      part.on('data', (chunk) => {
+
+      });
+
+      part.on('end', () => {
+        writeStream.end();
+      });
+    });
+
+    form.on('close', () => {
+      console.log('1')
+      let userInfo = {
+        u_id: u_id,
+        u_name: u_name,
+        u_email: u_email,
+        u_intro: u_intro
+      }
+console.log('2')
+      db.updateUserProfile(userInfo, (err, rows) => {
+        if(err){
+          console.log(err)
+        } else {
+          console.log(userInfo)
+          res.send('update success');
+        }
+      });
+    });
+
+    form.on('progress', () => {
+
+    });
+  
+    form.parse(req);
   });
 });
 
