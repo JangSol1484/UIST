@@ -22,7 +22,6 @@ router.get('/', (req, res) => {
 });
 
 router.get('/my', auth.ensureAuth(), (req, res) => {
-  console.log('api진입')
   db.findUserByNo(req.user.id, (err, [user]) => {
     if(err){
       res.status(401);
@@ -56,7 +55,6 @@ router.post('/login', (req, res) => {
     res.json({name, accessToken});
   });
 });
-
 
 router.post('/update', (req, res) => {
 
