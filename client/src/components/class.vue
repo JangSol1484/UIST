@@ -100,6 +100,7 @@ export default {
     return {
       myinfo: '',
       mylecture: '',
+      thumbnail: null,
       selected_cate_lv0: '카테고리 선택',
       selected_cate_lv1: '카테고리 선택',
       category_on_lv0: false,
