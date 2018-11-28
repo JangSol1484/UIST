@@ -1,6 +1,6 @@
 <template>
   <div id="login" align="center">
-    <br><br><br><br><br><br>
+    <div class="mh-100"></div>
     <b-container>
       <b-row align-v="center" align-h="center">
         <b-col md="4">
