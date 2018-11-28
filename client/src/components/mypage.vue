@@ -61,17 +61,20 @@
                             label="자기소개:"
                             label-class="text-sm-right"
                             label-for="my_intro">
-                <b-form-textarea id="my intro"
-                            :rows = "3"
-                            :max-rows = "6"
-                            :disabled = modify >
-                </b-form-textarea>
+                <textarea class="form-control"
+                          id="my_intro"
+                          :rows="3"
+                          :max-rows="6"
+                          :disabled = modify
+                          :value="user.u_introduction"
+                          style="resize:none">
+                </textarea>
               </b-form-group>
             </b-col>
           </b-row>
         </b-col>
       </b-card>
-
+      <br>
       <b-card bg-variant="light">
         <b-form-group horizontal
                       breakpoint="lg"

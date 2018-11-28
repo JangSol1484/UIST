@@ -19,7 +19,7 @@
           </b-nav-form>
           <span class='user' id = "loginbar" v-if="!this.$store.getters.getName" >
             <router-link :to="{name: 'login'}" id="lglink">로그인</router-link>
-            <router-link :to="{name: 'signin'}" id="sglink">회원가입</router-link>
+            <router-link :to="{name: 'signup'}" id="sglink">회원가입</router-link>
           </span>
 
           <b-nav-item-dropdown right  id="drop" v-if="this.$store.getters.getName" v-b-popover.hover = "navDrop">

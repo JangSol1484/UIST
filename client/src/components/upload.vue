@@ -2,13 +2,6 @@
 <!--강의 영상 업로드-->
 <!--script는 건드리지 말 것-->
   <div>
-    <div class = "dropbox">
-      <input class = "input-file" type = "file" name = "userfile" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)">
-      <h2 v-text="msg"></h2>
-    </div>
-    <progress max="100" :value.prop="uploadPercentage"></progress>
-    <br>
-    <input type = "button" @click="upload" value = "업로드">
     <b-container>
         <b-row align-h="center" align-v="center">
           <b-col md = "6">
@@ -17,20 +10,23 @@
                           label-class="text-sm-right"
                           label-for="up_title"
                           >
-                <b-form-input id="up_title"></b-form-input>
+                <b-form-input v-model="l_title"></b-form-input>
             </b-form-group>
             <b-form-group horizontal
                                 label="소개 : "
                                 label-class="text-sm-right"
-                                label-for="up_text">
-                    <b-form-textarea id="up_text"
-                                :rows = "3"
-                                :max-rows = "6">
-                    </b-form-textarea>
+                                label-for="l_text">
+                    <textarea class="form-control"
+                              v-model="l_text"
+                              :rows = "3"
+                              :max-rows = "6"
+                              style="resize:none">
+                    </textarea>
             </b-form-group>
-              <b-form-file v-model="file" :state="Boolean(file)" placeholder="Drag and drop" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
-              <b-progress class = "mt-2" :value.prop="uploadPercentage" max="100" show-progress animated></b-progress>
-              <b-button class = "mt-1" size="" variant="secondary" @click="upload" value = "업로드">업로드</b-button>
+              <b-form-file name = "userfile" v-model="file" :state="Boolean(file)" placeholder="Drag and Drop" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
+              <b-progress class = "mt-2" :value="uploadPercentage" max="100" show-progress animated></b-progress>
+              <b-button class = "mt-1" size="" variant="secondary" @click="upload">업로드</b-button>
+              <button @click="test">test</button>
           </b-col>
         </b-row>
     </b-container>
@@ -50,7 +46,7 @@ export default {
       this.targetFile = files[0]
       let type = files[0].type.split('/')
       this.msg = type[1] + files[0].name
-      if (type[1] === 'mp4' || type[1] === 'avi' || type[1] === 'mkv') {
+      if (type[1] === 'mp4') {
         this.isVideo = true
       }
     },
@@ -62,7 +58,7 @@ export default {
           this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
           this.isFormExist = true
         }
-        this.$http.post('/api/contents/upload', this.formData, {
+        this.$http.post('/api/contents/upload/lecture', this.formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           },
@@ -76,6 +72,9 @@ export default {
       } else {
         alert('동영상만 올려라')
       }
+    },
+    test () {
+      alert(this.l_title + this.l_text)
     }
   },
   data () {
