@@ -27,17 +27,18 @@ router.get('/user', (req, res, next) => {
   let part = req.query.query;
   db.searchUserByName(part, (err, result) => {
    // console.log(err);
-  if(result){
-    for(let i = 0; i < result.length; i++){
-      if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id + '.jpg'))){
-        let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id + '.jpg'));
-        result[i] = new Buffer(imagebytes).toString('base64');
-      } else {
-        let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'default_user_thumbnail.jpg'));
-        result[i] = new Buffer(imagebytes).toString('base64');
+    if(result){
+      for(let i = 0; i < result.length; i++){
+        if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id + '.jpg'))){
+          let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id + '.jpg'));
+          result[i].u_thum = new Buffer(imagebytes).toString('base64');
+        } else {
+          let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'default_user_thumbnail.jpg'));
+          result[i].u_thum = new Buffer(imagebytes).toString('base64');
+        }
       }
     }
-  }
+    console.log(result[0].u_thum);
     res.send(result);
   });
 });
