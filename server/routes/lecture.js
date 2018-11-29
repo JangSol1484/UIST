@@ -39,10 +39,8 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', (req, res, next) => {
-
   db.getLectureById(req.params.id, (err, lecture) => { //수정완료
     db.searchLecturePartitioning((err,result) => {
-
       let categoryInfo = new Array();
       let Info
       let Info_tmp
@@ -70,6 +68,7 @@ router.get('/:id', (req, res, next) => {
           categoryInfo.push(Info)
         }
       }
+      console.log(lecture)
       console.log(categoryInfo)
 
       for (let i = 0; i < lecture.length; i++) {

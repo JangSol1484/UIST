@@ -1,5 +1,5 @@
 <template>
-    <b-navbar toggleable="md" type="dark" variant="info">
+    <b-navbar toggleable="md" type="dark" variant="info" sticky = true>
 
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
@@ -12,14 +12,16 @@
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto" sticky = true>
-          <b-nav-form @submit.prevent="SearchQuery">
-            <b-form-input size="sm" class="mr-sm-2" type="text" placeholder="Search" name="query" v-model="query"/>
+        <b-navbar-nav class="ml-auto col-md-4">
+          <b-nav-form @submit.prevent="SearchQuery" class="w-100">
+            <b-form-input size="sm" class="mr-sm-2 w-75" type="text" placeholder="Search" name="query" v-model="query"/>
             <b-button size="sm" class="my-2 my-sm-0" type="button" @click="SearchQuery">Search</b-button>
           </b-nav-form>
+        </b-navbar-nav>
+        <b-navbar-nav class="ml-auto">
           <span class='user' id = "loginbar" v-if="!this.$store.getters.getName" >
-            <router-link :to="{name: 'login'}" id="lglink">로그인</router-link>
-            <router-link :to="{name: 'signup'}" id="sglink">회원가입</router-link>
+            <b-button size="sm" router-link :to="{name: 'login'}" id="lglink">로그인</b-button>
+            <b-button size="sm" router-link :to="{name: 'signup'}" id="sglink">회원가입</b-button>
           </span>
 
           <b-nav-item-dropdown right  id="drop" v-if="this.$store.getters.getName" v-b-popover.hover = "navDrop">

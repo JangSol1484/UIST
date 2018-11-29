@@ -1,7 +1,7 @@
 <template>
 <!--회원가입-->
   <div>
-    <br><br><br><br>
+    <br><br>
     <b-container>
       <b-row align-v="center" align-h="center">
         <b-col md="7">

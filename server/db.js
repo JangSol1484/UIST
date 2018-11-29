@@ -21,7 +21,7 @@ const db = {
   },
   findUserByNo(u_no, cb) {//요청 시 토큰의 id값으로 유저 인증
     u_no = u_no * 1;
-    conn.query('select u_id, u_name, u_email, u_introduction from user where u_no = ?', u_no, cb);
+    conn.query('select u_id, u_name, u_email, u_introduction, u_follower, u_lectures from user where u_no = ?', u_no, cb);//수정
   },
   updateUserProfile(userInfo, cb) {
     with(userInfo){
@@ -71,11 +71,14 @@ const db = {
   searchUserByName(searchStr, cb) {
     conn.query('select u_id, u_email, u_introduction, u_lectures, u_follower from user WHERE u_id REGEXP ?' ,searchStr,cb);
   },
-  searchMySubscribe(cb) {
-    conn.query('select s_following_no from subscribe, user where u_no = s_follower_no',cb)
+  searchMySubscribe(myid,cb) {
+    conn.query('select u_name from user where u_no = (select s_following_no from subscribe where s_follower_no = ?)',myid, cb)
   },
   searchLecturePartitioning(cb) {
     conn.query('select * from category where c_level1 = 00',cb);
+  },
+  getAllCategory(cb) {
+    conn.query('select * from category order by c_level0',cb)
   }
 }
 
