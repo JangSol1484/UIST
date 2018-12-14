@@ -55,6 +55,7 @@ export default {
     onClickLogout () {
       this.$store.dispatch('LOGOUT')
       this.username = null
+      this.$router.push('/')
     },
     SearchQuery () {
       let query = this.query

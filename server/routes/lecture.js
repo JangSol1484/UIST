@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const db = require('../db')
+const db = require('../db');
+const auth = require('../auth');
 
 const router = express.Router();
 
@@ -68,8 +69,6 @@ router.get('/:id', (req, res, next) => {
           categoryInfo.push(Info)
         }
       }
-      console.log(lecture)
-      console.log(categoryInfo)
 
       for (let i = 0; i < lecture.length; i++) {
         try {
@@ -90,6 +89,23 @@ router.get('/:id/:no', (req, res, next) => {
     db.increaseView(req.params.id, req.params.no);
     res.json(lecture);
   });
+});
+
+router.get('/like/:id/:no', (req, res, next) => {
+  
+  let user;
+  try { user = auth.verify(req.headers.authorization); } catch (e) {}
+
+  db.handleLike(user.id, req.params.id, req.params.no, (result) => {
+    if(result == true){
+      console.log('좋아요 누름')
+      res.send('T');
+    }
+    else{
+      console.log('좋아요 취소')
+      res.send('F');
+    }
+  })
 });
 
 module.exports = router;

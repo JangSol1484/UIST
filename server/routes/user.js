@@ -23,7 +23,7 @@ router.get('/', (req, res) => {
 
 router.get('/my', auth.ensureAuth(), (req, res) => {
   db.findUserByNo(req.user.id, (err, [user]) => {
-    db.searchMySubscribe(req.user.id, (err, result) => {
+    db.getMySubscribe(req.user.id, (err, result) => {
       if(err){
         res.status(401);
       }
@@ -47,7 +47,6 @@ router.get('/my', auth.ensureAuth(), (req, res) => {
             sublist.push(people);
           }          
         }
-        console.log(sublist);
         
         res.json({user,sublist})
       }
@@ -64,9 +63,10 @@ router.get('/my/class', auth.ensureAuth(), (req, res) => {
 
     info.follower = user[0].u_follower
     info.lectures = user[0].u_lectures
+    
+//    db.getMyFollowing()
 
     smallUserInfo.push(info);
-    console.log(smallUserInfo);
     res.json(smallUserInfo);
     }
   });
@@ -130,7 +130,6 @@ router.post('/update', (req, res) => {
   });
 
   form.on('close', () => {
-    console.log('1')
     let userInfo = {
       u_no: u_no,
       u_name: u_name,
@@ -141,7 +140,6 @@ router.post('/update', (req, res) => {
       if(err){
         console.log(err)
       } else {
-        console.log(userInfo)
         res.send('update success');
       }
     });
@@ -163,6 +161,22 @@ router.get('/thumbnail/:id', (req, res) => {
   }
 });
 
+router.get('/subscribe/:id', (req, res) => {
+  let user;
+  try { user = auth.verify(req.headers.authorization); } catch (e) {}
+
+  let f_wer = user.id;
+  let f_ing_id = req.params.id;
+
+  db.handleSubscribe(f_wer, f_ing_id, (result) => {
+    if(result == true) {
+      res.send('T')
+    }
+    else {
+      res.send('F')
+    }
+  })
+})
 
 router.use((err, req, res, next) => {
   res.json({error: err.message});

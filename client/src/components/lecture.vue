@@ -27,6 +27,9 @@
       -->
     </div>
     <div class="contents">
+      <button @click="btn_like">{{like}}</button>
+      <button @click="btn_subscribe">구독</button>
+      <br>
       제목 : {{lecture.l_title}}<br>
       본문 : {{lecture.l_text}}<br>
       작성자 : {{lecture.l_wr_name}}<br>
@@ -75,7 +78,8 @@ export default {
       path: '',
       note: '',
       play: '',
-      playerOptions: null
+      playerOptions: null,
+      like: '좋아요'
     }
   },
   methods: {
@@ -121,6 +125,29 @@ export default {
     },
     getCurrentTime () {
       console.log(this.$refs.videoPlayer.$el.childNodes[0].childNodes[0].currentTime)
+    },
+    btn_subscribe (event) {
+      let id = this.$route.params.id
+      this.$http.get(`/api/user/subscribe/${id}`)
+      .then((res) => {
+        if (res.data === 'T') {
+          alert('구독 누름')
+        } else if (res.data === 'F') {
+          alert('구독 취소')
+        }
+      })
+    },
+    btn_like (evnet) {
+      let id = this.$route.params.id
+      let no = this.$route.params.no
+      this.$http.get(`/api/lecture/like/${id}/${no}`)
+      .then((res) => {
+        if (res.data === 'T') {
+          this.like = '좋아요 취소'
+        } else {
+          this.like = '좋아요'
+        }
+      })
     }
   }
 }

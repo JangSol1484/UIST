@@ -22,21 +22,18 @@
       </b-row>
       <b-row>
         <b-col>
-          <span v-for="user in userlist" v-bind:key="user.l_no" class="lecture">
-              <router-link :to="{ name: 'lecture', params: { id: user.l_wr_id, no: user.l_no }}">
-                <img v-bind:src="'data:image/jpeg;base64,'+lecture.l_thum" class="thumbnail">
+          <span v-for="user in userlist" v-bind:key="user.u_no" class="lecture">
+              <router-link :to="{ name: 'class', params: { id: user.u_id }}">
+                <img v-bind:src="'data:image/jpeg;base64,'+user.u_thum" class="thumbnail">
               </router-link>
               <div>
-                <strong>{{user.l_title}}</strong> [{{user.l_view}}]
+                <strong>{{user.u_name}}</strong>
               </div>
             </span>
         </b-col>
       </b-row>
     </b-container>
 <br>
-      
-    유저 검색 :<br>
-    {{userlist}}<br>
   </div>
 </template>
 
@@ -51,6 +48,7 @@ export default {
     this.$http.get(`/api/search/user?query=${query}`)
     .then((res) => {
       this.userlist = res.data
+      // alert(this.userlist[0].u_thum)
     })
   },
   data () {

@@ -38,8 +38,7 @@ router.get('/user', (req, res, next) => {
         }
       }
     }
-    console.log(result[0].u_thum);
-    res.send(result);
+    res.json(result);
   });
 });
 

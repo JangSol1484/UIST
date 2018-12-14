@@ -91,6 +91,12 @@
                       label-class="font-weight-bold pt-0"
                       class="mb-0">
         </b-form-group>
+          <span v-for="sub in sub_list" v-bind:key="sub.bj">
+            <span>
+              <b-img thumbnail fluid v-bind:src="'data:image/jpeg;base64,'+sub.bjThumbnail" width = "120px" height="120px"/>
+              {{sub.bj}}
+            </span>
+          </span>
       </b-card>
     </b-container>
   </div>
@@ -102,6 +108,7 @@
       return {
         formData: null,
         user: null,
+        sub_list: null,
         thumbnail: null,
         modify: true,
         modifyOn: '2',
@@ -120,6 +127,7 @@
           this.v_name = this.user.u_name
           this.v_email = this.user.u_email
           this.v_intro = this.user.u_introduction
+          this.sub_list = res.data.sublist
           this.$http.get(`/api/user/thumbnail/${this.user.u_id}`)
           .then((res) => {
             this.thumbnail = res.data
