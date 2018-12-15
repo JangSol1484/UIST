@@ -23,6 +23,7 @@ router.get('/lecture', (req, res, next) => {
 
 });
 
+
 router.get('/user', (req, res, next) => {
   let part = req.query.query;
   db.searchUserByName(part, (err, result) => {
