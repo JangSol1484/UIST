@@ -1,5 +1,6 @@
 <template>
   <div>
+    <br><br>
     <b-container>
       <b-row>
         <h2>강의 검색</h2>
@@ -22,12 +23,12 @@
       </b-row>
       <b-row>
         <b-col>
-          <span v-for="user in userlist" v-bind:key="user.u_no" class="lecture">
-              <router-link :to="{ name: 'class', params: { id: user.u_id }}">
-                <img v-bind:src="'data:image/jpeg;base64,'+user.u_thum" class="thumbnail">
+          <span v-for="s_user in userlist" v-bind:key="s_user.u_no" class="user">
+              <router-link :to="{ name: 'class', params: { id: s_user.u_id }}">
+                <img v-bind:src="'data:image/jpeg;base64,'+s_user.u_thum" class="thumbnail" width="150px" height="150px">
               </router-link>
               <div>
-                <strong>{{user.u_name}}</strong>
+                <strong>{{s_user.u_name}}</strong>
               </div>
             </span>
         </b-col>
