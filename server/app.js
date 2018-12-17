@@ -9,6 +9,8 @@ const compression = require('compression');
 
 let app = express();
 
+app.io = require('socket.io')();
+
 const index = require('./routes/index');
 const user = require('./routes/user');
 const lecture = require('./routes/lecture');
@@ -56,5 +58,9 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.send('http status 500 error');
 });
+
+app.io.on('connection', (socket) => {
+  console.log('socketio user connected...')
+})
 
 module.exports = app;

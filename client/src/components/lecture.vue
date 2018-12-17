@@ -2,43 +2,55 @@
 <!--강의 영상과 강의 정보를 렌더-->
 <!--우측 note는 지속적으로 ajax로 서버와 통신하며 값을 DB에 갱신, 미구현-->
   <div>
-    <div class="video">
-      <video-player  class="video-player-box"
-        ref="videoPlayer"
-        :options="playerOptions"
-        :playsinline="true"
-        customEventName="customstatechangedeventname"
- 
-        @play="onPlayerPlay($event)"
-        @pause="onPlayerPause($event)"
-        @ended="onPlayerEnded($event)"
-        @waiting="onPlayerWaiting($event)"
-        @playing="onPlayerPlaying($event)"
-        @loadeddata="onPlayerLoadeddata($event)"
-        @timeupdate="onPlayerTimeupdate($event)"
-        @canplay="onPlayerCanplay($event)"
-        @canplaythrough="onPlayerCanplaythrough($event)"
-        @statechanged="playerStateChanged($event)"
-        @ready="playerReadied">
-      </video-player>
-      <!--
-        <video id="myvideo" v-bind:src = "path" controls autoplay preload="metadata" ref="myvideo"></video>
-        
-      -->
-    </div>
-    <div class="contents">
-      <button @click="btn_like">{{like}}</button>
-      <button @click="btn_subscribe">구독</button>
-      <br>
-      제목 : {{lecture.l_title}}<br>
-      본문 : {{lecture.l_text}}<br>
-      작성자 : {{lecture.l_wr_name}}<br>
-      작성일 : {{lecture.l_date}}<br>
-      조회수 : {{lecture.l_view}}<br>
+    <b-row>
+      <b-col class="w-50" md="6">
+        <b-row>
+          <video-player  class="video-player-box"
+            ref="videoPlayer"
+            :options="playerOptions"
+            :playsinline="true"
+            customEventName="customstatechangedeventname"
 
-    <router-link :to="{name: 'home'}">뒤로가기</router-link>
-    </div>
-    <textarea class="note" @keydown.tab.prevent="tabed($event.target)" style="resize: none;"></textarea>
+            @play="onPlayerPlay($event)"
+            @pause="onPlayerPause($event)"
+            @ended="onPlayerEnded($event)"
+            @waiting="onPlayerWaiting($event)"
+            @playing="onPlayerPlaying($event)"
+            @loadeddata="onPlayerLoadeddata($event)"
+            @timeupdate="onPlayerTimeupdate($event)"
+            @canplay="onPlayerCanplay($event)"
+            @canplaythrough="onPlayerCanplaythrough($event)"
+            @statechanged="playerStateChanged($event)"
+            @ready="playerReadied">
+          </video-player>
+        </b-row>
+    <!--
+      <video id="myvideo" v-bind:src = "path" controls autoplay preload="metadata" ref="myvideo"></video>
+      
+    -->
+        <b-row>
+          <b-col class="text-center">
+            <div>
+              <b-button variant="primary" @click="btn_like">{{like}}</b-button>
+              <b-button variant="danger" @click="btn_subscribe">구독</b-button>
+              <br>
+              제목 : {{lecture.l_title}}<br>
+              본문 : {{lecture.l_text}}<br>
+              작성자 : {{lecture.l_wr_name}}<br>
+              작성일 : {{lecture.l_date}}<br>
+              조회수 : {{lecture.l_view}}<br>
+
+              <router-link :to="{name: 'home'}">뒤로가기</router-link>
+            </div>
+          </b-col>
+        </b-row>
+      </b-col>
+      <b-col md="6">
+        <textarea class="form-control" @keydown.tab.prevent="tabed($event.target)" style="resize: none;" 
+                          :rows="30"
+                          :max-rows="6"></textarea>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -62,7 +74,6 @@ export default {
         muted: false,
         language: 'en',
         playbackRates: [0.7, 1.0, 1.2, 1.5, 2.0],
-        width: '960px',
         height: '540px',
         sources: [{
           type: 'video/mp4',
@@ -71,6 +82,10 @@ export default {
         // poster: "/static/images/author.jpg",
       }
     })
+    var ws = new WebSocket('ws://localhost:3001')
+    ws.onopen = function (event) {
+      ws.send('Client message: Hi!')
+    }
   },
   data: function () {
     return {
@@ -154,28 +169,10 @@ export default {
 </script>
 
 <style scoped>
-div.video {
-  position: absolute;
-  left: 0%;
-  width: 960px;
-  height: 540px;
-}
-div.video > video {
-  width: 960px;
-  height: 540px;
-}
-textarea.note {
+textarea.form-control {
   position: relative;
   padding: 5px;
-  left: 970px;
-  width: 490px;
-  height: 540px;
   overflow: auto;
   background-color: aliceblue;
-}
-div.contents {
-  position: relative;
-  top: 550px;
-  width: 960px;
 }
 </style>

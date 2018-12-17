@@ -7,21 +7,38 @@
       <b-row>
         <h2>업로드</h2>
       </b-row>
+      <br><br>
       <b-row>
         <b-col class="text-left">
-          <b-form-group horizontal
+          <b-form-group
                         :label-cols="2"
                         label="타이틀 : "
                         label-class="text-sm-right"
                         label-for="up_title"
-                        >
+                        >          
               <b-form-input v-model="l_title"></b-form-input>
           </b-form-group>
         </b-col>
+        <b-col md="5" class="text-right">
+            <b-dropdown :text="selected_cate_lv0" >
+              <b-dropdown-item v-for="category0 in category_level0" 
+                              :key="category0"
+                              @click="selectLevel0(category0)">
+                {{category0}}
+              </b-dropdown-item>
+            </b-dropdown>
+            <b-dropdown v-if="category_on_lv0===true" :text="selected_cate_lv1">
+              <b-dropdown-item v-for="category1 in category_level1"
+                              :key="category1"
+                              @click="selectLevel1(category1)">
+                {{category1}}
+              </b-dropdown-item>
+            </b-dropdown>
+          </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <b-form-group horizontal
+          <b-form-group
                         :label-cols="2"
                         label="소개 : "
                         label-class="text-sm-right"
@@ -36,30 +53,15 @@
           </b-col>
       </b-row>
       <b-row>
-        <b-col md="5">
-          <b-dropdown :text="selected_cate_lv0" >
-            <b-dropdown-item v-for="category0 in category_level0" 
-                            :key="category0"
-                            @click="selectLevel0(category0)">
-              {{category0}}
-            </b-dropdown-item>
-          </b-dropdown>
-          <b-dropdown v-if="category_on_lv0===true" :text="selected_cate_lv1">
-            <b-dropdown-item v-for="category1 in category_level1"
-                            :key="category1"
-                            @click="selectLevel1(category1)">
-              {{category1}}
-            </b-dropdown-item>
-          </b-dropdown>
-        </b-col>
         <b-col>
           <b-form-file name = "userfile" v-model="file" :state="Boolean(file)" placeholder="Drag and Drop" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
         </b-col>
       </b-row>
       <b-row>
-        <b-col>
+        <b-col class="text-right">
           <b-progress class = "mt-2" :value="uploadPercentage" max="100" show-progress animated></b-progress>
           <b-button class = "mt-1" size="" variant="secondary" @click="upload">업로드</b-button>
+          <b-button class="mt-1" variant="secondary" router-link :to="{name: 'myclass'}">취소</b-button>
         </b-col>
       </b-row>
     </b-container>
@@ -169,7 +171,7 @@ export default {
       targetFile: null,
       uploadPercentage: 0,
       selected_cate_lv0: '카테고리 선택',
-      selected_cate_lv1: '카테고리 선택',
+      selected_cate_lv1: '2 카테고리 선택',
       category_on_lv0: false,
       category_on_lv1: false,
       category_level0: [],

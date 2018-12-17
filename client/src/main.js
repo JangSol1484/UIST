@@ -7,6 +7,7 @@ import App from './App'
 import Header from './Header'
 import router from './router'
 import store from './store'
+import VueSocketIO from 'vue-socket.io'
 import VueVideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -14,6 +15,15 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 Vue.prototype.$http = axios
 Vue.use(BootVue)
 Vue.use(VueVideoPlayer)
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: 'http://localhost:3000',
+  vuex: {
+    store,
+    actionPrefix: 'SOCKET_',
+    mutationPrefix: 'SOCKET_'
+  }
+}))
 
 /* eslint-disable no-new */
 /* eslint-disable no-unused-vars */

@@ -104,6 +104,7 @@ export default {
       }).then((res) => {
         if (res.data === true) {
           this.$router.push('/')
+          alert('가입 되셨습니다.')
         } else {
           alert('회원가입에 실패했습니다.')
         }
