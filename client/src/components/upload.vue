@@ -155,7 +155,6 @@ export default {
         }
       }
       this.selected_category = categoryNumber0 + this.cast_category1(categoryName1)
-      alert(this.selected_category)
     },
     test () {
       alert(this.l_title + this.l_text)

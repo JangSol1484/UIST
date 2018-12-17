@@ -11,8 +11,8 @@ import Login from 'components/login'
 import Signup from 'components/signup'
 import Search from 'components/search'
 import Upload from 'components/upload'
+import Discovery from 'components/discovery'
 import store from '../store'
-
 const requireAuth = () => (from, to, next) => {
   if (store.getters.isAuthenticated) return next()
   next('/login?returnPath=my')
@@ -62,6 +62,12 @@ export default new Router({
       path: '/upload',
       name: 'upload',
       component: Upload,
+      beforeEnter: requireAuth()
+    },
+    {
+      path: '/discovery',
+      name: 'discovery',
+      component: Discovery,
       beforeEnter: requireAuth()
     }
   ]
