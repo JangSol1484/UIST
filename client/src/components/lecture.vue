@@ -3,7 +3,7 @@
 <!--우측 note는 지속적으로 ajax로 서버와 통신하며 값을 DB에 갱신, 미구현-->
   <div>
     <b-row>
-      <b-col class="w-50" md="6">
+      <b-col class="w-50">
         <b-row>
           <video-player  class="video-player-box"
             ref="videoPlayer"
@@ -29,23 +29,24 @@
       
     -->
         <b-row>
-          <b-col class="text-center">
-            <div>
+          <b-col>
+            <div class="text-right">
+              <big>조회수 : {{lecture.l_view}}</big>
               <b-button variant="primary" @click="btn_like">{{like}}</b-button>
               <b-button variant="danger" @click="btn_subscribe">구독</b-button>
+            </div>
               <br>
-              제목 : {{lecture.l_title}}<br>
-              본문 : {{lecture.l_text}}<br>
+            <div class="text-left">
+              <h3>제목 : {{lecture.l_title}}</h3>
+              <h6>본문 : {{lecture.l_text}}</h6><br>
               작성자 : {{lecture.l_wr_name}}<br>
               작성일 : {{lecture.l_date}}<br>
-              조회수 : {{lecture.l_view}}<br>
-
               <router-link :to="{name: 'home'}">뒤로가기</router-link>
             </div>
           </b-col>
         </b-row>
       </b-col>
-      <b-col md="6">
+      <b-col>
         <textarea class="form-control" @keydown.tab.prevent="tabed($event.target)" style="resize: none;" 
                           :rows="30"
                           :max-rows="6"></textarea>

@@ -35,6 +35,12 @@
           </span>
         </b-col>
       </b-row>
+      <b-row>
+        <h1>인기 카테고리</h1>
+      </b-row>
+      <b-row>
+        <!--2카테고리 중 일부를 개시-->
+      </b-row>
     </b-container>
   </div>
 </template>
