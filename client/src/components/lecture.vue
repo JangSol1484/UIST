@@ -7,13 +7,16 @@
         </video>
         <div id="video-controls" class="d-flex flex-row mx-0" @mouseover="showControls" @mouseout="hideControls" :style="{animationName: visible, opacity: opacity}">
           <div>
-            <button class="play mx-2" v-show="play" ref="btn_play" @click="play_lecture"></button>
-            <button class="pause mx-2" v-show="!play" ref="btn_play" @click="play_lecture"></button>
+            <!-- <button class="play mx-2" v-show="play" ref="btn_play" @click="play_lecture"></button>
+            <button class="pause mx-2" v-show="!play" ref="btn_play" @click="play_lecture"></button> -->
+            <i class="fas fa-pause fa-2x mx-3" v-show="play" ref="btn_play" @click="play_lecture"></i>
+            <i class="fas fa-play fa-2x mx-3" v-show="!play" ref="btn_play" @click="play_lecture"></i>
           </div>
           <div class="align-self-center">{{currentTime}} / {{duration}}</div>
           <div class="progress flex-grow-1 mt-2 mx-2" style="height: 15px" @click="seek" ref="seekBar"><div class="progress-bar" role="progressbar" :style="{width: seekPer}" :aria-valuenow="seekVal" aria-valuemin="0" aria-valuemax="100"></div></div>
           <div><range-slider class="slider mt-1" min="0" max="1" step="0.05" v-model="sliderValue" @change="volume"></range-slider></div>
         </div>
+
         
       </div>
       <div>
@@ -22,15 +25,15 @@
           <div>
             <div class="d-flex justify-content-between">
               <div>
-                {{lecture.l_wr_name}}<br>
-                {{lecture.l_date}}<br>
+                <i class="fas fa-user-circle mx-2"></i>{{lecture.l_wr_name}}<br>
+                <i class="far fa-calendar-alt mx-2"></i>{{lecture.l_date}}<br>
               </div>
               <div class="d-flex flex-column">
                 <div>
                   <b-button :variant="like_color" @click="btn_like">좋아요 {{lecture.l_like}}</b-button>
-                  <b-button :variant="sub_color" @click="btn_subscribe">구독 {{subscribed}}</b-button>
+                  <b-button class="ml-2" :variant="sub_color" @click="btn_subscribe">구독 {{subscribed}}</b-button>
                 </div>
-                <div class="text-right">조회수 : {{lecture.l_view}}</div>
+                <div class="text-right"><i class="fas fa-eye mx-1"></i> {{lecture.l_view}}</div>
               </div>
             </div>
 
@@ -38,13 +41,17 @@
 
             <h6>{{lecture.l_text}}</h6><br>
               
-            <router-link :to="{name: 'home'}">뒤로가기</router-link>
+            <router-link :to="{name: 'home'}">뒤로가기</router-link>{{note_anchor}}
           </div>
         </div>
       </div>
     </div>
     <div class="col-4">
-      <textarea class="form-control" @keydown.tab.prevent="tabed($event.target)" style="resize: none;" :rows="30"></textarea>
+      <textarea class="form-control mb-3" @keydown.tab.prevent @keyup.tab="btn_timeStamp" style="resize: none;" :rows="32" ref="note" :value="note_anchor"></textarea>
+      <div class="btn-group w-100" role="group">
+        <button type="button" class="btn btn-primary w-50" data-toggle="tooltip" data-placement="top" title="Hot-Key : Tab Key" @click="btn_timeStamp">Time Stamp</button>
+        <button type="button" class="btn btn-info w-50" @click="btn_saveNote">Save Note</button>
+      </div>
     </div>
   </div>
 </template>
@@ -76,6 +83,10 @@ export default {
       this.target = this.lecture.l_v_name + '.' + this.lecture.l_v_type
       this.path = `/api/contents/video?play=${this.target}`
 
+      let date = new Date(this.lecture.l_date)
+
+      this.lecture.l_date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+
       this.player = this.$refs.videoPlayer
       this.player.addEventListener('loadedmetadata', function () {
         self.duration = parseInt(this.duration / 60) + ':' + (parseInt(this.duration % 60) >= 10 ? parseInt(this.duration % 60) : '0' + parseInt(this.duration % 60))
@@ -92,7 +103,6 @@ export default {
     return {
       lecture: {},
       path: null,
-      note: '',
       target: null,
       visible: null,
       opacity: 0,
@@ -105,7 +115,10 @@ export default {
       player: null,
       like: false,
       like_color: 'secondary',
-      sub_color: 'secondary'
+      sub_color: 'secondary',
+      note_tmp: null,
+      note_anchor: '초기값',
+      timeout: null
     }
   },
   methods: {
@@ -143,10 +156,49 @@ export default {
         } else if (res.data === 'F') {
           this.sub_color = 'secondary'
           this.subscribed -= 1
-        } else {
+        } else if (res.data === 'E') {
           alert('구독은 로그인 후 가능합니다.')
+        } else if (res.data === 'S') {
+          alert('자신을 구독할 수 없습니다.')
         }
       })
+    },
+    btn_timeStamp () {
+      // alert(this.player.currentTime)
+      let hashtag = '\n#' + parseInt(this.player.currentTime) + '$\n'
+      let cursor = this.$refs.note.selectionStart
+      let oldNote = this.$refs.note.value
+      this.$refs.note.value = oldNote.substring(0, cursor) + hashtag + oldNote.substring(cursor, oldNote.length)
+      this.$refs.note.selectionDirection = 'none'
+      this.$refs.note.setSelectionRange(cursor + hashtag.length, cursor + hashtag.length)
+      // alert(cursor)
+    },
+    btn_saveNote () {
+      this.note_tmp = this.$refs.note.value
+
+      this.note_tmp = this.note_tmp.split('#')
+
+      let note = Object()
+
+      for (let i = 0; i < this.note_tmp.length; i++) {
+        this.note_tmp[i] = this.note_tmp[i].split('$')
+        note[parseInt(this.note_tmp[i][0])] = this.note_tmp[i][1]
+        // console.log(note[parseInt(this.note_tmp[i][0])])
+      }
+      let timeCount = 0
+
+      var self = this
+
+      self.timeout = setInterval(function () {
+        self.note_anchor = note[parseInt(self.player.currentTime)]
+        console.log(self.note_anchor)
+        console.log(parseInt(self.player.currentTime))
+        timeCount += 1
+
+        if (self.player.currentTime === 7) {
+          clearInterval(self.timeout)
+        }
+      }, 1000)
     },
     showControls (event) {
       this.visible = 'showControls'
@@ -185,6 +237,7 @@ export default {
 textarea.form-control {
   overflow: auto;
   width: 100%;
+  background-color:beige;
 }
 
 video.embed-responsive {

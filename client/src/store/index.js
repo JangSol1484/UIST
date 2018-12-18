@@ -59,6 +59,9 @@ export default new Vuex.Store({
           commit('LOGIN', payload)
           axios.defaults.headers.common['Authorization'] = `Bearer ${data.accessToken}`
         })
+        .catch(() => {
+          alert('로그인에 실패하였습니다.')
+        })
     },
     LOGOUT ({commit}) {
       axios.defaults.headers.common['Authorization'] = undefined

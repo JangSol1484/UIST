@@ -6,17 +6,17 @@
     <br>
     <b-container>
       <b-row class="mb-2 w-100">
-        <b-col><h1>{{this.$store.getters.getName}}님의 강의실</h1></b-col>
+        <b-col><h1 class="font-weight-bold">{{this.$store.getters.getName}}님의 강의실</h1></b-col>
         <b-col class="text-right">
           <b-button variant="dark" router-link :to="{name: 'upload'}" >업로드</b-button>
         </b-col>
       </b-row>
       <b-row class="mb-4 w-100">
         <b-col>
-          <b-card bg-variant="light">
+          <b-card class="shadow" bg-variant="light">
             <b-row>
               <b-col>
-                <b-img thumbnail fluid v-bind:src="'data:image/jpeg;base64,'+thumbnail" width = "400px" height="400px"/>
+                <img class="img-thumbnail" v-bind:src="'data:image/jpeg;base64,'+thumbnail"/>
               </b-col>
               <b-col class="d-flex align-items-end flex-column">
                 <div class="h6">{{upinfo[0].lectures}}개의 강의가 업로드 됨</div>
@@ -47,19 +47,21 @@
       </b-row>
       <b-row class="w-100">
         <b-col>
-          <b-card class="w-100" v-if = "this.category_on_lv1===true">
+          <b-card  class="shadow w-100" v-if = "this.category_on_lv1===true">
             <div class="d-flex flex-column border-bottom mb-4" v-for="video in selected_lecture" :key="video.l_no">
               <div class="d-flex flex-row">
                 <router-link :to="{ name: 'lecture', params: { id: video.l_wr_id, no: video.l_no }}">
                   <img class="mb-3" v-bind:src="'data:image/jpeg;base64,'+video.l_thum" width="185px">
                 </router-link>
                 <div class="d-flex flex-column mx-3">
-                  <div class="h3 mb-3">{{video.l_title}}</div>
+                  <router-link :to="{ name: 'lecture', params: { id: video.l_wr_id, no: video.l_no }}">
+                    <div class="lectureTitle h3 mb-3 font-weight-bold">{{video.l_title}}</div>
+                  </router-link>
                   <div class="h5">{{video.l_text}}</div>
                   <div class="h6 mt-auto mb-3">조회수 : {{video.l_view}} 좋아요 : {{video.l_like}}</div>
                 </div>
                 <div class="h6 ml-auto mb-3 align-self-end">
-                  수정 삭제
+                  수정(사족) 삭제
                 </div>
               </div>
             </div>
@@ -187,3 +189,16 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.lectureTitle {
+  color: black;
+}
+.lectureTitle:visited {
+  color: black;
+}
+.lectureTitle:hover {
+  color: black;
+  text-decoration: underline; 
+}
+</style>

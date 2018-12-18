@@ -14,7 +14,6 @@ router.get('/lecture', (req, res, next) => {
         let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', result[i].l_thum));
         result[i].l_thum = new Buffer(thumbnail).toString('base64');
       } catch (e) {
-        console.log(e);
         result[i].l_thum = null;
       }
     }
@@ -27,7 +26,6 @@ router.get('/lecture', (req, res, next) => {
 router.get('/user', (req, res, next) => {
   let part = req.query.query;
   db.searchUserByName(part, (err, result) => {
-   // console.log(err);
     if(result){
       for(let i = 0; i < result.length; i++){
         if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id + '.jpg'))){
