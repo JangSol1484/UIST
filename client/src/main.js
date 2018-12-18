@@ -1,5 +1,10 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
+
+/* eslint-disable no-new */
+/* eslint-disable no-unused-vars */
+/* eslint-env browser */
+
 import Vue from 'vue'
 import BootVue from 'bootstrap-vue'
 import axios from 'axios'
@@ -15,8 +20,6 @@ Vue.prototype.$http = axios
 Vue.use(BootVue)
 Vue.use(VueVideoPlayer)
 
-/* eslint-disable no-new */
-/* eslint-disable no-unused-vars */
 var main = new Vue({
   el: '#app',
   router,

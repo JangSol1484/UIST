@@ -44,6 +44,17 @@ const db = {
     lno = lno * 1;
     conn.query('select * from lecture where l_wr_id = ? and l_no = ?', [uid, lno], cb);
   },
+  getIsLiked(uno, lidx, cb) {
+    uno = uno * 1;
+    lidx = lidx * 1;
+    conn.query('select * from like_history where u_no = ? and l_idx = ?', [uno, lidx], cb);
+  },
+  getIsSubscribed(wer_no, ing_no, cb) {
+    conn.query('select s_idx from subscribe where s_follower_no = ? and s_following_no = ?', [wer_no, ing_no], cb)
+  },
+  getSubscribed(uid, cb) {
+    conn.query('select u_no, u_follower from user where u_id = ?', uid, cb)
+  },
   getLectureByCategory(cat, cb) {
     conn.query('select * from lecture where l_category = ?', cat, cb);
   },
@@ -53,9 +64,13 @@ const db = {
   registerLecture(l_info, cb) {
     conn.query('alter table lecture auto_increment=1;', () => {
       conn.query('update user set u_lectures = u_lectures + 1 where u_id = ?', [l_info.wr_id], () => {
-        with(l_info){
-          conn.query('insert into lecture(l_no, l_category, l_title, l_text, l_wr_id, l_wr_name, l_v_name, l_v_type, l_thum) value(?, ?, ?, ?, ?, ?, ?, ?, ?);',[no, '900', title, text, wr_id, wr_name, fileName, filetype, thumb], cb);
-        }
+        conn.query('select c_level0, c_level1 from category where c_name = ?', l_info.category, (err, [result]) => {
+          with(l_info){
+            let cat_no = result.c_level0 + result.c_level1
+            conn.query('insert into lecture(l_no, l_category, l_c_name, l_title, l_text, l_wr_id, l_wr_name, l_v_name, l_v_type, l_thum) value(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[no, cat_no, category, title, text, wr_id, wr_name, fileName, filetype, thumb], cb);
+          }
+        })
+        
       })
     })
   },

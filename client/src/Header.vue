@@ -34,6 +34,9 @@
               <router-link :to="{name: 'my', params:{id: this.$store.getters.getId}}">마이페이지</router-link>
             </b-dropdown-item>
             <b-dropdown-item>
+              <router-link :to="{name: 'myclass', params:{id: this.$store.getters.getId}}">내강의실</router-link>
+            </b-dropdown-item>
+            <b-dropdown-item>
               <a href="" @click.prevent="onClickLogout">로그아웃</a>
             </b-dropdown-item>
           </b-nav-item-dropdown>
