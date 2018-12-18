@@ -55,19 +55,21 @@ router.get('/my', auth.ensureAuth(), (req, res) => {
 });
 
 router.get('/my/class', auth.ensureAuth(), (req, res) => {
-  db.findUserByNo(req.user.id, (err,user) => {
-    if(err) {res.status(401);}
-    else {
-    let smallUserInfo = new Array();
-    let info = new Object();
+  db.findUserByNo(req.user.id, (err, user) => {
+    if(err) {
+      res.status(401);
+      } else {
+      let smallUserInfo = new Array();
+      let info = new Object();
 
-    info.follower = user[0].u_follower
-    info.lectures = user[0].u_lectures
+      info.follower = user[0].u_follower
+      info.lectures = user[0].u_lectures
+      info.intro = user[0].u_introduction
     
 //    db.getMyFollowing()
 
-    smallUserInfo.push(info);
-    res.json(smallUserInfo);
+      smallUserInfo.push(info);
+      res.json(smallUserInfo);
     }
   });
 });
@@ -163,19 +165,24 @@ router.get('/thumbnail/:id', (req, res) => {
 
 router.get('/subscribe/:id', (req, res) => {
   let user;
-  try { user = auth.verify(req.headers.authorization); } catch (e) {}
+  try { user = auth.verify(req.headers.authorization); } catch (e) {user = new Object();user.id = -1}
 
-  let f_wer = user.id;
-  let f_ing_id = req.params.id;
+  if (user.id !== -1) {
 
-  db.handleSubscribe(f_wer, f_ing_id, (result) => {
-    if(result == true) {
-      res.send('T')
-    }
-    else {
-      res.send('F')
-    }
-  })
+    let f_wer = user.id;
+    let f_ing_id = req.params.id;
+
+    db.handleSubscribe(f_wer, f_ing_id, (result) => {
+      if(result == true) {
+        res.send('T')
+      } else {
+        res.send('F')
+      }
+    })
+  } else {
+    res.send('E')
+  }
+
 })
 
 router.use((err, req, res, next) => {

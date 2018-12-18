@@ -27,6 +27,7 @@ router.post('/upload/lecture', (req, res, next) => {
 
   let title;
   let text;
+  let category;
 
   db.findUserByNo(user.id, (err, [rows]) => {
     wr_id = rows.u_id;
@@ -43,6 +44,7 @@ router.post('/upload/lecture', (req, res, next) => {
         //console.log('nomal field / name = ' + name + ' value = ' + value);
         if (name === 'title') title = value;
         else if (name === 'text') text = value;
+        else if (name === 'category') category = value;
       })
 
       form.on('part', (part) => {
@@ -76,6 +78,7 @@ router.post('/upload/lecture', (req, res, next) => {
         }).then( (thumb) => {
           l_info = {
             no: cnt,
+            category: category,
             title: title,
             text: text,
             wr_id: wr_id,

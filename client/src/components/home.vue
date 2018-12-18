@@ -13,8 +13,9 @@
             <router-link :to="{ name: 'lecture', params: { id: newest.l_wr_id, no: newest.l_no }}">
               <img v-bind:src="'data:image/jpeg;base64,'+newest.l_thum" class="thumbnail">
             </router-link>
-            <div>
-              <strong>{{newest.l_title}}</strong> [{{newest.l_view}}]
+            <div class="d-flex flex-column bd-highlight mb-3">
+              <div class="p-0 bd-highlight"><strong class="d-inline-block text-truncate" style="max-width:185px">{{newest.l_title}}</strong></div>
+              <div class="p-0 bd-highlight">조회수 : {{newest.l_view}}</div>
             </div>
           </span>
         </b-col>
@@ -29,8 +30,9 @@
             <router-link :to="{ name: 'lecture', params: { id: popular.l_wr_id, no: popular.l_no }}">
               <img v-bind:src="'data:image/jpeg;base64,'+popular.l_thum" class="thumbnail">
             </router-link>
-            <div>
-              <strong>{{popular.l_title}}</strong> [{{popular.l_view}}]
+            <div class="d-flex flex-column bd-highlight mb-3">
+              <div class="p-0 bd-highlight"><strong class="d-inline-block text-truncate" style="max-width:185px">{{popular.l_title}}</strong></div>
+              <div class="p-0 bd-highlight">조회수 : {{popular.l_view}}</div>
             </div>
           </span>
         </b-col>
@@ -82,6 +84,5 @@ div.index {
 .lecture {
   display: inline-block;
   padding: 10px;
-  text-align: center;
 }
 </style>

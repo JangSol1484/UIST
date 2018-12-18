@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const secret = 'token secret';//암호화 키값
-const expiresIn = 60 * 60; //로그인 정보가 유효한 시간 60mins
+const expiresIn = 60 * 60 * 6; //로그인 정보가 유효한 시간 60mins
 
 const auth = {
   signToken (id) {

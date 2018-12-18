@@ -1,32 +1,33 @@
 <template>
-<!--내 강의실-->
+<!--내 강의실 and X의 강의실-->
 <!--내가 올린 모든 동영상에 관한 정보 혹은 요약된 정보를 렌더-->
 <!--아직 미구현-->
   <div>
     <br>
     <b-container>
-      <b-row>
-        <b-col><h2>{{this.$store.getters.getName}}님의 강의실</h2></b-col>
+      <b-row class="mb-2 w-100">
+        <b-col><h1>{{this.$store.getters.getName}}님의 강의실</h1></b-col>
         <b-col class="text-right">
           <b-button variant="dark" router-link :to="{name: 'upload'}" >업로드</b-button>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row class="mb-4 w-100">
         <b-col>
           <b-card bg-variant="light">
             <b-row>
               <b-col>
                 <b-img thumbnail fluid v-bind:src="'data:image/jpeg;base64,'+thumbnail" width = "400px" height="400px"/>
               </b-col>
-              <b-col md="8" class="text-center">
-                <p>구독자 : {{upinfo[0].follower}}명</p>
-                <p>동영상 : {{upinfo[0].lectures}}개</p>
+              <b-col class="d-flex align-items-end flex-column">
+                <div class="h6">{{upinfo[0].lectures}}개의 강의가 업로드 됨</div>
+                <div class="h6">구독자 : {{upinfo[0].follower}}명</div>
+                <div class="h4 mt-auto">{{upinfo[0].intro}}</div>
               </b-col>
             </b-row>
           </b-card>
         </b-col>
       </b-row>
-      <b-row>
+      <b-row class="mb-3 w-100">
         <b-col>
           <b-dropdown :text="selected_cate_lv0" >
             <b-dropdown-item v-for="category0 in category_level0" 
@@ -44,17 +45,26 @@
           </b-dropdown>
         </b-col>
       </b-row>
-      <b-row>
-        <b-card v-if = "this.category_on_lv1===true">
-          <span v-for="video in selected_lecture" :key="video.l_no" class="lecture">
-            <router-link :to="{ name: 'lecture', params: { id: video.l_wr_id, no: video.l_no }}">
-              <img v-bind:src="'data:image/jpeg;base64,'+video.l_thum" class="thumbnail" width="200px" height="100px">
-            </router-link>
-            <div class="text-center">
-              <strong>{{video.l_title}}</strong> [{{video.l_view}}]
+      <b-row class="w-100">
+        <b-col>
+          <b-card class="w-100" v-if = "this.category_on_lv1===true">
+            <div class="d-flex flex-column border-bottom mb-4" v-for="video in selected_lecture" :key="video.l_no">
+              <div class="d-flex flex-row">
+                <router-link :to="{ name: 'lecture', params: { id: video.l_wr_id, no: video.l_no }}">
+                  <img class="mb-3" v-bind:src="'data:image/jpeg;base64,'+video.l_thum" width="185px">
+                </router-link>
+                <div class="d-flex flex-column mx-3">
+                  <div class="h3 mb-3">{{video.l_title}}</div>
+                  <div class="h5">{{video.l_text}}</div>
+                  <div class="h6 mt-auto mb-3">조회수 : {{video.l_view}} 좋아요 : {{video.l_like}}</div>
+                </div>
+                <div class="h6 ml-auto mb-3 align-self-end">
+                  수정 삭제
+                </div>
+              </div>
             </div>
-          </span>
-        </b-card>
+          </b-card>
+        </b-col>
       </b-row>
     </b-container>
   </div>
@@ -87,6 +97,7 @@ export default {
       }
     })
     .catch(() => {
+      alert('로그인이 만료되었습니다.')
       this.$router.push('/')
       this.$store.dispatch('LOGOUT')
     })
@@ -107,7 +118,7 @@ export default {
       thumbnail: null,
       selected_cate_lv0: '카테고리 선택',
       selected_cate_lv1: '카테고리 선택',
-      category_name: ['수능', '공시', '어학', '사회', '투자', '생활', '예술', '기술', '게임', '기타'],
+      category_name: ['수능', '공시', '어학', '사회', '투자', '생활', '예술', '기술', '게임', '기타', '전체'],
       category_on_lv0: false,
       category_on_lv1: false,
       categories: [],
