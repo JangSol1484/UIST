@@ -40,7 +40,7 @@
           </b-row>
           <b-row class="mt-2">
             <b-col>
-              <img  class="img-thumbnail" v-bind:src="'data:image/jpeg;base64,'+thumbnail"/>
+              <img  class="img-thumbnail" v-bind:src="thumbnail"/>
               <b-form-file name = "thumbnail" v-if="modify===false" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
             </b-col>
             <b-col md="8">
@@ -111,7 +111,7 @@
         formData: null,
         user: null,
         sub_list: null,
-        thumbnail: null,
+        thumbnail: 'data:image/jpeg;base64,',
         modify: true,
         modifyOn: '2',
         profileB: '프로필 수정',
@@ -132,7 +132,7 @@
           this.sub_list = res.data.sublist
           this.$http.get(`/api/user/thumbnail/${this.user.u_id}`)
           .then((res) => {
-            this.thumbnail = res.data
+            this.thumbnail = this.thumbnail + res.data
           })
           this.v_name = this.user.u_name
         })
@@ -190,6 +190,7 @@
       loadfile (name, files) {
         this.targetName = name
         this.targetFile = files[0]
+        this.thumbnail = URL.createObjectURL(files[0])
         let type = files[0].type.split('/')
         if (type[1] === 'jpg') {
           this.isJpeg = true
