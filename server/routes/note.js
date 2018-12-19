@@ -1,9 +1,11 @@
 const express = require('express');
 const path = require('path');
+const multiparty = require('multiparty');
 const router = express.Router();
 const db = require('../db');
 const auth = require('../auth');
 
+/*
 router.get('/video', function (req, res,next) {
     db.getNote((err,result) => {
         //console.log(result);
@@ -34,15 +36,42 @@ router.post('/video', function(req,res) {
    
     res.send('hello');
 })
+*/
+
+router.get('/:lidx', auth.ensureAuth(), (req, res) => {
+
+    let uno = req.user.id
+    let lidx = req.params.lidx
+
+    db.getNote(uno, lidx, (err, [result]) => {
+        res.send(result.n_text)
+    })
+})
 
 router.post('/:lidx', auth.ensureAuth(), (req, res) => {
     let uno = req.user.id
     let lidx = req.params.lidx
-    let note = req.body
+    let note
+    let form = new multiparty.Form()
 
-    console.log(req.body)
+    form.on('field', (name, value) => {
+        //console.log('진입')
+        //console.log('nomal field / name = ' + name + ' value = ' + value)
+        if (name === 'note') note = value
+    });
 
-    res.seed('T')
+    form.on('close', () => {
+
+        db.registerNote(uno, lidx, note, (err) => {
+
+            console.log(err)
+            res.send('T')
+        })
+    })
+
+    form.parse(req);
 })
+
+
 
 module.exports = router;

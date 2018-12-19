@@ -77,11 +77,14 @@ const db = {
       })
     })
   },
-  increaseView(uid, lno){
-    conn.query('update lecture set l_view = l_view + 1 where l_wr_id = ? and l_no = ?', [uid, lno]);
+  registerNote (uno, lidx, text, cb) {
+    conn.query('insert into note(n_u_no, n_l_idx, n_text) values(?, ?, ?)', [uno, lidx, text], cb)
   },
-  getNote() {
-    conn.query('select * from note;');
+  increaseView(uid, lno, cb){
+    conn.query('update lecture set l_view = l_view + 1 where l_wr_id = ? and l_no = ?', [uid, lno], cb)
+  },
+  getNote(uno, lidx, cb) {
+    conn.query('select n_text from note where n_u_no = ? and n_l_idx = ?', [uno, lidx], cb);
   },
   insertNote(notestr,timest) {
     conn.query('insert into note(n_ts,n_string) value(?,?)',[timest,notestr]);

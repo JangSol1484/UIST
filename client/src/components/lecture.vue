@@ -97,6 +97,12 @@ export default {
         self.seekVal = (100 / this.duration) * this.currentTime
         self.seekPer = self.seekVal + '%'
       }, false)
+      this.$http.get(`/api/note/${this.lecture.l_idx}`)
+      .then((res) => {
+        // this.note_toggle = true
+        alert('저장된 필기를 불러왔습니다.')
+        this.$refs.note.value = res.data
+      })
     })
   },
   data: function () {
@@ -110,7 +116,7 @@ export default {
       duration: null,
       seekVal: null,
       seekPer: null,
-      sliderValue: 0,
+      sliderValue: 0.5,
       play: false,
       player: null,
       like: false,
@@ -196,8 +202,8 @@ export default {
 
         self.timeout = setInterval(function () {
           self.note_anchor = note[parseInt(self.player.currentTime)] ? note[parseInt(self.player.currentTime)] : self.note_anchor
-          console.log(self.note_anchor)
-          console.log(parseInt(self.player.currentTime))
+          // console.log(self.note_anchor)
+          // console.log(parseInt(self.player.currentTime))
           timeCount += 1
 
           if (self.player.currentTime === 7) {
@@ -236,10 +242,17 @@ export default {
     sendPost () {
       let formData = new FormData()
       formData.append('note', this.$refs.note.value)
-      console.log(this.$refs.note.value)
-      this.$http.post(`/api/note/${this.lecture.l_idx}`, formData)
+      // console.log(this.$refs.note.value)
+      this.$http.post(`/api/note/${this.lecture.l_idx}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
       .then((res) => {
         alert('필기를 성공적으로 저장했습니다.')
+      })
+      .catch((err) => {
+        console.log(err)
       })
     }
   },
