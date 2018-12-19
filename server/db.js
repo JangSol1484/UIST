@@ -1,23 +1,32 @@
 const mysql = require('mysql');
+const crypto = require('crypto')
 const dbconfig = require('./dbconfig.json');
 
 const conn = mysql.createConnection(dbconfig);
 
 conn.connect();
 
+let iteration = 131093
+
 const db = {
-  testapi (cb) {
-    conn.query('select * from category order by c_level0', cb);
-  },
   registerUser (userInfo, cb) {
-    conn.query('alter table user auto_increment=1;', () => {
-      with(userInfo){
-        conn.query('insert into user(u_id, u_pw, u_name, u_email, u_introduction) value (?, ?, ?, ?, ?);',  [u_id,u_pw,u_name,u_email,u_intro], cb);
-      }
-    });
+    crypto.randomBytes(64, (err, buf) => {
+      let salt = buf.toString('base64')
+      crypto.pbkdf2(userInfo.u_pw, salt, iteration, 64, 'sha512', (err, key) => {
+        conn.query('alter table user auto_increment=1;', () => {
+          with(userInfo){
+            conn.query('insert into user(u_id, u_pw, u_name, u_email, u_introduction, salt) value (?, ?, ?, ?, ?, ?);',  [u_id, key.toString('base64'), u_name, u_email, u_intro, salt], cb);
+          }
+        });
+      })
+    })
   },
   findUser (userInfo, cb) {//로그인 시
-    conn.query('select u_no, u_id, u_name from user where u_id = ? and u_pw = ?;',  [userInfo.uid, userInfo.upw], cb);
+    conn.query('select salt from user where u_id = ?', userInfo.uid, (err, [salt]) => {
+      crypto.pbkdf2(userInfo.upw, salt.salt, iteration, 64, 'sha512', (err, key) => {
+        conn.query('select u_no, u_id, u_name from user where u_id = ? and u_pw = ?',  [userInfo.uid, key.toString('base64')], cb);
+      })
+    })
   },
   findUserByNo(u_no, cb) {//요청 시 토큰의 id값으로 유저 인증
     u_no = u_no * 1;

@@ -8,8 +8,6 @@ const db = require('../db');
 
 const router = express.Router();
 
-/* GET users listing. */
-
 router.get('/', (req, res) => {
 
   let user;
@@ -65,8 +63,6 @@ router.get('/my/class', auth.ensureAuth(), (req, res) => {
       info.follower = user[0].u_follower
       info.lectures = user[0].u_lectures
       info.intro = user[0].u_introduction
-    
-//    db.getMyFollowing()
 
       smallUserInfo.push(info);
       res.json(smallUserInfo);

@@ -8,6 +8,7 @@
       <b-row>
         <b-col>
           <b-card class="shadow w-100">
+            <span v-if="lecturelist.length===0">검색 결과가 없습니다.</span>
             <div class="d-flex flex-column border-bottom mb-4" v-for="lecture in lecturelist" :key="lecture.l_no">
               <div class="d-flex flex-row">
                 <router-link :to="{ name: 'lecture', params: { id: lecture.l_wr_id, no: lecture.l_no }}">
@@ -32,6 +33,7 @@
       <b-row>
         <b-col>
             <b-card class="shadow w-100">
+              <span v-if="userlist.length===0">검색 결과가 없습니다.</span>
             <div class="d-flex flex-column border-bottom mb-4" v-for="s_user in userlist" :key="s_user.u_no">
               <div class="d-flex flex-row">
                 <router-link :to="{ name: 'lecture', params: { }}">
