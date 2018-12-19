@@ -4,7 +4,6 @@
 <!--아직 미구현-->
   <div>
     <br>
-    {{categories}}
     <b-container>
       <b-row class="mb-2 w-100">
         <b-col><h1 class="font-weight-bold">{{this.$store.getters.getName}}님의 강의실</h1></b-col>
@@ -98,6 +97,11 @@ export default {
       this.category_level0.push('전체')
       for (let i in this.category_level0_temp) {
         this.category_level0.push(this.category_name[this.category_level0_temp[i]])
+      }
+
+      this.category_on_lv1 = true
+      for (let j = 0; j < this.mylecture.length; j++) {
+        this.selected_lecture.push(this.mylecture[j])
       }
     })
     .catch(() => {

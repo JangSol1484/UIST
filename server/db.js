@@ -59,7 +59,7 @@ const db = {
     conn.query('select u_no, u_follower from user where u_id = ?', uid, cb)
   },
   getLectureByCategory(cat, cb) {
-    conn.query('select * from lecture where l_category = ?', cat, cb);
+    conn.query('select * from lecture where left(l_category, 1) = ?', cat, cb)
   },
   getMySubscribe(f_wer,cb) {
     conn.query('select ing.u_name from user ing, user wer, subscribe s where wer.u_no = s.s_follower_no and ing.u_no = s.s_following_no and wer.u_no = ?',f_wer, cb)
@@ -70,7 +70,7 @@ const db = {
         conn.query('select c_level0, c_level1 from category where c_name = ?', l_info.category, (err, [result]) => {
           with(l_info){
             let cat_no = result.c_level0 + result.c_level1
-            conn.query('insert into lecture(l_no, l_category, l_c_name, l_title, l_text, l_wr_id, l_wr_name, l_v_name, l_v_type, l_thum) value(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[no, cat_no, category, title, text, wr_id, wr_name, fileName, filetype, thumb], cb);
+            conn.query('insert into lecture(l_no, l_category, l_c_name, l_title, l_text, l_wr_id, l_wr_name, l_v_name, l_v_type, l_thum) value(?, ?, ?, ?, ?, ?, ?, ?, ?, ?);',[no, cat_no, category, title, text, wr_id, wr_name, fileName, filetype, thumb], cb)
           }
         })
         
@@ -145,6 +145,8 @@ const db = {
       conn.query('update user set u_lectures = u_lectures - 1 where u_id = ?', uid, cb)
     })
   }
+
 }
+
 
 module.exports = db;
