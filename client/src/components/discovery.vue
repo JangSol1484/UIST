@@ -1,36 +1,38 @@
 <template>
   <div>
     <br>
-    <b-row>
-      <b-col>
-        {{lectures}}
-        <b-dropdown :text="selected_cate_lv0" >
-          <b-dropdown-item v-for="category0 in category_level0" 
-                          :key="category0"
-                          @click="selectLevel0(category0)">
-            {{category0}}
-          </b-dropdown-item>
-        </b-dropdown>
-        <b-dropdown v-if="category_on_lv0===true" :text="selected_cate_lv1">
-          <b-dropdown-item v-for="category1 in category_level1"
-                          :key="category1"
-                          @click="selectLevel1(category1)">
-            {{category1}}
-          </b-dropdown-item>
-        </b-dropdown>
-      </b-col>
-    </b-row>
-    <b-row>
-      <!--selected_category로 동영상 요청 후 영상 뿌리기, 해당 변수에는 113 001 등 선택된 카테고리 번호가 들어있음-->
-      <span v-if="category_on_lv1===true" v-for="lecture in lectures" v-bind:key="lecture.l_no" class="lecture">
-          <router-link :to="{ name: 'lecture', params: { id: lecture.l_wr_id, no: lecture.l_no }}">
-              <img v-bind:src="'data:image/jpeg;base64,'+lecture.l_thum" class="thumbnail">
-          </router-link>
-          <div>
-              <strong>{{lecture.l_title}}</strong> [{{lecture.l_view}}]
-          </div>
-      </span>
-    </b-row>
+    <b-container>
+      <b-row>
+        <b-col>
+          <b-dropdown :text="selected_cate_lv0" >
+            <b-dropdown-item v-for="category0 in category_level0" 
+                            :key="category0"
+                            @click="selectLevel0(category0)">
+              {{category0}}
+            </b-dropdown-item>
+          </b-dropdown>
+          <b-dropdown v-if="category_on_lv0===true" :text="selected_cate_lv1">
+            <b-dropdown-item v-for="category1 in category_level1"
+                            :key="category1"
+                            @click="selectLevel1(category1)">
+              {{category1}}
+            </b-dropdown-item>
+          </b-dropdown>
+        </b-col>
+      </b-row>
+      <br><br>
+      <b-row>
+        <!--selected_category로 동영상 요청 후 영상 뿌리기, 해당 변수에는 113 001 등 선택된 카테고리 번호가 들어있음-->
+        <span v-if="category_on_lv1===true" v-for="lecture in lectures" v-bind:key="lecture.l_no" class="lecture">
+            <router-link :to="{ name: 'lecture', params: { id: lecture.l_wr_id, no: lecture.l_no }}">
+                <img v-bind:src="'data:image/jpeg;base64,'+lecture.l_thum" class="thumbnail">
+            </router-link>
+            <div>
+                <strong>{{lecture.l_title}}</strong> [{{lecture.l_view}}]
+            </div>
+        </span>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -87,12 +89,6 @@ export default {
         }
         write = true
       }
-      let getLectures = '/api/discovery/' + this.cast_category0(categoryName0)
-      alert(getLectures)
-      this.$http.get(getLectures)
-      .then((res) => {
-        this.lectures = res.data
-      })
     },
     selectLevel1 (categoryName1) {
       this.selected_cate_lv1 = categoryName1
@@ -105,11 +101,16 @@ export default {
         }
       }
       this.selected_category = categoryNumber0 + this.cast_category1(categoryName1)
-      for (let j = 0; j < this.mylecture.length; j++) {
-        if (this.mylecture[j].l_category === this.selected_category) {
-          this.selected_lecture.push(this.mylecture[j])
+      let getLectures = '/api/discovery/' + categoryNumber0
+      this.$http.get(getLectures)
+      .then((res) => {
+        this.lecturesTemp = res.data
+        for (let j = 0; j < this.lecturesTemp.length; j++) {
+          if (this.lecturesTemp[j].l_category === this.selected_category) {
+            this.lectures.push(this.lecturesTemp[j])
+          }
         }
-      }
+      })
     }
   },
   data () {
@@ -123,7 +124,8 @@ export default {
       categories: '',
       selected_category0: '',
       selected_category1: '',
-      lectures: []
+      lectures: [],
+      lecturesTemp: []
     }
   }
 }
