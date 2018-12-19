@@ -137,12 +137,18 @@ export default {
       this.category_on_lv0 = true
       this.category_on_lv1 = false
       this.category_level1 = []
+      this.selected_cate_lv1 = '카테고리 선택'
       for (let i = 0; i < this.categories.length; i++) {
-        if (this.categories[i].c_level0 === this.cast_category0(categoryName0)) {
+        if (this.categories[i].c_level0 === this.cast_category0(categoryName0) && this.cast_category0(categoryName0) !== '9') {
           if (this.categories[i].c_level1 !== '00') {
             this.category_level1.push(this.categories[i].c_name)
           }
         }
+      }
+      if (this.cast_category0(categoryName0) === '9') {
+        this.category_on_lv0 = false
+        this.category_on_lv1 = true
+        this.selected_category = '900'
       }
     },
     selectLevel1 (categoryName1) {

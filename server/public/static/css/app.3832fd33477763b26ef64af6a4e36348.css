@@ -340,29 +340,11 @@ div.index[data-v-03e74d57] {
   text-align: center;
 }
 
-div.video[data-v-0badb094] {
-  position: absolute;
-  left: 0%;
-  width: 960px;
-  height: 540px;
-}
-div.video > video[data-v-0badb094] {
-  width: 960px;
-  height: 540px;
-}
-textarea.note[data-v-0badb094] {
+textarea.form-control[data-v-0badb094] {
   position: relative;
   padding: 5px;
-  left: 970px;
-  width: 490px;
-  height: 540px;
   overflow: auto;
   background-color: aliceblue;
-}
-div.contents[data-v-0badb094] {
-  position: relative;
-  top: 550px;
-  width: 960px;
 }
 
 
@@ -11268,4 +11250,4 @@ table.b-table > tbody > tr.b-table-details > td {
     border-top: none;
 }
 
-/*# sourceMappingURL=app.a8326e35532199edfe6825a1d12d250f.css.map*/
+/*# sourceMappingURL=app.3832fd33477763b26ef64af6a4e36348.css.map*/

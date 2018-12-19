@@ -2,18 +2,20 @@
     <div>
        <br><br>
         <b-col>
-            <span v-if="category_on_lv0===false" v-for="category0 in category_level0" :key="category0.c_level0" class="category">
-                <!--섬네일에 클릭이벤트 & 클릭시 클릭이벤트 selectLevel0 ({{category0.c_name}})-->
-                <div>
-                    <strong>{{category0.c_name}}</strong> <!--추가로 동영상 수?-->
-                </div>
-            </span>
-            <span v-if="category_on_lv0===true" v-for="category1 in category_level1" :key="category1.c_level1" class="category1">
-                <!--섬네일에 클릭이벤트 & 클릭시 selectLevel1 ({{category1.c_name}}) -->
-                <div>
-                    <strong>{{category1.c_name}}</strong> <!--추가로 동영상 수?-->
-                </div>
-            </span>
+            <b-dropdown :text="selected_cate_lv0" >
+            <b-dropdown-item v-for="category0 in category_level0" 
+                            :key="category0"
+                            @click="selectLevel0(category0)">
+              {{category0}}
+            </b-dropdown-item>
+          </b-dropdown>
+          <b-dropdown v-if="category_on_lv0===true" :text="selected_cate_lv1">
+            <b-dropdown-item v-for="category1 in category_level1"
+                            :key="category1"
+                            @click="selectLevel1(category1)">
+              {{category1}}
+            </b-dropdown-item>
+          </b-dropdown>
             <!--selected_category로 동영상 요청 후 영상 뿌리기, 해당 변수에는 113 001 등 선택된 카테고리 번호가 들어있음-->
             <span v-if="category_on_lv1===true" v-for="lecture in lectures" v-bind:key="lecture.l_no" class="lecture">
                 <router-link :to="{ name: 'lecture', params: { id: lecture.l_wr_id, no: lecture.l_no }}">
@@ -63,17 +65,29 @@ export default {
     this.category_on_lv0 = true
     this.category_on_lv1 = false
     this.category_level1 = []
-    for (let i = 0; i < this.categories.length; i++) {
-      if (this.categories[i].c_level0 === this.cast_category0(categoryName0)) {
-        if (this.categories[i].c_level1 !== '00') {
-          this.category_level1.push(this.categories[i])
+
+    for (let i = 0, write = true; i < this.categories.length; i++) {
+      if (this.cast_category0(categoryName0) === this.categories[i].c_level0) {
+        for (let j = 0; j < this.category_level1.length; j++) {
+          if (this.category_level1[j] === this.categories[i].c_name) {
+            write = false
+            break
+          }
+        }
+        if (this.categories[i].c_level1 === '00') {
+          write = false
+        }
+        if (write) {
+          this.category_level1.push(this.categories[i].c_name)
         }
       }
+      write = true
     }
   },
   selectLevel1 (categoryName1) {
     this.selected_cate_lv1 = categoryName1
     this.category_on_lv1 = true
+    this.selected_lecture = []
     let categoryNumber0
     for (let i = 0; i < this.categories.length; i++) {
       if (this.categories[i].c_name === categoryName1) {

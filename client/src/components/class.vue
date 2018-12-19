@@ -4,6 +4,7 @@
 <!--아직 미구현-->
   <div>
     <br>
+    {{categories}}
     <b-container>
       <b-row class="mb-2 w-100">
         <b-col><h1 class="font-weight-bold">{{this.$store.getters.getName}}님의 강의실</h1></b-col>
@@ -94,6 +95,7 @@ export default {
         }
         write = true
       }
+      this.category_level0.push('전체')
       for (let i in this.category_level0_temp) {
         this.category_level0.push(this.category_name[this.category_level0_temp[i]])
       }
@@ -118,7 +120,7 @@ export default {
       myinfo: '',
       mylecture: '',
       thumbnail: null,
-      selected_cate_lv0: '카테고리 선택',
+      selected_cate_lv0: '전체',
       selected_cate_lv1: '카테고리 선택',
       category_name: ['수능', '공시', '어학', '사회', '투자', '생활', '예술', '기술', '게임', '기타', '전체'],
       category_on_lv0: false,
@@ -149,24 +151,44 @@ export default {
       this.selected_cate_lv0 = categoryName0
       this.category_on_lv0 = true
       this.category_on_lv1 = false
+      this.selected_cate_lv1 = '카테고리 선택'
       this.category_level1 = []
-
-      for (let i = 0, write = true; i < this.categories.length; i++) {
-        if (this.cast_category0(categoryName0) === this.categories[i].c_level0) {
-          for (let j = 0; j < this.category_level1.length; j++) {
-            if (this.category_level1[j] === this.categories[i].c_name) {
+      if (categoryName0 !== '전체') {
+        for (let i = 0, write = true; i < this.categories.length; i++) {
+          if (this.cast_category0(categoryName0) === this.categories[i].c_level0) {
+            for (let j = 0; j < this.category_level1.length; j++) {
+              if (this.category_level1[j] === this.categories[i].c_name) {
+                write = false
+                break
+              }
+            }
+            if (this.categories[i].c_level1 === '00') {
               write = false
-              break
+              if (this.cast_category0(categoryName0) === '9') {
+                write = true
+              }
+            }
+            if (write) {
+              this.category_level1.push(this.categories[i].c_name)
             }
           }
-          if (this.categories[i].c_level1 === '00') {
-            write = false
-          }
-          if (write) {
-            this.category_level1.push(this.categories[i].c_name)
+          write = true
+          if (this.cast_category0(categoryName0) === '9') {
+            this.category_on_lv0 = false
+            this.category_on_lv1 = true
+            for (let j = 0; j < this.mylecture.length; j++) {
+              if (this.mylecture[j].l_category === '900') {
+                this.selected_lecture.push(this.mylecture[j])
+              }
+            }
           }
         }
-        write = true
+      } else {
+        this.category_on_lv0 = false
+        this.category_on_lv1 = true
+        for (let j = 0; j < this.mylecture.length; j++) {
+          this.selected_lecture.push(this.mylecture[j])
+        }
       }
     },
     selectLevel1 (categoryName1) {
