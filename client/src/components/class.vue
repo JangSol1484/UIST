@@ -214,10 +214,19 @@ export default {
     },
     deleteLecture (event) {
       let uid, lno
-      alert(event.target.parentNode.parentNode.parentNode)
-      event.target.parentNode.parentNode.parentNode.$remove
-      /*
       [uid, lno] = event.target.childNodes[0].value.split(',')
+      // alert(event.target.parentNode.parentNode.parentNode)
+      for (let i = 0; i < this.mylecture.length; i++) {
+        if (this.mylecture[i].l_no === parseInt(lno)) {
+          alert('찾았다' + i)
+        }
+      }
+      for (let i = 0; i < this.selected_lecture.length; i++) {
+        if (this.selected_lecture[i].l_no === parseInt(lno)) {
+          this.selected_lecture[i].l_title = '콬코카'
+        }
+      }
+      /*
       this.$http.get(`/api/lecture/delete/${uid}/${lno}`)
       .then((res) => {
         if (res.data === 'T') {
