@@ -20,13 +20,13 @@
         
       </div>
       <div>
-        <div class="mt-3">
-          <h3>{{lecture.l_title}}</h3>
+        <div class="card shadow p-2 mt-3">
+          <h3 class="font-weight-bold">{{lecture.l_title}}</h3>
           <div>
             <div class="d-flex justify-content-between">
               <div>
                 <i class="fas fa-user-circle mx-2"></i>{{lecture.l_wr_name}}<br>
-                <i class="far fa-calendar-alt mx-2"></i>{{lecture.l_date}}<br>
+                <i class="far fa-calendar-alt mx-2"></i>게시일 : {{lecture.l_date}}<br>
               </div>
               <div class="d-flex flex-column">
                 <div>
@@ -40,14 +40,14 @@
             <hr style="width: 100%; height: 1px; background-color:#BDBDBD;">
 
             <h6>{{lecture.l_text}}</h6><br>
-              
-            <router-link :to="{name: 'home'}">뒤로가기</router-link>{{note_anchor}}
+            
           </div>
         </div>
       </div>
     </div>
     <div class="col-4">
-      <textarea class="form-control mb-3" @keydown.tab.prevent @keyup.tab="btn_timeStamp" style="resize: none;" :rows="32" ref="note" :value="note_anchor"></textarea>
+      <textarea class="form-control mb-3" v-show="note_toggle" @keydown.tab.prevent @keyup.tab="btn_timeStamp" style="resize: none;" :rows="32" :value="note_anchor" readonly></textarea>
+      <textarea class="form-control mb-3" v-show="!note_toggle" @keydown.tab.prevent @keyup.tab="btn_timeStamp" style="resize: none;" :rows="32" ref="note"></textarea>
       <div class="btn-group w-100" role="group">
         <button type="button" class="btn btn-primary w-50" data-toggle="tooltip" data-placement="top" title="Hot-Key : Tab Key" @click="btn_timeStamp">Time Stamp</button>
         <button type="button" class="btn btn-info w-50" @click="btn_saveNote">Save Note</button>
@@ -85,7 +85,7 @@ export default {
 
       let date = new Date(this.lecture.l_date)
 
-      this.lecture.l_date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+      this.lecture.l_date = date.getFullYear() + '. ' + (date.getMonth() + 1) + '. ' + date.getDate() + '.'
 
       this.player = this.$refs.videoPlayer
       this.player.addEventListener('loadedmetadata', function () {
@@ -110,15 +110,16 @@ export default {
       duration: null,
       seekVal: null,
       seekPer: null,
-      sliderValue: 0.5,
+      sliderValue: 0,
       play: false,
       player: null,
       like: false,
       like_color: 'secondary',
       sub_color: 'secondary',
       note_tmp: null,
-      note_anchor: '초기값',
-      timeout: null
+      note_anchor: null,
+      timeout: null,
+      note_toggle: false
     }
   },
   methods: {
@@ -174,31 +175,37 @@ export default {
       // alert(cursor)
     },
     btn_saveNote () {
-      this.note_tmp = this.$refs.note.value
+      if (this.note_toggle) {
+        this.note_toggle = false
+      } else {
+        this.note_toggle = true
 
-      this.note_tmp = this.note_tmp.split('#')
+        this.note_tmp = this.$refs.note.value
+        this.note_tmp = this.note_tmp.split('#')
 
-      let note = Object()
+        let note = Object()
 
-      for (let i = 0; i < this.note_tmp.length; i++) {
-        this.note_tmp[i] = this.note_tmp[i].split('$')
-        note[parseInt(this.note_tmp[i][0])] = this.note_tmp[i][1]
-        // console.log(note[parseInt(this.note_tmp[i][0])])
-      }
-      let timeCount = 0
-
-      var self = this
-
-      self.timeout = setInterval(function () {
-        self.note_anchor = note[parseInt(self.player.currentTime)]
-        console.log(self.note_anchor)
-        console.log(parseInt(self.player.currentTime))
-        timeCount += 1
-
-        if (self.player.currentTime === 7) {
-          clearInterval(self.timeout)
+        for (let i = 0; i < this.note_tmp.length; i++) {
+          this.note_tmp[i] = this.note_tmp[i].split('$')
+          note[parseInt(this.note_tmp[i][0])] = this.note_tmp[i][1]
+          // console.log(note[parseInt(this.note_tmp[i][0])])
         }
-      }, 1000)
+        let timeCount = 0
+
+        var self = this
+
+        self.timeout = setInterval(function () {
+          self.note_anchor = note[parseInt(self.player.currentTime)] ? note[parseInt(self.player.currentTime)] : self.note_anchor
+          console.log(self.note_anchor)
+          console.log(parseInt(self.player.currentTime))
+          timeCount += 1
+
+          if (self.player.currentTime === 7) {
+            clearInterval(self.timeout)
+          }
+        }, 1000)
+        this.sendPost()
+      }
     },
     showControls (event) {
       this.visible = 'showControls'
@@ -218,13 +225,22 @@ export default {
       }
     },
     seek (event) {
-      this.seekVal = parseInt(event.offsetX / this.$refs.seekBar.offsetWidth * 100)
+      this.seekVal = event.offsetX / this.$refs.seekBar.offsetWidth * 100
       this.seekPer = this.seekVal + '%'
 
       this.player.currentTime = this.seekVal * this.player.duration / 100
     },
     volume (event) {
       this.player.volume = this.sliderValue
+    },
+    sendPost () {
+      let formData = new FormData()
+      formData.append('note', this.$refs.note.value)
+      console.log(this.$refs.note.value)
+      this.$http.post(`/api/note/${this.lecture.l_idx}`, formData)
+      .then((res) => {
+        alert('필기를 성공적으로 저장했습니다.')
+      })
     }
   },
   components: {

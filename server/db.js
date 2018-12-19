@@ -139,6 +139,11 @@ const db = {
         })
       }
     })
+  },
+  deleteLecture (uid, lno, cb) {
+    conn.query('delete from lecture where l_wr_id = ? and l_no = ?', [uid, lno], (err) => {
+      conn.query('update user set u_lectures = u_lectures - 1 where u_id = ?', uid, cb)
+    })
   }
 }
 

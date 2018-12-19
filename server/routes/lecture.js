@@ -139,20 +139,29 @@ router.get('/:id/:no', (req, res, next) => {
 
 router.get('/like/:id/:no', (req, res, next) => {
   
-  let user;
+  let user
   try { user = auth.verify(req.headers.authorization); } catch (e) {user = new Object();user.id = -1}
 
   if (user.id !== -1) {
     db.handleLike(user.id, req.params.id, req.params.no, (result) => {
       if(result === 'T'){
-        res.send('T');
+        res.send('T')
       } else if(result === 'F') {
-        res.send('F');
+        res.send('F')
       }
     })
   } else {
-    res.send('E');
+    res.send('E')
   }
 });
 
+router.get('/delete/:id/:no', auth.ensureAuth(), (req, res) => {
+
+  let uid = req.params.id
+  let lno = req.params.no
+
+  db.deleteLecture(uid, lno, (err) => {
+    res.send('T')
+  })
+})
 module.exports = router;

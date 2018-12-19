@@ -61,7 +61,7 @@
                   <div class="h6 mt-auto mb-3">조회수 : {{video.l_view}} 좋아요 : {{video.l_like}}</div>
                 </div>
                 <div class="h6 ml-auto mb-3 align-self-end">
-                  수정(사족) 삭제
+                  <span @click="deleteLecture"><input type="hidden" :value="video.l_wr_id + ',' + video.l_no">삭제</span>
                 </div>
               </div>
             </div>
@@ -185,6 +185,20 @@ export default {
           this.selected_lecture.push(this.mylecture[j])
         }
       }
+    },
+    deleteLecture (event) {
+      let uid, lno
+      alert(event.target.parentNode.parentNode.parentNode)
+      event.target.parentNode.parentNode.parentNode.$remove
+      /*
+      [uid, lno] = event.target.childNodes[0].value.split(',')
+      this.$http.get(`/api/lecture/delete/${uid}/${lno}`)
+      .then((res) => {
+        if (res.data === 'T') {
+          alert('삭제 완료되었습니다.')
+        }
+      })
+      */
     }
   }
 }

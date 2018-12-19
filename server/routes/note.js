@@ -34,4 +34,15 @@ router.post('/video', function(req,res) {
    
     res.send('hello');
 })
+
+router.post('/:lidx', auth.ensureAuth(), (req, res) => {
+    let uno = req.user.id
+    let lidx = req.params.lidx
+    let note = req.body
+
+    console.log(req.body)
+
+    res.seed('T')
+})
+
 module.exports = router;
