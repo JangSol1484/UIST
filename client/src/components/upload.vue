@@ -99,7 +99,11 @@ export default {
         if (!this.isFormExist) {
           this.formData.append('title', this.l_title)
           this.formData.append('text', this.l_text)
-          this.formData.append('category', this.selected_cate_lv1)
+          if (this.selected_cate_lv0 !== '기타') {
+            this.formData.append('category', this.selected_cate_lv1)
+          } else if (this.selected_cate_lv0 === '기타') {
+            this.formData.append('category', this.selected_cate_lv0)
+          }
           this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
           this.isFormExist = true
         }
