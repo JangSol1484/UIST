@@ -268,14 +268,12 @@ video.embed-responsive {
 .play {
   border: 0;
   background-color: Transparent;
-  background-image: url('../assets/pause.png');
   height: 30px;
   width: 30px;
 }
 .pause {
   border: 0;
   background-color: Transparent;
-  background-image: url('../assets/play.png');
   height: 30px;
   width: 30px;
 }
