@@ -8,10 +8,11 @@ import MyPage from 'components/mypage'
 import MyClass from 'components/class'
 import Lecture from 'components/lecture'
 import Login from 'components/login'
-import Signin from 'components/Signin'
+import Signup from 'components/signup'
+import Search from 'components/search'
 import Upload from 'components/upload'
+import Discovery from 'components/discovery'
 import store from '../store'
-
 const requireAuth = () => (from, to, next) => {
   if (store.getters.isAuthenticated) return next()
   next('/login?returnPath=my')
@@ -31,9 +32,9 @@ export default new Router({
       component: Login
     },
     {
-      path: '/signin',
-      name: 'signin',
-      component: Signin
+      path: '/signup',
+      name: 'signup',
+      component: Signup
     },
     {
       path: '/lecture/:id/:no',
@@ -41,13 +42,18 @@ export default new Router({
       component: Lecture
     },
     {
-      path: '/my',
+      path: '/search/:query',
+      name: 'search',
+      component: Search
+    },
+    {
+      path: '/my/:id',
       name: 'my',
       component: MyPage,
       beforeEnter: requireAuth()
     },
     {
-      path: '/my/class',
+      path: '/my/:id/class',
       name: 'myclass',
       component: MyClass,
       beforeEnter: requireAuth()
@@ -56,6 +62,12 @@ export default new Router({
       path: '/upload',
       name: 'upload',
       component: Upload,
+      beforeEnter: requireAuth()
+    },
+    {
+      path: '/discovery',
+      name: 'discovery',
+      component: Discovery,
       beforeEnter: requireAuth()
     }
   ]

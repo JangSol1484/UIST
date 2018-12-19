@@ -11,6 +11,7 @@ yarn-error.log*
 *.mkv
 *.png
 *.jpg
+*.zip
 
 # Runtime data
 pids
