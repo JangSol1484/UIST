@@ -3,6 +3,7 @@
     <br>
     <b-row>
       <b-col>
+        {{lectures}}
         <b-dropdown :text="selected_cate_lv0" >
           <b-dropdown-item v-for="category0 in category_level0" 
                           :key="category0"
@@ -37,10 +38,6 @@
 <script>
 export default {
   created () {
-    this.$http.get('/api/lecture')
-    .then((res) => {
-      this.mylecture = res.data
-    })
     this.formData = new FormData()
     this.$http.get('/api/category')
     .then((res) => {
@@ -90,6 +87,12 @@ export default {
         }
         write = true
       }
+      let getLectures = '/api/discovery/' + this.cast_category0(categoryName0)
+      alert(getLectures)
+      this.$http.get(getLectures)
+      .then((res) => {
+        this.lectures = res.data
+      })
     },
     selectLevel1 (categoryName1) {
       this.selected_cate_lv1 = categoryName1
@@ -119,7 +122,8 @@ export default {
       category_on_lv1: false,
       categories: '',
       selected_category0: '',
-      selected_category1: ''
+      selected_category1: '',
+      lectures: []
     }
   }
 }
