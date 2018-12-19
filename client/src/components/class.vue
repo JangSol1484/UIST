@@ -4,7 +4,6 @@
 <!--아직 미구현-->
   <div>
     <br>
-    {{categories}}
     <b-container>
       <b-row class="mb-2 w-100">
         <b-col><h1>{{this.$store.getters.getName}}님의 강의실</h1></b-col>
