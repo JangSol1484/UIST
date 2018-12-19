@@ -8,9 +8,9 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="/discovery">탐색</b-nav-item>
+          <b-nav-item href="/discovery"><i class="fas fa-archway mr-1"></i>탐색</b-nav-item>
         </b-navbar-nav>
-
+        
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto col-md-4">
           <b-nav-form @submit.prevent="SearchQuery" class="w-100">

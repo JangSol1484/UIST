@@ -9,7 +9,7 @@
         
       </div>
       <br>
-      <b-card bg-variant="light">
+      <b-card class="shadow" bg-variant="light">
         <b-col>
           <b-row aligh-h="between">
             <b-col order="1">
@@ -40,7 +40,7 @@
           </b-row>
           <b-row class="mt-2">
             <b-col>
-              <b-img thumbnail fluid v-bind:src="'data:image/jpeg;base64,'+thumbnail" width = "400px" height="400px"/>
+              <img  class="img-thumbnail" v-bind:src="'data:image/jpeg;base64,'+thumbnail"/>
               <b-form-file name = "thumbnail" v-if="modify===false" @change="loadfile($event.target.name, $event.target.files)" @drop="loadfile($event.target.name, $event.target.files)"></b-form-file>
             </b-col>
             <b-col md="8">
@@ -83,7 +83,7 @@
         </b-col>
       </b-card>
       <br>
-      <b-card bg-variant="light">
+      <b-card class="shadow" bg-variant="light">
         <b-form-group horizontal
                       breakpoint="lg"
                       label="구독 정보"

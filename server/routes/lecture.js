@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
   db.getLectureWithNewest((err, newest) => {
-    if (newest) {
+    if (newest.length) {
       for (let i = 0; i < newest.length; i++) {
         try {
           let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', newest[i].l_thum));
@@ -18,11 +18,11 @@ router.get('/', (req, res, next) => {
         }
       }
     } else {
-      newest = null;
+      newest = false
     }
 
     db.getLectureWithPopularity((err, popular) => {
-      if (popular) {
+      if (popular.length) {
         for (let i = 0; i < popular.length; i++) {
           try {
             let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', popular[i].l_thum));
@@ -32,9 +32,28 @@ router.get('/', (req, res, next) => {
           }
         }
       } else {
-        popular = null
+        popular = false
       }
-      res.json({newest, popular});
+      
+      let user;
+      try { user = auth.verify(req.headers.authorization); } catch (e) {user = new Object();user.id = -1}
+
+      db.getLectureBySubscribed(user.id, (err, subscribed) => {
+        if (subscribed.length) {
+          for (let i = 0; i < subscribed.length; i++) {
+            try {
+              let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', subscribed[i].l_thum));
+              subscribed[i].l_thum = new Buffer(thumbnail).toString('base64');
+            } catch (e) {
+              subscribed[i].l_thum = null;
+            }
+          }
+        } else {
+          subscribed = false
+        }
+        res.json({subscribed, newest, popular});
+      })
+      
     })
   });
 });
@@ -120,20 +139,29 @@ router.get('/:id/:no', (req, res, next) => {
 
 router.get('/like/:id/:no', (req, res, next) => {
   
-  let user;
+  let user
   try { user = auth.verify(req.headers.authorization); } catch (e) {user = new Object();user.id = -1}
 
   if (user.id !== -1) {
     db.handleLike(user.id, req.params.id, req.params.no, (result) => {
-      if(result == true){
-        res.send('T');
-      } else {
-        res.send('F');
+      if(result === 'T'){
+        res.send('T')
+      } else if(result === 'F') {
+        res.send('F')
       }
     })
   } else {
-    res.send('E');
+    res.send('E')
   }
 });
 
+router.get('/delete/:id/:no', auth.ensureAuth(), (req, res) => {
+
+  let uid = req.params.id
+  let lno = req.params.no
+
+  db.deleteLecture(uid, lno, (err) => {
+    res.send('T')
+  })
+})
 module.exports = router;

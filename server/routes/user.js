@@ -93,7 +93,7 @@ router.post('/login', (req, res) => {
       return res.status(401).json({error: 'login failure'});
     }
     let name = user.u_name;
-    let accessToken = auth.signToken(user.u_no);
+    let accessToken = auth.signToken(user.u_no, user.u_id, user. u_name);
     res.json({name, accessToken});
   });
 });
@@ -118,8 +118,10 @@ router.post('/update', (req, res) => {
 
   form.on('part', (part) => {
 
-    let writeStream = fs.createWriteStream(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_test.jpg'));
-    writeStream.filename = 'thumbnail_test.jpg';
+    let filename = 'thumbnail_' + user.identi + '.jpg'
+
+    let writeStream = fs.createWriteStream(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', filename));
+    writeStream.filename = filename
     part.pipe(writeStream);
 
     part.on('data', (chunk) => {
@@ -173,10 +175,12 @@ router.get('/subscribe/:id', (req, res) => {
     let f_ing_id = req.params.id;
 
     db.handleSubscribe(f_wer, f_ing_id, (result) => {
-      if(result == true) {
+      if(result == 'T') {
         res.send('T')
-      } else {
+      } else if (result === 'F') {
         res.send('F')
+      } else if (result === 'S') {
+        res.send('S')
       }
     })
   } else {
