@@ -2,6 +2,7 @@
     <div>
        <br><br>
         <b-col>
+          {{lectures}}
             <b-dropdown :text="selected_cate_lv0" >
             <b-dropdown-item v-for="category0 in category_level0" 
                             :key="category0"
@@ -39,7 +40,7 @@ export default {
       this.categories = res.data
       for (let i = 0; i < this.categories.length; i++) {
         if (this.categories[i].c_level1 === '00') {
-          this.category_level0.push(this.categories[i])
+          this.category_level0.push(this.categories[i].c_name)
         }
       }
     })
@@ -51,54 +52,67 @@ export default {
           return this.categories[i].c_level0
         }
       }
-    }
-  },
-  cast_category1 (categoryName) {
-    for (let i = 0; i < this.categories.length; i++) {
-      if (categoryName === this.categories[i].c_name) {
-        return this.categories[i].c_level1
+    },
+    cast_category1 (categoryName) {
+      for (let i = 0; i < this.categories.length; i++) {
+        if (categoryName === this.categories[i].c_name) {
+          return this.categories[i].c_level1
+        }
       }
-    }
-  },
-  selectLevel0 (categoryName0) {
-    this.selected_cate_lv0 = categoryName0
-    this.category_on_lv0 = true
-    this.category_on_lv1 = false
-    this.category_level1 = []
+    },
+    selectLevel0 (categoryName0) {
+      this.selected_cate_lv0 = categoryName0
+      this.category_on_lv0 = true
+      this.category_on_lv1 = false
+      this.category_level1 = []
 
-    for (let i = 0, write = true; i < this.categories.length; i++) {
-      if (this.cast_category0(categoryName0) === this.categories[i].c_level0) {
-        for (let j = 0; j < this.category_level1.length; j++) {
-          if (this.category_level1[j] === this.categories[i].c_name) {
+      for (let i = 0, write = true; i < this.categories.length; i++) {
+        if (this.cast_category0(categoryName0) === this.categories[i].c_level0) {
+          for (let j = 0; j < this.category_level1.length; j++) {
+            if (this.category_level1[j] === this.categories[i].c_name) {
+              write = false
+              break
+            }
+          }
+          if (this.categories[i].c_level1 === '00') {
             write = false
-            break
+          }
+          if (write) {
+            this.category_level1.push(this.categories[i].c_name)
           }
         }
-        if (this.categories[i].c_level1 === '00') {
-          write = false
-        }
-        if (write) {
-          this.category_level1.push(this.categories[i].c_name)
+        write = true
+      }
+
+      let getLecture = '/api/discovery/' + this.cast_category0(categoryName0)
+      this.$http.get(getLecture)
+      .then((res) => {
+        this.lectures = res.data
+      })
+    },
+    selectLevel1 (categoryName1) {
+      this.selected_cate_lv1 = categoryName1
+      this.selected_lecture = []
+      let categoryNumber0
+      for (let i = 0; i < this.categories.length; i++) {
+        if (this.categories[i].c_name === categoryName1) {
+          categoryNumber0 = this.categories[i].c_level0
         }
       }
-      write = true
-    }
-  },
-  selectLevel1 (categoryName1) {
-    this.selected_cate_lv1 = categoryName1
-    this.category_on_lv1 = true
-    this.selected_lecture = []
-    let categoryNumber0
-    for (let i = 0; i < this.categories.length; i++) {
-      if (this.categories[i].c_name === categoryName1) {
-        categoryNumber0 = this.categories[i].c_level0
+      this.selected_category = categoryNumber0 + this.cast_category1(categoryName1)
+      let lecturesTemp = []
+      for (let j = 0; j < lecturesTemp.length; j++) {
+        if (lecturesTemp[j].l_category[0] === categoryNumber0) {
+
+        }
       }
+      this.category_on_lv1 = true
     }
-    this.selected_category = categoryNumber0 + this.cast_category1(categoryName1)
   },
   data () {
     return {
       selected_cate_lv0: '카테고리 선택',
+      selected_cate_lv1: '카테고리 선택',
       category_level0: [],
       category_level1: [],
       category_on_lv0: false,
