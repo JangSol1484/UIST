@@ -214,17 +214,23 @@ export default {
     },
     deleteLecture (event) {
       let uid, lno
-      alert(event.target.parentNode.parentNode.parentNode)
-      event.target.parentNode.parentNode.parentNode.$remove
-      /*
       [uid, lno] = event.target.childNodes[0].value.split(',')
+      for (let i = 0; i < this.mylecture.length; i++) {
+        if (this.mylecture[i].l_no === parseInt(lno)) {
+          this.mylecture.splice(i, 1)
+        }
+      }
+      for (let i = 0; i < this.selected_lecture.length; i++) {
+        if (this.selected_lecture[i].l_no === parseInt(lno)) {
+          this.selected_lecture.splice(i, 1)
+        }
+      }
       this.$http.get(`/api/lecture/delete/${uid}/${lno}`)
       .then((res) => {
         if (res.data === 'T') {
           alert('삭제 완료되었습니다.')
         }
       })
-      */
     }
   }
 }
