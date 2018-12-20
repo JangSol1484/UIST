@@ -1,6 +1,5 @@
 <template>
 <!--메인화면 홈페이지 /api/lecture에서 받은 정보를 화면에 렌더-->
-<!--썸네일은 별도로 /api/contents/thumbnail에서 요청함-->
   <div class="index">
     <br>
     <b-container>
@@ -36,7 +35,6 @@
           </span>
         </b-col>
       </b-row>
-    <!--<img v-bind:src="`/api/user/thumbnail/test`" class="thumbnail">-->
       <b-row v-if="populars">
         <h1>인기 강의</h1>
       </b-row>

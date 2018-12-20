@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
   db.getLectureWithNewest((err, newest) => {
-    if (newest.length) {
+    if (!isEmpty(newest)) {
       for (let i = 0; i < newest.length; i++) {
         try {
           let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', newest[i].l_thum));
@@ -22,7 +22,7 @@ router.get('/', (req, res, next) => {
     }
 
     db.getLectureWithPopularity((err, popular) => {
-      if (popular.length) {
+      if (!isEmpty(popular)) {
         for (let i = 0; i < popular.length; i++) {
           try {
             let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', popular[i].l_thum));
@@ -39,7 +39,7 @@ router.get('/', (req, res, next) => {
       try { user = auth.verify(req.headers.authorization); } catch (e) {user = new Object();user.id = -1}
 
       db.getLectureBySubscribed(user.id, (err, subscribed) => {
-        if (subscribed.length) {
+        if (!isEmpty(subscribed)) {
           for (let i = 0; i < subscribed.length; i++) {
             try {
               let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', subscribed[i].l_thum));
@@ -49,6 +49,7 @@ router.get('/', (req, res, next) => {
             }
           }
         } else {
+          
           subscribed = false
         }
         res.json({subscribed, newest, popular});
@@ -165,3 +166,23 @@ router.get('/delete/:id/:no', auth.ensureAuth(), (req, res) => {
   })
 })
 module.exports = router;
+
+
+function isEmpty(obj) {
+  // null and undefined are "empty"
+  if (obj == null) return true;
+
+  // Assume if it has a length property with a non-zero value
+  // that that property is correct.
+  if (obj.length && obj.length > 0)    return false;
+  if (obj.length === 0)  return true;
+
+  // Otherwise, does it have any properties of its own?
+  // Note that this doesn't handle
+  // toString and toValue enumeration bugs in IE < 9
+  for (var key in obj) {
+      if (hasOwnProperty.call(obj, key)) return false;
+  }
+
+  return true;
+}

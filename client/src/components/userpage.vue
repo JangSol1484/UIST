@@ -5,7 +5,7 @@
     <b-container>
       <br><br>
       <div align-self="end">
-        <b-button size="" variant="secondary" router-link :to="{name: 'myclass'}" >내강의실</b-button>
+        <b-button size="" variant="secondary" router-link :to="{name: 'userclass', params: {id: this.$route.params.id}}" >강의실</b-button>
         
       </div>
       <br>
@@ -21,22 +21,6 @@
                       class="mb-0">
              </b-form-group>
             </b-col>
-            <b-col class="text-right" order="2" md=3>
-              <b-button-group>
-                <b-button 
-                    :variant="b_color"
-                    @click="modifyB()">
-                  {{profileB}}
-                </b-button>
-                <b-button 
-                    variant="secondary" 
-                    v-if="modify===false"
-                    @click="cancel()">
-                    취소
-                </b-button>
-              </b-button-group>
-            </b-col>
-            
           </b-row>
           <b-row class="mt-2">
             <b-col>
@@ -93,12 +77,16 @@
         </b-form-group>
         <div class="d-inline-flex">
           <div v-for="sub in sub_list" v-bind:key="sub.bj">
+            
             <div class="d-flex flex-column ml-3 mr-3">
-              <router-link :to="{ name: 'user', params: { id: sub.bjid}}">
-                <img class="fluid rounded-circle" v-bind:src="'data:image/jpeg;base64,'+sub.bjThumbnail" width = "120px" height="120px"/>
-              </router-link>
+              <div>
+                <router-link :to="{ name: 'user', params: { id: sub.bjid}}">
+                  <img class="fluid rounded-circle" v-bind:src="'data:image/jpeg;base64,'+sub.bjThumbnail" width = "120px" height="120px"/>
+                </router-link>
+              </div>
               <div class="text-center">{{sub.bj}}</div>
             </div>
+            
           </div>
         </div>
       </b-card>

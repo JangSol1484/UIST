@@ -100,8 +100,10 @@ export default {
       this.$http.get(`/api/note/${this.lecture.l_idx}`)
       .then((res) => {
         // this.note_toggle = true
-        alert('저장된 필기를 불러왔습니다.')
-        this.$refs.note.value = res.data
+        if (res.data !== '') {
+          alert('저장된 필기를 불러왔습니다.')
+          this.$refs.note.value = res.data
+        }
       })
     })
   },
@@ -155,7 +157,7 @@ export default {
     },
     btn_subscribe (event) {
       let id = this.$route.params.id
-      this.$http.get(`/api/user/subscribe/${id}`)
+      this.$http.get(`/api/user/${id}/subscribe`)
       .then((res) => {
         if (res.data === 'T') {
           this.sub_color = 'danger'

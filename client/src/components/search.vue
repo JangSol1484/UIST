@@ -36,11 +36,11 @@
               <span v-if="userlist.length===0">검색 결과가 없습니다.</span>
             <div class="d-flex flex-column border-bottom mb-4" v-for="s_user in userlist" :key="s_user.u_no">
               <div class="d-flex flex-row">
-                <router-link :to="{ name: 'lecture', params: { }}">
+                <router-link :to="{ name: 'user', params: { id: s_user.u_id}}">
                   <img class="mb-3 fluid rounded-circle" v-bind:src="'data:image/jpeg;base64,'+ s_user.u_thum" width="120px" height="120px">
                 </router-link>
                 <div class="d-flex flex-column mx-3">
-                  <router-link :to="{ name: 'lecture', params: { }}">
+                  <router-link :to="{ name: 'user', params: { id: s_user.u_id}}">
                     <div class="lectureTitle h3 mb-3 font-weight-bold">{{s_user.u_name}}</div>
                   </router-link>
                   <div class="h6">{{s_user.u_introduction}}</div>
@@ -82,7 +82,7 @@ export default {
   methods: {
     btn_subscribe (event) {
       let id = event.target.name
-      this.$http.get(`/api/user/subscribe/${id}`)
+      this.$http.get(`/api/user/${id}/subscribe`)
       .then((res) => {
         if (res.data === 'T') {
           alert('구독이 완료되었습니다.')

@@ -96,30 +96,34 @@ export default {
     },
     upload () {
       if (this.isVideo) {
-        if (!this.isFormExist) {
-          this.formData.append('title', this.l_title)
-          this.formData.append('text', this.l_text)
-          if (this.selected_cate_lv0 !== '기타') {
-            this.formData.append('category', this.selected_cate_lv1)
-          } else if (this.selected_cate_lv0 === '기타') {
-            this.formData.append('category', this.selected_cate_lv0)
+        if (this.l_title && this.l_text && this.category_on_lv1) {
+          if (!this.isFormExist) {
+            this.formData.append('title', this.l_title)
+            this.formData.append('text', this.l_text)
+            if (this.selected_cate_lv0 !== '기타') {
+              this.formData.append('category', this.selected_cate_lv1)
+            } else if (this.selected_cate_lv0 === '기타') {
+              this.formData.append('category', this.selected_cate_lv0)
+            }
+            this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
+            this.isFormExist = true
           }
-          this.formData.append(this.targetName, this.targetFile, this.targetFile.name)
-          this.isFormExist = true
+          this.$http.post('/api/contents/upload/lecture', this.formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            },
+            onUploadProgress: function (progressEvent) {
+              this.uploadPercentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
+            }.bind(this)
+          })
+          .then((res) => {
+            this.$router.push({name: 'myclass', params: {id: this.$store.getters.getId}})
+          })
+        } else {
+          alert('모든 항목을 입력해주세요')
         }
-        this.$http.post('/api/contents/upload/lecture', this.formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          },
-          onUploadProgress: function (progressEvent) {
-            this.uploadPercentage = parseInt(Math.round((progressEvent.loaded * 100) / progressEvent.total))
-          }.bind(this)
-        })
-        .then((res) => {
-          this.$router.push({name: 'myclass'})
-        })
       } else {
-        alert('동영상만 올려라')
+        alert('동영상을 올려주세요')
       }
     },
     cast_category0 (categoryName) {
@@ -149,6 +153,7 @@ export default {
           }
         }
       }
+      console.log(this.category_level1, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaS')
       if (this.cast_category0(categoryName0) === '9') {
         this.category_on_lv0 = false
         this.category_on_lv1 = true
@@ -166,9 +171,6 @@ export default {
         }
       }
       this.selected_category = categoryNumber0 + this.cast_category1(categoryName1)
-    },
-    test () {
-      alert(this.l_title + this.l_text)
     }
   },
   data () {

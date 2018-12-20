@@ -23,14 +23,21 @@ const db = {
   },
   findUser (userInfo, cb) {//로그인 시
     conn.query('select salt from user where u_id = ?', userInfo.uid, (err, [salt]) => {
-      crypto.pbkdf2(userInfo.upw, salt.salt, iteration, 64, 'sha512', (err, key) => {
-        conn.query('select u_no, u_id, u_name from user where u_id = ? and u_pw = ?',  [userInfo.uid, key.toString('base64')], cb);
-      })
+      if (salt) {
+        crypto.pbkdf2(userInfo.upw, salt.salt, iteration, 64, 'sha512', (err, key) => {
+          conn.query('select u_no, u_id, u_name from user where u_id = ? and u_pw = ?',  [userInfo.uid, key.toString('base64')], cb);
+        })
+      } else {
+        cb('E', 'E')
+      }
     })
   },
   findUserByNo(u_no, cb) {//요청 시 토큰의 id값으로 유저 인증
     u_no = u_no * 1;
     conn.query('select u_id, u_name, u_email, u_introduction, u_follower, u_lectures from user where u_no = ?', u_no, cb);//수정
+  },
+  findUserById(u_id, cb) {
+    conn.query('select u_no, u_id, u_name, u_email, u_introduction, u_follower, u_lectures from user where u_id = ?', u_id, cb);//수정
   },
   updateUserProfile(userInfo, cb) {
     with(userInfo){
@@ -38,19 +45,19 @@ const db = {
     }
   },
   getLectureBySubscribed (uno, cb) {
-    conn.query('select l.l_no, l.l_wr_id, l.l_wr_name, l.l_title, l.l_thum, l.l_view, l.l_like from lecture l, subscribe s, user u where s.s_following_no = u.u_no and u.u_id = l.l_wr_id and s.s_follower_no = ?', uno, cb)
+    conn.query('select l.l_no, l.l_wr_id, l.l_wr_name, l.l_title, l.l_thum, l.l_view, l.l_like from lecture l, subscribe s, user u where s.s_following_no = u.u_no and u.u_id = l.l_wr_id and s.s_follower_no = ? order by l_date desc limit 0, 10', uno, cb)
   },
   getLectureWithNewest(cb) {
-    conn.query('select l_no, l_wr_id, l_wr_name, l_title, l_thum, l_view, l_like from lecture order by l_date desc limit 0, 5', cb);
+    conn.query('select l_no, l_wr_id, l_wr_name, l_title, l_thum, l_view, l_like from lecture order by l_date desc limit 0, 10', cb);
   },
   getLectureWithPopularity(cb) {
-    conn.query('select l_no, l_wr_id, l_wr_name, l_title, l_thum, l_view, l_like from lecture order by l_view desc limit 0, 5', cb);
+    conn.query('select l_no, l_wr_id, l_wr_name, l_title, l_thum, l_view, l_like from lecture order by l_view desc limit 0, 10', cb);
   },
   getNumberofLectures(uid, cb) {
     conn.query('select u_lectures from user where u_id = ?', uid, cb);
   },
   getLectureById(uid, cb) {
-    conn.query('select * from lecture where l_wr_id = ?', uid, cb);
+    conn.query('select * from lecture where l_wr_id = ? order by l_date desc', uid, cb);
   },
   getLectureByNo(uid, lno, cb) {
     lno = lno * 1;
@@ -67,11 +74,17 @@ const db = {
   getSubscribed(uid, cb) {
     conn.query('select u_no, u_follower from user where u_id = ?', uid, cb)
   },
-  getLectureByCategory(cat, cb) {
-    conn.query('select * from lecture where left(l_category, 1) = ?', cat, cb)
+  getLectureByCategory(cat, offset, cb) {
+    conn.query('select count(l_idx) as cnt from lecture where left(l_category, 1) = ?', cat, (err, [result]) => {
+      let cnt = result.cnt
+      offset = (offset * 1 - 1) * 15
+      conn.query('select * from lecture where left(l_category, 1) = ? order by l_date desc limit ?, 15', [cat, offset], (err, lecture) => {
+        cb(err, cnt, lecture)
+      })
+    })
   },
   getMySubscribe(f_wer,cb) {
-    conn.query('select ing.u_name from user ing, user wer, subscribe s where wer.u_no = s.s_follower_no and ing.u_no = s.s_following_no and wer.u_no = ?',f_wer, cb)
+    conn.query('select ing.u_id, ing.u_name from user ing, user wer, subscribe s where wer.u_no = s.s_follower_no and ing.u_no = s.s_following_no and wer.u_no = ? limit 0, 7',f_wer, cb)
   },
   registerLecture(l_info, cb) {
     conn.query('alter table lecture auto_increment=1;', () => {
@@ -131,7 +144,6 @@ const db = {
   handleSubscribe(f_wer, f_ing_id, cb) {
     conn.query('select u_no from user where u_id = ?', f_ing_id, (err, rows) => {
       let f_ing = rows[0].u_no
-      //console.log(f_ing_id, rows)
       if (f_ing === f_wer) {
         cb('S')
       } else {

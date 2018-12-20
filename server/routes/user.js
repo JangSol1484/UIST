@@ -19,9 +19,10 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/my', auth.ensureAuth(), (req, res) => {
-  db.findUserByNo(req.user.id, (err, [user]) => {
-    db.getMySubscribe(req.user.id, (err, result) => {
+router.get('/:id', (req, res) => {
+  let id = req.params.id
+  db.findUserById(id, (err, [user]) => {
+    db.getMySubscribe(user.u_no, (err, result) => {
       if(err){
         res.status(401);
       }
@@ -32,11 +33,12 @@ router.get('/my', auth.ensureAuth(), (req, res) => {
         if(result)
         for(let i=0; i<result.length; i++)
         {
-          people = new Object();
-          people.bj = result[i].u_name;          
+          people = new Object()
+          people.bj = result[i].u_name
+          people.bjid = result[i].u_id
 
-          if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + people.bj.toString() + '.jpg'))){
-            let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + people.bj.toString() + '.jpg'));
+          if(fs.existsSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id.toString() + '.jpg'))){
+            let imagebytes = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', 'thumbnail_' + result[i].u_id.toString() + '.jpg'));
             people.bjThumbnail = new Buffer(imagebytes).toString('base64');
             sublist.push(people);
           } else {
@@ -52,14 +54,17 @@ router.get('/my', auth.ensureAuth(), (req, res) => {
   });
 });
 
-router.get('/my/class', auth.ensureAuth(), (req, res) => {
-  db.findUserByNo(req.user.id, (err, user) => {
-    if(err) {
+router.get('/:id/class', (req, res) => {
+  let id = req.params.id
+  db.findUserById(id, (err, user) => {
+    if (err) {
       res.status(401);
-      } else {
+    } else {
       let smallUserInfo = new Array();
       let info = new Object();
-
+      
+      info.id = user[0].u_id
+      info.name = user[0].u_name
       info.follower = user[0].u_follower
       info.lectures = user[0].u_lectures
       info.intro = user[0].u_introduction
@@ -85,9 +90,10 @@ router.post('/login', (req, res) => {
   let userInfo = {uid: req.body.uid, upw: req.body.upw}
   
   db.findUser(userInfo, (err, [user]) => {
-    if(!user || !user.u_no){
+    if(!user || !user.u_no || err == 'E'){
       return res.status(401).json({error: 'login failure'});
     }
+
     let name = user.u_name;
     let accessToken = auth.signToken(user.u_no, user.u_id, user. u_name);
     res.json({name, accessToken});
@@ -148,7 +154,7 @@ router.post('/update', (req, res) => {
   form.parse(req);
 });
 
-router.get('/thumbnail/:id', (req, res) => {
+router.get('/:id/thumbnail', (req, res) => {
   
   let id = req.params.id;
 
@@ -161,7 +167,7 @@ router.get('/thumbnail/:id', (req, res) => {
   }
 });
 
-router.get('/subscribe/:id', (req, res) => {
+router.get('/:id/subscribe', (req, res) => {
   let user;
   try { user = auth.verify(req.headers.authorization); } catch (e) {user = new Object();user.id = -1}
 

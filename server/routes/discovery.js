@@ -6,11 +6,11 @@ const db = require('../db');
 
 const router = express.Router();
 
-router.get('/:category', (req, res) => {
+router.get('/:category/:offset', (req, res) => {
   let category = req.params.category;
-  db.getLectureByCategory(category, (err, discovery) => {
-
-    if (discovery.length) {
+  let offset = req.params.offset;
+  db.getLectureByCategory(category, offset, (err, cnt, discovery) => {
+    if (discovery) {
       for (let i = 0; i < discovery.length; i++) {
         try {
           let thumbnail = fs.readFileSync(path.join(__dirname, '..', 'contents', 'img', 'thumbnail', discovery[i].l_thum));
@@ -23,7 +23,7 @@ router.get('/:category', (req, res) => {
       discovery = false
     }
 
-    res.send(discovery);
+    res.json({cnt, discovery});
   });
 });
 

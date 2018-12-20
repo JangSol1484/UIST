@@ -11,7 +11,11 @@ router.get('/:lidx', auth.ensureAuth(), (req, res) => {
     let lidx = req.params.lidx
 
     db.getNote(uno, lidx, (err, [result]) => {
-        res.send(result.n_text)
+        if (result) {
+            res.send(result.n_text)
+        } else {
+            res.send(null)
+        }
     })
 })
 

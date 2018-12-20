@@ -5,7 +5,9 @@ Vue.use(Router)
 
 import Home from 'components/home'
 import MyPage from 'components/mypage'
+import UserPage from 'components/userpage'
 import MyClass from 'components/class'
+import UserClass from 'components/userclass'
 import Lecture from 'components/lecture'
 import Login from 'components/login'
 import Signup from 'components/signup'
@@ -53,10 +55,20 @@ export default new Router({
       beforeEnter: requireAuth()
     },
     {
+      path: '/user/:id',
+      name: 'user',
+      component: UserPage
+    },
+    {
       path: '/my/:id/class',
       name: 'myclass',
       component: MyClass,
       beforeEnter: requireAuth()
+    },
+    {
+      path: '/user/:id/class',
+      name: 'userclass',
+      component: UserClass
     },
     {
       path: '/upload',
@@ -67,8 +79,7 @@ export default new Router({
     {
       path: '/discovery',
       name: 'discovery',
-      component: Discovery,
-      beforeEnter: requireAuth()
+      component: Discovery
     }
   ]
 })

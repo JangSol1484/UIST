@@ -6,10 +6,7 @@
     <br>
     <b-container>
       <b-row class="mb-2 w-100">
-        <b-col><h1 class="font-weight-bold">{{this.$store.getters.getName}}님의 강의실</h1></b-col>
-        <b-col class="text-right">
-          <b-button variant="dark" router-link :to="{name: 'upload'}" >업로드</b-button>
-        </b-col>
+        <b-col><h1 class="font-weight-bold">{{upinfo[0].name}}님의 강의실</h1></b-col>
       </b-row>
       <b-row class="mb-4 w-100">
         <b-col>
@@ -21,6 +18,7 @@
               <b-col class="d-flex align-items-end flex-column">
                 <div class="h6">{{upinfo[0].lectures}}개의 강의가 업로드 됨</div>
                 <div class="h6">구독자 : {{upinfo[0].follower}}명</div>
+                <div><button type="button" class="btn btn-primary" @click="btn_subscribe" :name="upinfo[0].id">구독하기</button></div>
                 <div class="h4 mt-auto">{{upinfo[0].intro}}</div>
               </b-col>
             </b-row>
@@ -59,9 +57,6 @@
                   </router-link>
                   <div class="h5">{{video.l_text}}</div>
                   <div class="h6 mt-auto mb-3">조회수 : {{video.l_view}} 좋아요 : {{video.l_like}}</div>
-                </div>
-                <div class="h6 ml-auto mb-3 align-self-end">
-                  <span @click="deleteLecture"><input type="hidden" :value="video.l_wr_id + ',' + video.l_no">삭제</span>
                 </div>
               </div>
             </div>
@@ -212,23 +207,18 @@ export default {
         }
       }
     },
-    deleteLecture (event) {
-      let uid, lno
-      [uid, lno] = event.target.childNodes[0].value.split(',')
-      for (let i = 0; i < this.mylecture.length; i++) {
-        if (this.mylecture[i].l_no === parseInt(lno)) {
-          this.mylecture.splice(i, 1)
-        }
-      }
-      for (let i = 0; i < this.selected_lecture.length; i++) {
-        if (this.selected_lecture[i].l_no === parseInt(lno)) {
-          this.selected_lecture.splice(i, 1)
-        }
-      }
-      this.$http.get(`/api/lecture/delete/${uid}/${lno}`)
+    btn_subscribe (event) {
+      let id = event.target.name
+      this.$http.get(`/api/user/${id}/subscribe`)
       .then((res) => {
         if (res.data === 'T') {
-          alert('삭제 완료되었습니다.')
+          alert('구독이 완료되었습니다.')
+        } else if (res.data === 'F') {
+          alert('구독이 취소되었습니다.')
+        } else if (res.data === 'S') {
+          alert('자신을 구독할 수 없습니다.')
+        } else if (res.data === 'E') {
+          alert('구독은 로그인 후 가능합니다.')
         }
       })
     }
