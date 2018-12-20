@@ -251,7 +251,6 @@ export default {
         }
       })
       .then((res) => {
-        alert('필기를 성공적으로 저장했습니다.')
       })
       .catch((err) => {
         console.log(err)

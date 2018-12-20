@@ -61,7 +61,7 @@
         <b-col class="text-right">
           <b-progress class = "mt-2" :value="uploadPercentage" max="100" show-progress animated></b-progress>
           <b-button class = "mt-1" size="" variant="secondary" @click="upload">업로드</b-button>
-          <b-button class="mt-1" variant="secondary" router-link :to="{name: 'myclass'}">취소</b-button>
+          <b-button class="mt-1" variant="secondary" router-link :to="{name: 'home'}">취소</b-button>
         </b-col>
       </b-row>
     </b-container>
