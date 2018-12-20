@@ -350,6 +350,17 @@ div.index[data-v-03e74d57] {
   text-decoration: underline;
 }
 
+.lectureTitle[data-v-2c699176] {
+  color: black;
+}
+.lectureTitle[data-v-2c699176]:visited {
+  color: black;
+}
+.lectureTitle[data-v-2c699176]:hover {
+  color: black;
+  text-decoration: underline;
+}
+
 textarea.form-control[data-v-0badb094] {
   overflow: auto;
   width: 100%;
@@ -564,6 +575,18 @@ video.embed-responsive[data-v-0badb094] {
   top:0;
   left:0;
   z-index: 3;
+}
+
+.thumbnail[data-v-6e950ee8] {
+  width: 185px;
+  vertical-align: middle;
+}
+.lecture[data-v-6e950ee8] {
+  display: inline-block;
+  padding: 10px;
+}
+.discovery[data-v-6e950ee8] {
+  height: 80vh;
 }
 .video-js .vjs-big-play-button .vjs-icon-placeholder:before, .vjs-button > .vjs-icon-placeholder:before, .video-js .vjs-modal-dialog, .vjs-modal-dialog .vjs-modal-dialog-content {
   position: absolute;
@@ -11192,4 +11215,4 @@ table.b-table > tbody > tr.b-table-details > td {
     border-top: none;
 }
 
-/*# sourceMappingURL=app.7b92a67f8d48cbc5f4b3db0edc5fbbc2.css.map*/
+/*# sourceMappingURL=app.2ebf6076ff7a7a63e29c5eb8d169e72b.css.map*/

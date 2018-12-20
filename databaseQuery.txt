@@ -1,0 +1,164 @@
+create database uist;
+
+user uist;
+
+create table user (
+   u_no int unsigned not null auto_increment,
+   u_id varchar(10) not null,
+   u_pw varchar(100) not null,
+   u_name varchar(20) not null,
+   u_email varchar(30) not null,
+   u_introduction varchar(200),
+   u_lectures int unsigned not null default 0,
+   u_following int unsigned not null default 0,
+   u_follower int unsigned not null default 0,
+   salt varchar(100),
+   primary key(u_no),
+   unique key(u_id, u_email)
+)ENGINE = innoDB;
+
+create table subscribe (
+   s_idx int unsigned not null auto_increment,
+   s_follower_no int unsigned not null,
+   s_following_no int unsigned not null,
+   primary key(s_idx),
+   unique key(s_follower_no, s_following_no)
+);
+
+create table like_history (
+   lh_idx int unsigned not null auto_increment,
+   u_no int unsigned not null,
+   l_idx int unsigned not null,
+   primary key(lh_idx),
+   unique key(u_no, l_idx)
+);
+
+create table category (
+   c_level0 varchar(1) not null,
+   c_level1 varchar(2) not null,
+   c_name varchar(20) not null,
+   primary key(c_level0, c_level1),
+   unique key(c_name)
+)ENGINE = innoDB;
+
+create table watch_history (
+   w_idx int unsigned not null auto_increment,
+   w_u_no int unsigned not null,
+   w_l_dix int unsigned not null,
+   primary key(w_idx)
+);
+
+create table note (
+   n_idx int unsigned not null auto_increment,
+   n_u_no int unsigned not null,
+   n_l_idx int unsigned not null,
+   n_text longtext not null,
+   primary key(n_idx),
+   unique key(n_u_no, n_l_idx)
+)ENGINE = innoDB;
+
+create table lecture (
+   l_idx int unsigned not null auto_increment,
+   l_no int unsigned not null,
+   l_category varchar(4) not null,
+   l_c_name varchar(20) not null,
+   l_title varchar(100) not null,
+   l_text varchar(500) not null,
+   l_wr_id varchar(10) not null,
+   l_wr_name varchar(20) not null,
+   l_v_name varchar(80) not null,
+   l_v_type varchar(10) not null,
+   l_thum varchar(80) not null,
+   l_view int unsigned not null default 0,
+   l_like int unsigned not null default 0,
+   l_date timestamp not null default now(),
+   primary key(l_idx)
+)ENGINE = innoDB;
+
+insert into category values('0', '00', '수능');
+insert into category values('0', '01', '국어');
+insert into category values('0', '02', '외국어');
+insert into category values('0', '03', '제2외국어');
+insert into category values('0', '04', '수학');
+insert into category values('0', '05', '과학탐구');
+insert into category values('0', '06', '사회탐구');
+insert into category values('1', '00', '공시');
+insert into category values('1', '01', '국어');
+insert into category values('1', '02', '영어');
+insert into category values('1', '03', '한국사');
+insert into category values('1', '04', '사회');
+insert into category values('1', '05', '수학');
+insert into category values('1', '06', '과학');
+insert into category values('1', '07', '관세법개론');
+insert into category values('1', '08', '경제학개론');
+insert into category values('1', '09', '교육학개론');
+insert into category values('1', '10', '교정학개론');
+insert into category values('1', '11', '사회복지학개론');
+insert into category values('1', '12', '세법개론');
+insert into category values('1', '13', '통계학개론');
+insert into category values('1', '14', '행정법총론');
+insert into category values('1', '15', '행정학개론');
+insert into category values('1', '16', '형법');
+insert into category values('1', '17', '형법총론');
+insert into category values('1', '18', '형사소송법');
+insert into category values('1', '19', '형사소송법개론');
+insert into category values('1', '20', '회계원리');
+insert into category values('1', '21', '회계학');
+insert into category values('1', '22', '기계일반');
+insert into category values('1', '23', '기계설계');
+insert into category values('1', '24', '전기이론');
+insert into category values('1', '25', '전기기기');
+insert into category values('1', '26', '화학공학일반');
+insert into category values('1', '27', '공업화학');
+insert into category values('1', '28', '재배학개론');
+insert into category values('1', '29', '식용작물');
+insert into category values('1', '30', '조림');
+insert into category values('1', '31', '임업경영');
+insert into category values('1', '32', '응용역학개론');
+insert into category values('1', '33', '토목설계');
+insert into category values('1', '34', '건축계획');
+insert into category values('1', '35', '건축구조');
+insert into category values('1', '36', '컴퓨터일반');
+insert into category values('1', '37', '정보보호론');
+insert into category values('1', '38', '네트워크보안');
+insert into category values('1', '39', '정보시스템보안');
+insert into category values('1', '40', '전자공학개론');
+insert into category values('1', '41', '무선공학개론');
+insert into category values('1', '42', '재난관리론');
+insert into category values('1', '43', '안전관리론');
+
+insert into category values('2', '00', '어학');
+insert into category values('2', '01', '한국어');
+insert into category values('2', '02', '영어');
+insert into category values('2', '03', '중국어');
+insert into category values('2', '04', '일본어');
+insert into category values('2', '05', '러시아어');
+insert into category values('2', '06', '스페인어');
+insert into category values('2', '07', '프랑스어');
+insert into category values('2', '08', '독일어');
+insert into category values('2', '09', '아랍어');
+
+insert into category values('3', '00', '사회');
+insert into category values('3', '01', '정치');
+insert into category values('3', '02', '국제');
+insert into category values('3', '03', '경제');
+insert into category values('3', '04', '역사');
+
+insert into category values('4', '00', '투자');
+insert into category values('4', '01', '재테크');
+insert into category values('4', '02', '주식');
+insert into category values('4', '03', '펀드');
+insert into category values('4', '04', '옵션');
+insert into category values('4', '05', '코인');
+
+insert into category values('5', '00', '생활');
+insert into category values('6', '00', '예술');
+insert into category values('7', '00', '기술');
+
+insert into category values('8', '00', '게임');
+insert into category values('8', '01', '스타크래프트');
+insert into category values('8', '02', '리그오브레전드');
+insert into category values('8', '03', '배틀그라운드');
+insert into category values('8', '04', '오버워치');
+
+insert into category values('9', '00', '기타');
